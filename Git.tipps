@@ -1,0 +1,13 @@
+Tutorial: https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
+
+
+
+
+######Github############
+git clone https://github.com/Ockenfuss/dotfiles.git #Lade repository von github herunter
+git remote set-url origin git@github.com:Ockenfuss/dotfiles.git #wechsle zB von https zu ssh
+
+
+
+#Neuen ssh key bei github registrieren:
+https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent

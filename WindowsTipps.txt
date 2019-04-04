@@ -1,0 +1,7 @@
+Tipps zur Konfiguration von Windows
+
+########################Defender########################################
+https://www.heise.de/select/ct/2018/15/1531801911047812
+
+Adware Protection: Set-MpPreference -PUAProtection 1 (zum Ausschalten 0)
+-Network Protection: Set-MpPreference -EnableNetworkProtection Enabled (Disabled)

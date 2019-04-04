@@ -1,0 +1,73 @@
+#Alle Arten von Notizen zu vscode
+
+
+#################Allgemeine Einstelllungen########################################
+Datei->Einstelllungen->Einstelllungen
+-Links: Große Liste aller Default Einstelllungen
+=>Klick auf Kopieren: Kopiert den ausgewählten Block in entweder: Benutzereinstellungen (gelten immer) oder Arbeitseinstellungen (gelten im gewählten Verzeichnis) => Überschreiben Standardeinstellungen
+Ort: werden damit automatisch im settings.json file im Ordner .vscode gespeichert (Editieren auch hier direkt möglich)
+
+######Shortcuts######################################
+einfach: File-preferences-keyboard Shortcuts
+allgemein: keybindings.json (link über obiges menü)
+
+ctrl+J: wechsel zwischen panel (terminal) und editor (eintrag in .json file. Alternativ: Wechsel mit automatischem öffnen und schließen: einfach an "Toggle Panel" binden)
+
+
+
+
+
+###################Latex#################################################
+Strg+Alt+B: Wählt automatisch das erste "Recipe" aus. die hier gelisteten Tools werden nacheinander ausgeführt
+Tools: Kurzformen für commandozeilenbefehle mit Argumenten
+Speicherort: in Standard- und Benutzereinstellungen
+https://pmateusz.github.io/latex/2017/03/29/vs-code-latex-editor.html
+in "tasks.json":
+{
+ "version": "0.1.0",
+ "isShellCommand": true,
+ "suppressTaskName": true,
+ "showOutput": "always",
+ "tasks": [{
+         "taskName": "Build PDF",
+         "command": "pdflatex",
+         "isBuildCommand": true,
+         "args": [
+             "-interaction=nonstopmode",
+             "-file-line-error",
+             "report.tex"
+         ]}, {
+         "taskName": "Build BibTex",
+         "command": "bibtex",
+         "isTestCommand": true,
+         "args": ["report.aux"]
+         }]
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,11 @@
+Checkliste vor Druck:
+-Hyperlinks in Farbe ausschalten! \usepackage[hidelinks]{hyperref}
+-Seitenanordnung richig? Leerseiten? Seitenränder? \documentclass[a4paper,10pt, twoside]{report}
+
+
+
+
+
+
+############Formatierung#######################
+-Einheiten: Space between value and unit, unit non italic font: $412$ nm

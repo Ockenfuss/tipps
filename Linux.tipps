@@ -1,0 +1,78 @@
+
+
+
+
+
+
+#############################################Useful bash commands################################
+more#show content of ascii file
+
+############################Printing###################
+#All options: https://www.cups.org/doc/options.html
+lpstat -p #show printers
+lp -d Printer_Name dokument.pdf #print pdf
+
+###########################Searching###################
+#grep: For searches within files find: for searching a file/folder
+
+#############################Pipes and redirection######################################
+|#Pipes: send stdout of the left command to stdin of the right command
+#Remind: stderr is not sent to the right!
+cmd> NewFile#Redirection: Redirect all the output from one command to a (new) file. Its content will be overwritten!
+cmd>>#Redirection with appending the new content
+cmd>&1#Redirect output to stdout. "0" is stdin, 1" is stdout, "2" is stderr
+2>$1#Redirect only errors to stdout
+
+/dev/null #Black hole: Swallows all input redirected to it
+
+#########Everyday commands##############################
+#Rename#
+rename -n#show how files would be renamed. Overview: https://www.computerhope.com/unix/rename.htm
+rename -n 's/Expr1/Expr2/' files#Replace all Expr1 in the given filenames with Expr2
+
+#Unzip
+unzip file.zip -d DestinationFolder
+
+#.zshrc
+source ~/.zshrc #reload configurations
+##############################Links###############################
+ln -s Source Destination#create symbolic link
+readlink [-f]#get destination of existing link
+
+#######Bluetooth###########
+Bose qc 35 verbinden: https://askubuntu.com/questions/833322/pair-bose-quietcomfort-35-with-ubuntu-over-bluetooth
+in /etc/bluetooth/main.conf: "ControllerMode = bredr" setzen und danach "sudo service bluetooth restart"
+=> neu im Bluetooth Menü verbinden. Anschließend kann ggf. wieder "#ControllerMode = dual" gesetzt werden (LE=Low energy) und wieder "sudo service bluetooth restart"
+
+
+
+
+
+
+
+
+########################ssh##########################################
+sshfs:
+killall -9 sshfs
+fusermount -uz ~/Mounts/Remote #Unmount directory "Remote"
+
+scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from one computer to other
+
+
+
+
+
+###############Diskusage#####################
+du -h --max-depth=1 #-h: Human readable
+
+######################################################zsh configurations############################
+source ~/.zshrc #reload zshrc
+#Change colors of command prompt:
+host_color="%F{green}"
+username_color="%F{blue}"
+path_color="%F{blue}"
+PROMPT="${username_color}$USERNAME%f@${host_color}%B%m%b%f ${path_color}%B%~%b%f > "
+
+
+
+
