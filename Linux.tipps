@@ -2,6 +2,14 @@
 
 
 
+###########################Permissions in Linux##############################
+https://www.guru99.com/file-permissions.html
+#Syntax:
+-rwxr-xr-x#file Type | rwx: User permissions|r-x: Group permissions| r-x: World permissions (all others)
+#r: read, w: write, x: execute
+chmod u=rwx #change permissions of user to rwx
+/etc/group #all groups
+groups #command to show my groups
 
 
 #############################################Useful bash commands################################
