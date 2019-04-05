@@ -5,7 +5,6 @@ import numpy as np
 
 
 
-
 #Verschiedenste Tricks im Umgang mit Python
 ################################Allgemein#################################
 sys.exit()#beendet ein Python Program #Stop #Interrupt
@@ -20,6 +19,12 @@ for index, values in enumerate(array, start)#returns the position as well as the
 
 np.atleast_1d(arrays)#Converts scalars to array and leaves everything else untouched=>Usefull for functions to handle scalars as well arrays
 np.atleast_2d(array)#convert to 2d by "adding one pair of brackets": array2d=[array1d] or array2d=[[scalar]]
+
+##################################Lists###############################
+#Like Arrays, but can (1) contain different data types and (2) be extended dynamically
+liste=[]
+liste.append("Hallo")
+liste.append(liste2)#list of lists
 ############################Dateipfade########################paths#file
 import os.path
 
@@ -57,15 +62,6 @@ plt.plot(time,d)
 import time
 #Pause
 time.sleep(5.5)#5.5 seconds pause
-
-
-
-
-
-
-
-
-
 
 
 
