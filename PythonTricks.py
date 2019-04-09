@@ -95,6 +95,10 @@ indexarray=np.where(a==1)#gibt array: (array([0, 1, 2]),)=> indexarray[0] ist al
 #Secondly, the resulting 1d array is filled into the new one by the same principle: the first (50) elements of the 1D array are put in the last dimension (0-50), then the second last dimension (0-400) is raised +1 and the next (50) elements are put into the last dimension (0-50) again, and so on.
 new=old.reshape((3,400,50))
 
+#combine numpy arrays
+np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
+np.row_stack((arr1, arr2, arr3))
+
 #Numpy Datentypen
 arr2=arr1.astype(int)#Array conversion
 
