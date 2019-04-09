@@ -12,9 +12,11 @@ einfach: File-preferences-keyboard Shortcuts
 allgemein: keybindings.json (link über obiges menü)
 
 ctrl+J: wechsel zwischen panel (terminal) und editor (eintrag in .json file. Alternativ: Wechsel mit automatischem öffnen und schließen: einfach an "Toggle Panel" binden)
+ctrl+W in Terminal: Close it (self defined)
 
 
-
+#########################Debugging########################################
+Logpoints: Advanced break points, which can e.g. depend on a condition
 
 
 ###################Latex#################################################
