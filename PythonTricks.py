@@ -95,9 +95,11 @@ indexarray=np.where(a==1)#gibt array: (array([0, 1, 2]),)=> indexarray[0] ist al
 #Secondly, the resulting 1d array is filled into the new one by the same principle: the first (50) elements of the 1D array are put in the last dimension (0-50), then the second last dimension (0-400) is raised +1 and the next (50) elements are put into the last dimension (0-50) again, and so on.
 new=old.reshape((3,400,50))
 
-#combine numpy arrays
+#stack numpy arrays
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
+#combine multidimensional arrays
+np.concatenate((arr1, arr2), axis=1)#must have same dimensions except on the concatenation axis
 
 #Numpy Datentypen
 arr2=arr1.astype(int)#Array conversion
@@ -107,6 +109,36 @@ np.mean(Array, Axis=0)#Numpy
 
 np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
+####################################################Pandas##################################################
+#Create Data Frame
+test=[[4,5,6],[1,2,3]]
+testdf=pd.DataFrame(test,columns=['A','B','C'])
+#read from file
+data=pd.read_csv("FileName")
+
+#acces element: both work with boolean indexing
+data.loc['A','B']#if you use column/row names
+data.iloc[1:2,3:4]#if you use indices
+
+#get columns
+datadp.columns
+#Categories in one column
+np.unique(testdf.A)
+
+
+#iterration over rows
+for index, line in df.iterrows():
+    print(line)
+#Groupby: combine rows which have a common feature into subgroups (https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html)
+datgroup=data.groupby("Label")
+#if groupby by two labels: multindices occur: https://www.datacamp.com/community/tutorials/pandas-multi-index
+#acces
+datgroup.get_group["A"]
+#iterate over groups
+for name, group in enumerate(datgroup):
+    print(group)
+
+
 ############################################Pyplot/Matplotlib###############################################################################################
 #https://matplotlib.org/faq/usage_faq.html#usage
 #Basic structure: A Figure object is the empty window which contains the plots.
