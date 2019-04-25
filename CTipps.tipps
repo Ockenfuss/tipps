@@ -1,0 +1,20 @@
+//######Tipps concerning C##########
+
+
+
+
+
+//#Create arrays
+bool boolArray[5] = {true , false , true , false , true};
+double *distance= (double *)calloc(L, sizeof(double));//dynamic, but should be avoided usually
+int *array = (int *) malloc(size * sizeof(int));//allocate memory without cleaning
+free(distance);//important!!!
+
+
+
+
+//Format specifier: https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
+%i: integer
+%e: scientific notation
+%f: float
+%g: use e or f (what's shorter)
