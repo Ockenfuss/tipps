@@ -1,5 +1,6 @@
 
-
+#bash in general: there are various types of shells: login, interactive, non-interactive
+#if a bash script is executed, this is usually done in a non-interactive shell. Therefore, custom commands from the .bashrc or .zshrc are not available there!
 
 
 ###########################Permissions in Linux##############################
@@ -33,6 +34,9 @@ cmd>&1#Redirect output to stdout. "0" is stdin, 1" is stdout, "2" is stderr
 2>$1#Redirect only errors to stdout
 
 /dev/null #Black hole: Swallows all input redirected to it
+
+#Pipes
+Befehl1 | Befehl2
 
 #########Everyday commands##############################
 #Rename#

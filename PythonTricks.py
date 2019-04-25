@@ -1,6 +1,7 @@
 Install:
 sudo apt install python3
 Pip: sudo apt install python3-Pip   
+#install package with pip: use --user flag if you have problems
 import numpy as np
 
 
@@ -89,6 +90,8 @@ print(a[ind])#sortiert
 #Numpy Elemente finden: np.where gibt array zurück mit allen reihenindizes in einem array und allen columnindizes in zweitem.Bsp:
 a=[1,1,1,2,2,3]
 indexarray=np.where(a==1)#gibt array: (array([0, 1, 2]),)=> indexarray[0] ist also [0,1,2] für die vorkommen von "1" in a
+np.amax(array)#maximum of array
+np.argmax(array)#index of maximum
 
 #Numpy Array reshape
 #Imagine the old array to be flattened first: First, the last dimension is counted up (0,1,2,3...), then the second last is raised +1 and the last counted up again and so on.
@@ -106,10 +109,12 @@ arr2=arr1.astype(int)#Array conversion
 
 #Numpy Funktionen
 np.mean(Array, Axis=0)#Numpy
-
+np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy
 np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
 ####################################################Pandas##################################################
+#My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
+
 #Create Data Frame
 test=[[4,5,6],[1,2,3]]
 testdf=pd.DataFrame(test,columns=['A','B','C'])
@@ -119,6 +124,10 @@ data=pd.read_csv("FileName")
 #acces element: both work with boolean indexing
 data.loc['A','B']#if you use column/row names
 data.iloc[1:2,3:4]#if you use indices
+#important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
+
+#boolean indexing
+ s[(s < -1) | (s > 0.5)]
 
 #get columns
 datadp.columns
@@ -147,11 +156,15 @@ for name, group in enumerate(datgroup):
 
 ###create plot
 fig,ax=plt.subplots()
+fig2, ax2=plt.subplots(nrows=2, ncols=2)#ax2: either 1D or 2D array => use atleast2d().T if necessary
+fig.suptitle('This is a somewhat long figure title', fontsize=16)
+
 
 ###Axen und Ticks
 ax.set_ylim(1e-7,5e1)#Limits
 ax.set_xticks([1,2,3])#Ticks setzen. ax.get_xticks() liefert ticks
 ax.tick_params(labelsize=16)
+ax.yaxis.tick_right()#Ticks rechts setzen
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter
@@ -205,9 +218,12 @@ grid = plt.GridSpec(4, 3, hspace=0.4, wspace=0.2)
 ax1 = fig.add_subplot(grid[:-1,:])
 ax2 = fig.add_subplot(grid[-1, :])
 
+#Text and annotations
+ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
+ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
+
 ###############Plot types#############
 ax2.hist(distance,bins=100, weights=values, range=(-60,60))#histogramm
-ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
 
 ###############Images (2D Verteilung) plotten#################
 from matplotlib.colors import LogNorm#falls mit LogNorm
