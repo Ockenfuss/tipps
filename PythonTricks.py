@@ -165,6 +165,8 @@ ax.set_ylim(1e-7,5e1)#Limits
 ax.set_xticks([1,2,3])#Ticks setzen. ax.get_xticks() liefert ticks
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
+ax.yaxis.set_label_coords(-0.1, 0.5)#exakte position
+ax.get_yaxis().set_visible(False)#hide ticks/axis
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter
@@ -224,6 +226,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction'
 
 ###############Plot types#############
 ax2.hist(distance,bins=100, weights=values, range=(-60,60))#histogramm
+im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
 
 ###############Images (2D Verteilung) plotten#################
 from matplotlib.colors import LogNorm#falls mit LogNorm
