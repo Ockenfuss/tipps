@@ -46,6 +46,7 @@ rename -n 's/Expr1/Expr2/' files#Replace all Expr1 in the given filenames with E
 #Unzip
 unzip file.zip -d DestinationFolder
 
+#wc: counts words (-w), lines (-l) or characters (-m)
 #.zshrc
 source ~/.zshrc #reload configurations
 ##############################Links###############################
