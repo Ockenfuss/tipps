@@ -2,6 +2,8 @@ Install:
 sudo apt install python3
 Pip: sudo apt install python3-Pip   
 #install package with pip: use --user flag if you have problems
+#also possible: install with python3 -m pip install
+#list packages (python3 -m) pip list
 import numpy as np
 
 
@@ -10,8 +12,16 @@ import numpy as np
 ################################Allgemein#################################
 sys.exit()#beendet ein Python Program #Stop #Interrupt
 
+#Funktionen: often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
+#Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
+
 #Datentypen
 int(x)#convert to integer
+
+################################Strings######################
+test="Hallo"+"du"#combine strings
+",".join(arr)#print array elements with the given separator (if necessary: use [str(i) for i in arr] first)
+string.strip("\n")#remove occurances at beginning or end
 
 #################################Arrays###################################
 for index, values in enumerate(array, start)#returns the position as well as the value of the array
@@ -211,6 +221,9 @@ ax.add_artist(circle1)
 ###Save File Location default and default extension (pdf)
 plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#need to "import os"
 plt.rcParams["savefig.format"]="pdf"
+###Backend
+matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set.
+matplotlib.get_backend()#get backend
 
 ###Size of plots
 fig = plt.figure(figsize=(4,3))#Define grid and specify over how many cells axes spread
@@ -242,6 +255,9 @@ ani = animation.ArtistAnimation(fig, ims, interval=30, blit=True, repeat_delay=4
 ani.save('SimpleBox.mp4')
 plt.show()
 
+###############################NETCDF##########################################
+#Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
+#Dimensions are essentially also variables itself ("coordinate variables")
 
 #############################Image processing#####################################
 #Convolution
@@ -255,3 +271,23 @@ AcM=sig.convolve2d(A,M, mode='full', boundary='fill', fillvalue=0)
 #https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
 #All about paths and importing from other directories
 https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
+
+#Configure paths:
+#option1: define PYTHONPATH variable in .bashrc (problem: might be system dependent, dotfiles are synchronized via github)
+#for intellisense: set in settings json: "python.autoComplete.extraPaths": ["/home/p/Paul.Ockenfuss/Documents/CodeTemplates/Python"]
+#option2: set a link in one of the default locations (import sys, print(sys.path))
+#e.g. in /usr/lib/python3/dist-packages
+#intellisense should work automatically
+
+
+#How to write proper docstrings for functions/classes:
+https://www.python.org/dev/peps/pep-0257/
+def complex(real=0.0, imag=0.0):
+    """Form a complex number.
+
+    Keyword arguments:
+    real -- the real part (default 0.0)
+    imag -- the imaginary part (default 0.0)
+    """
+    if imag == 0.0 and real == 0.0:
+        return complex_zero
