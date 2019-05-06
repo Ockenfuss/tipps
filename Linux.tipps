@@ -73,6 +73,14 @@ scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from 
 Login at cip pool: ssh Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de
 Copy to cip pool: scp Bilderseite.pdf Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de:~/
 
+#Meteo
+ssh Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de
+ssh Paul.Ockenfuss@ComputerName
+rsync -a -v --exclude=".*" SimulationGit Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:
+Ergebnisse zurückholen: rsync -a -v Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:SimulationGit/NamederErgebnisse.results . <=Punkt: legt Ergebnisse in akt. Verzeichnis
+
+SSHFS:
+sshfs Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:/home/p/Paul.Ockenfuss Ordner_wo_der_Baum_eingehängt_werden_soll
 
 
 
