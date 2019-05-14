@@ -11,3 +11,8 @@ git remote set-url origin git@github.com:Ockenfuss/dotfiles.git #wechsle zB von 
 
 #Neuen ssh key bei github registrieren:
 https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
+
+
+#######General git commands########
+#Rename a file or folder
+git mv Old/ New/

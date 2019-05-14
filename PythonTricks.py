@@ -230,10 +230,13 @@ fig.savefig("Plot1.pdf")#save plot
 ###Backend
 matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set.
 matplotlib.get_backend()#get backend
+print(matplotlib.matplotlib_fname()) #find matplotlibrc
+
 
 ###Size of plots
 fig = plt.figure(figsize=(4,3))#Define grid and specify over how many cells axes spread
 grid = plt.GridSpec(4, 3, hspace=0.4, wspace=0.2)
+gs = gridspec.GridSpec(4, 2, width_ratios=[1, 1], height_ratios=[1, 10,10, 10])#another possibility
 ax1 = fig.add_subplot(grid[:-1,:])
 ax2 = fig.add_subplot(grid[-1, :])
 
