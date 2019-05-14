@@ -3,9 +3,60 @@ Checkliste vor Druck:
 -Seitenanordnung richig? Leerseiten? Seitenränder? \documentclass[a4paper,10pt, twoside]{report}
 
 
+##########Geometry############
+#show geometry:
+\usepackage{layout}
+\begin{document}\layout
+...
 
 
 
 
-############Formatierung#######################
+% ############Formatierung#######################
 -Einheiten: Space between value and unit, unit non italic font: $412$ nm
+
+
+
+
+
+
+
+% #Minimum working example:
+\documentclass[a4paper,10pt, twoside]{report}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage{geometry}
+\usepackage[english]{babel}
+\usepackage{amssymb}
+\usepackage[pdftex]{graphicx}
+\usepackage[backend=biber,style=authoryear,maxcitenames=1,giveninits=true, natbib=true]{biblatex}%
+\usepackage{graphicx}
+\usepackage[hidelinks]{hyperref}
+\usepackage{csquotes}
+\usepackage{amsmath}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{subcaption}
+\usepackage{cleveref}
+\usepackage{subfiles}
+\usepackage{gensymb}
+\usepackage{zref}
+\usepackage{pdfpages}
+\usepackage{subcaption}
+\usepackage{pdflscape}
+\usepackage{fancyhdr}
+\usepackage[toc,page]{appendix}
+\addbibresource{Quellen.bib}
+
+\begin{document}
+
+\section*{ResearchPlan}
+\subsection*{Motivation}%star removes numbering
+test, test
+% \bibliography{Quellen.bib}
+\printbibliography[title={Bibliography},heading=bibintoc]
+
+\end{document}
