@@ -122,6 +122,9 @@ np.mean(Array, Axis=0)#Numpy
 np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy
 np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
+
+#Random
+np.random.rand(*arr.shape)#produce random numbers between 0 and 1 in an array with the given dimensions
 ####################################################Pandas##################################################
 #My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
 
@@ -223,6 +226,7 @@ ax.add_artist(circle1)
 ###Save File Location default and default extension (pdf)
 plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#need to "import os"
 plt.rcParams["savefig.format"]="pdf"
+fig.savefig("Plot1.pdf")#save plot
 ###Backend
 matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set.
 matplotlib.get_backend()#get backend
