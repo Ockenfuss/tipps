@@ -38,7 +38,7 @@ liste.append("Hallo")
 liste.append(liste2)#list of lists
 ############################Dateipfade########################paths#file
 import os.path
-
+os.path.splitext(filename)#tuple with Path+Name and Extension
 ############################Datetime module##############################
 #Datum und Zeit
 #Vergleiche: PlotSeries.py
@@ -228,7 +228,7 @@ plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#ne
 plt.rcParams["savefig.format"]="pdf"
 fig.savefig("Plot1.pdf")#save plot
 ###Backend
-matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set.
+matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set. Alternative: TkAgg
 matplotlib.get_backend()#get backend
 print(matplotlib.matplotlib_fname()) #find matplotlibrc
 
