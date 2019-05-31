@@ -184,7 +184,7 @@ ax.get_yaxis().set_visible(False)#hide ticks/axis
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter
 ###Beschriftung mit Latex
-plt.rc('text', usetex=True)
+plt.rc('text', usetex=True) #always necessary?
 ax1.set_xlabel(r'Irradiance [$\frac{mW}{m^{2}nm}]$', fontsize=18)
 ax.plot(x,y, label=r'$\phi={0}\pi$'.format(i))#use variable in latex label
 
@@ -233,7 +233,9 @@ matplotlib.get_backend()#get backend
 print(matplotlib.matplotlib_fname()) #find matplotlibrc
 
 
-###Size of plots
+###Arange subplots
+fig, ax=plt.subplots(2,2, figsize=(4,3))#Easiest way
+fig.subplots_adjust(hspace=0.1,wspace=0.1)#Adjust height and width spacing in units of mean axis length
 fig = plt.figure(figsize=(4,3))#Define grid and specify over how many cells axes spread
 grid = plt.GridSpec(4, 3, hspace=0.4, wspace=0.2)
 gs = gridspec.GridSpec(4, 2, width_ratios=[1, 1], height_ratios=[1, 10,10, 10])#another possibility
@@ -288,6 +290,15 @@ https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 #option2: set a link in one of the default locations (import sys, print(sys.path))
 #e.g. in /usr/lib/python3/dist-packages
 #intellisense should work automatically
+
+#import from parent directory
+def load_src(name, fpath):
+    import os, imp
+    p = fpath if os.path.isabs(fpath) \
+        else os.path.join(os.path.dirname(__file__), fpath)
+    return imp.load_source(name, p)
+load_src("Tools", "/example/example/Tools.py")#absolute or relative path possible!
+import Tools
 
 
 #How to write proper docstrings for functions/classes:
