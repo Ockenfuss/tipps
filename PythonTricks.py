@@ -4,6 +4,7 @@ Pip: sudo apt install python3-Pip
 #install package with pip: use --user flag if you have problems
 #also possible: install with python3 -m pip install
 #list packages (python3 -m) pip list
+#upgrade pip: 
 import numpy as np
 
 

@@ -12,6 +12,9 @@ chmod u=rwx #change permissions of user to rwx
 /etc/group #all groups
 groups #command to show my groups
 
+##########################User Handling###################
+useradd test #Add new account
+userdel -r test #remove user including his home directory
 
 #############################################Useful bash commands################################
 more#show content of ascii file
