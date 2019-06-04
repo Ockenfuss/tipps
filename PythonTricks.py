@@ -84,12 +84,15 @@ np.zeros(100)
 np.ones(100)
 xgrid, ygrid=np.meshgrid(x,y)#make e.g. two 2D grids of two 1D arrays
 
+###Indexing
 #Boolsche Indizes: auswählen eines bestimmten Teilarrays
 #<,>,== geht direct, für Verknüpfung (Oder, Und) mehrerer Ausdrücke:
 b=np.logical_and(t<deltat, t>=0)
 print(t[b])
 #Elementwise boolean operations: https://docs.scipy.org/doc/numpy-1.13.0/reference/routines.logic.html
 np.logical_and(a,b)#perform logical and elementwise
+#Basic Slicing
+array[start:stop:step]#if start/stop<0, replace by start/stop+n with n the dimension of the axis
 
 
 #Numpy sortieren
@@ -109,7 +112,7 @@ np.argmax(array)#index of maximum
 #Secondly, the resulting 1d array is filled into the new one by the same principle: the first (50) elements of the 1D array are put in the last dimension (0-50), then the second last dimension (0-400) is raised +1 and the next (50) elements are put into the last dimension (0-50) again, and so on.
 new=old.reshape((3,400,50))
 
-#stack numpy arrays
+#stack/extend/combine numpy arrays
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
 #combine multidimensional arrays
