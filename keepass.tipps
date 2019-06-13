@@ -1,0 +1,15 @@
+
+
+Plugin Firefox: "Kee"
+
+Benötigt Plugin in keepass zur Kommunikation:
+Dazu: Passendes File in "Plugins" folder von Keepass legen
+
+
+
+Synchronisation mit Dropbox:
+-Je nach Betriebssystem von Keepass unabhängigen Dropbox Client installieren
+-Unter "Dokumente/Passwords.dkbx" liegt die original Keepass Datei
+-Um die Dropbox Datei bei jedem Speichern zu synchronisieren, erstelle einen Trigger:
+Event: Saving database file
+Actions: Erst Trigger State Off, dann sync with file/URL (hier die zu synchronisierende Dropbox Datei(pfad) angeben), dann Trigger State ON

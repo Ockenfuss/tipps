@@ -1,1 +1,16 @@
 *.private
+\.vscode/
+
+*.aux
+
+*.bcf
+
+Latex\.log
+
+*.out
+
+Latex\.run\.xml
+
+Latex\.synctex\.gz
+
+Latex\.pdf
