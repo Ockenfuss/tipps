@@ -16,6 +16,12 @@ sys.exit()#beendet ein Python Program #Stop #Interrupt
 #Funktionen: often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
 #Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
 
+#Variable reference in Python
+#in general, every object has an id (similar to pointer in C)
+#Function arguments are in general by reference, i.e. inside the function, we are dealing with a new reference for the original object
+#Generally, expressions are evaluated from the right
+#Expressions like a=a+10 (a can be numpy array!): Create a new, deep copy and assign its reference to a
+
 #Datentypen
 int(x)#convert to integer
 
@@ -39,6 +45,7 @@ liste.append("Hallo")
 liste.append(liste2)#list of lists
 ############################Dateipfade########################paths#file
 import os.path
+os.path.join()
 os.path.splitext(filename)#tuple with Path+Name and Extension
 ############################Datetime module##############################
 #Datum und Zeit
@@ -262,11 +269,12 @@ im.cmap.set_under('k',1.)
 
 #######################Animationen########################
 import matplotlib.animation as animation
-fig, ax=plt.subplots(2,2)
+fig, ax=plt.subplots()
 ims=[]
 for i in range(1,200):
-    im=ax[0,1].imshow(image[i], cmap="Greys_r")
-    ims.append([im])
+    title = plt.text(0.5,1.01,i, ha="center",va="bottom", transform=ax.transAxes)
+    im=ax.imshow(image[i], cmap="Greys_r")#pcolormesh o.ä. works as well
+    ims.append([im,title])
 ani = animation.ArtistAnimation(fig, ims, interval=30, blit=True, repeat_delay=40)
 ani.save('SimpleBox.mp4')
 plt.show()

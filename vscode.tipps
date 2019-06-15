@@ -46,7 +46,8 @@ in "tasks.json":
          }]
 }
 
-
+##############################Python###############################
+#Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
 
 
 
