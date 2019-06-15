@@ -89,7 +89,7 @@ time.sleep(5.5)#5.5 seconds pause
 #Numpy Arrays erstellen
 np.zeros(100)
 np.ones(100)
-xgrid, ygrid=np.meshgrid(x,y)#make e.g. two 2D grids of two 1D arrays
+xgrid, ygrid=np.meshgrid(x,y,indexing='ij')#make e.g. two 2D grids of two 1D arrays. With ij, every column ofxgrid equals x, every row of ygrid equals y. This is the "matrix interpretation".
 
 ###Indexing
 #Boolsche Indizes: auswählen eines bestimmten Teilarrays
@@ -258,7 +258,7 @@ ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
 ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
 
 ###############Plot types#############
-ax2.hist(distance,bins=100, weights=values, range=(-60,60))#histogramm
+n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff)
 im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
 
 ###############Images (2D Verteilung) plotten#################
