@@ -134,8 +134,10 @@ np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy
 np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
 np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at the adjacent old points. x_old must be increasing if not specified furhter!
-#Random
+
+#Statistics
 np.random.rand(*arr.shape)#produce random numbers between 0 and 1 in an array with the given dimensions
+np.random.normal(0,1,(2,2))#produce normal distributed values in an array with the given shape
 ####################################################Pandas##################################################
 #My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
 
