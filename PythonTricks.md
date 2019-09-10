@@ -5,68 +5,72 @@
 
 <!-- code_chunk_output -->
 
-* [Python Tricks](#python-tricks)
-	* [Python General](#python-general)
-		* [Installation](#installation)
-		* [General](#general)
-			* [Functions:](#functions)
-			* [Variable reference in Python](#variable-reference-in-python)
-			* [Datatypes](#datatypes)
-			* [Strings](#strings)
-			* [Arrays](#arrays)
-			* [Lists](#lists)
-			* [File paths](#file-paths)
-		* [Datetime module](#datetime-module)
-			* [Datum aus String](#datum-aus-string)
-			* [String aus Datum:](#string-aus-datum)
-			* [Differenz in Sekunden:](#differenz-in-sekunden)
-			* [Zeiten addieren:](#zeiten-addieren)
-			* [Zeiten Plotten](#zeiten-plotten)
-		* [time Module](#time-module)
-		* [Numpy](#numpy)
-			* [Numpy Arrays erstellen](#numpy-arrays-erstellen)
-			* [Indexing](#indexing)
-			* [Basic Slicing](#basic-slicing)
-			* [Numpy sortieren](#numpy-sortieren)
-			* [Numpy Array reshape](#numpy-array-reshape)
-			* [stack/extend/combine numpy arrays](#stackextendcombine-numpy-arrays)
-			* [combine multidimensional arrays](#combine-multidimensional-arrays)
-			* [Numpy Datentypen](#numpy-datentypen)
-			* [Numpy Funktionen](#numpy-funktionen)
-			* [Statistics](#statistics)
-		* [Pandas](#pandas)
-			* [Create Data Frame](#create-data-frame)
-			* [read from file](#read-from-file)
-			* [acces element](#acces-element)
-			* [boolean indexing](#boolean-indexing)
-			* [get columns](#get-columns)
-			* [Categories in one column](#categories-in-one-column)
-			* [iterration over rows](#iterration-over-rows)
-			* [Groupby](#groupby)
-		* [Pyplot/Matplotlib](#pyplotmatplotlib)
-			* [create plot](#create-plot)
-			* [Axen und Ticks](#axen-und-ticks)
-			* [Beschriftung mit Latex](#beschriftung-mit-latex)
-			* [Legende](#legende)
-			* [Color cycle setzen](#color-cycle-setzen)
-			* [linestyle cycle](#linestyle-cycle)
-			* [colorbar: They always live in their own axes object!](#colorbar-they-always-live-in-their-own-axes-object)
-			* [Zweite Axe rechts:](#zweite-axe-rechts)
-			* [Figuren](#figuren)
-				* [Kreis plotten](#kreis-plotten)
-			* [Save File Location default and default extension (pdf)](#save-file-location-default-and-default-extension-pdf)
-			* [Backend](#backend)
-			* [Arange subplots](#arange-subplots)
-			* [Text and annotations](#text-and-annotations)
-			* [Plot types](#plot-types)
-				* [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
-			* [Animationen](#animationen)
-		* [NETCDF](#netcdf)
-		* [Image processing](#image-processing)
-			* [Convolution](#convolution)
-		* [Create your own modules](#create-your-own-modules)
-			* [import from parent directory](#import-from-parent-directory)
-			* [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
+- [Python Tricks](#python-tricks)
+  - [Python General](#python-general)
+    - [Installation](#installation)
+    - [General](#general)
+      - [Functions:](#functions)
+      - [Variable reference in Python](#variable-reference-in-python)
+      - [Datatypes](#datatypes)
+      - [Strings](#strings)
+      - [Arrays](#arrays)
+      - [Lists](#lists)
+      - [File paths](#file-paths)
+    - [Datetime module](#datetime-module)
+      - [Datum aus String](#datum-aus-string)
+      - [String aus Datum:](#string-aus-datum)
+      - [Differenz in Sekunden:](#differenz-in-sekunden)
+      - [Zeiten addieren:](#zeiten-addieren)
+      - [Zeiten Plotten](#zeiten-plotten)
+    - [time Module](#time-module)
+  - [Numpy](#numpy)
+      - [Numpy I/O](#numpy-io)
+      - [Numpy Arrays erstellen](#numpy-arrays-erstellen)
+      - [Indexing](#indexing)
+      - [Basic Slicing](#basic-slicing)
+      - [Numpy sortieren](#numpy-sortieren)
+      - [Numpy Array reshape](#numpy-array-reshape)
+      - [stack/extend/combine numpy arrays](#stackextendcombine-numpy-arrays)
+      - [combine multidimensional arrays](#combine-multidimensional-arrays)
+      - [Numpy Datentypen](#numpy-datentypen)
+      - [Numpy Funktionen](#numpy-funktionen)
+      - [Statistics](#statistics)
+      - [Fourier Transformations](#fourier-transformations)
+  - [Pandas](#pandas)
+      - [Create Data Frame](#create-data-frame)
+      - [read from file](#read-from-file)
+      - [acces element](#acces-element)
+      - [boolean indexing](#boolean-indexing)
+      - [get columns](#get-columns)
+      - [Categories in one column](#categories-in-one-column)
+      - [iterration over rows](#iterration-over-rows)
+      - [Groupby](#groupby)
+  - [Pyplot/Matplotlib](#pyplotmatplotlib)
+      - [create plot](#create-plot)
+      - [Axen und Ticks](#axen-und-ticks)
+      - [Beschriftung mit Latex](#beschriftung-mit-latex)
+      - [Legende](#legende)
+      - [linestyle cycle](#linestyle-cycle)
+      - [colorbar](#colorbar)
+        - [Create colorbar](#create-colorbar)
+        - [Colorbar limits and scale](#colorbar-limits-and-scale)
+        - [Color cycle setzen](#color-cycle-setzen)
+      - [Zweite Axe rechts:](#zweite-axe-rechts)
+      - [Figuren](#figuren)
+        - [Kreis plotten](#kreis-plotten)
+      - [Save File Location default and default extension (pdf)](#save-file-location-default-and-default-extension-pdf)
+      - [Backend](#backend)
+      - [Arange subplots](#arange-subplots)
+      - [Text and annotations](#text-and-annotations)
+      - [Plot types](#plot-types)
+        - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
+      - [Animationen](#animationen)
+  - [NETCDF](#netcdf)
+  - [Image processing](#image-processing)
+      - [Convolution](#convolution)
+  - [Create your own modules](#create-your-own-modules)
+      - [import from parent directory](#import-from-parent-directory)
+      - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
 
 <!-- /code_chunk_output -->
 
@@ -150,6 +154,7 @@ os.path.splitext(filename)#tuple with Path+Name and Extension
 ```
 ### Datetime module
 Datum und Zeit
+Übersicht: https://www.programiz.com/python-programming/datetime
 Vergleiche: PlotSeries.py
 ```python
 import datetime
@@ -221,7 +226,14 @@ time.sleep(5.5)#5.5 seconds pause
 
 
 
-###Numpy
+##Numpy
+####Numpy I/O
+```python
+np.save("folder/file",array)#save as binary numpy object
+array=np.load("folder/file.npy")#load binary object
+array=np.genfromtxt("file")#load from asciifile
+```
+
 ####Numpy Arrays erstellen
 ```python
 np.zeros(100)
@@ -276,6 +288,7 @@ new=old.reshape((3,400,50))
 ```python
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
+np.repeat(arr1[:, :, np.newaxis], n_repeat, axis=2)#repeat a given array into a new direction
 ```
 ####combine multidimensional arrays
 ```python
@@ -293,17 +306,26 @@ np.mean(Array, Axis=0)#Numpy
 np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy
 np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
-np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at the adjacent old points. x_old must be increasing if not specified furhter!
+#Easy transformation 0 to 360: (360+angle)%360
+np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at the adjacent old points. x_old must be increasing if not specified further!
 ```
 
 ####Statistics
 ```python
 np.random.rand(*arr.shape)#produce random numbers between 0 and 1 in an array with the given dimensions
 np.random.normal(0,1,(2,2))#produce normal distributed values in an array with the given shape
+np.random.multivariate_normal(a,b)#produce a set of numbers (vector), such that these variables in the limit of many observations have the given covariance matrix b (around the mean vector a).
 ```
 
+####Fourier Transformations
+```python
+sig_f=np.fft.fft(sig)#Simple discrete Fourier transform
+sig2d_f=np.fft.fft2(sig2d)#For 2d arrays (images)
+```
+Sig_f contains the amplitudes corresponding to the frequencies given from `np.fft.fftfreq(N, d=1.0)`, with `N=len(sig)`. The general format is [k0, k1, ..., kN/2, k(-N/2), ... k(-1)], and the values are just kn=n/(N*d). Therefore, to get the real frequencies k we usually want in e^(ikx), we have to set d=dx/(2 * pi), with dx the spacing of the real space points in `sig`.
 
-###Pandas
+
+##Pandas
 My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
 
 ####Create Data Frame
@@ -362,7 +384,7 @@ for name, group in enumerate(datgroup):
 ```
 
 
-###Pyplot/Matplotlib
+##Pyplot/Matplotlib
 https://matplotlib.org/faq/usage_faq.html#usage
 Basic structure: A Figure object is the empty window which contains the plots.
 In the figure is a certain number of Axes objects, the actual "plots".
@@ -405,11 +427,6 @@ legend2 = ax2.legend([dummy_lines[i] for i in [0,1]], ["Measurements", "Simulati
 ax2.add_artist(legend2)
 ```
 
-####Color cycle setzen
-```python
-cm = plt.get_cmap('gist_rainbow')
-ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
-```
 ####linestyle cycle
 ```python
 from itertools import cycle
@@ -418,7 +435,11 @@ linecycler = cycle(lines)
 ax.plot(x,y, linestyle=next(linecycler))
 ```
 
-####colorbar: They always live in their own axes object!
+
+####colorbar
+
+#####Create colorbar
+They always live in their own axes object!
 ```python
 cbar=fig.colorbar(im)#If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
 cbar.set_label("Label")
@@ -428,6 +449,19 @@ divider = make_axes_locatable(ax[0])#If there are multiple axes 0,1,2,3...
 cax = divider.append_axes('right', size='5%', pad=0.05)
 fig.colorbar(contour, cax=cax)
 ```
+#####Colorbar limits and scale
+https://matplotlib.org/users/colormapnorms.html
+```python
+import matplotlib.colors as colors
+ax.matshow(Mat, norm=colors.SymLogNorm(linthresh=0.003, linscale=1.0, vmin=-2.0, vmax=2.0))#log scale with symmetric area around 0. linthresh: the value, where the linear range starts. linscale: if 1.0, the linear range has the width of one order of magnitude on the colorbar.
+```
+
+#####Color cycle setzen
+```python
+cm = plt.get_cmap('gist_rainbow')
+ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
+```
+
 
 ####Zweite Axe rechts:
 ```python
@@ -484,6 +518,7 @@ im.cmap.set_under('k',1.)
 
 
 ####Animationen
+Animation Artist:
 ```python
 import matplotlib.animation as animation
 fig, ax=plt.subplots()
@@ -496,12 +531,27 @@ ani = animation.ArtistAnimation(fig, ims, interval=30, blit=True, repeat_delay=4
 ani.save('SimpleBox.mp4')
 plt.show()
 ```
+Animation Function:
+```python
+from matplotlib.animation import FuncAnimation
+def create_1d_animation(fig, ax, x, values, interval):
+    #format [frame, position]
+    line, = ax.plot([], [], lw=1)
+    def animate(i):
+        a = x[i]
+        b = values[i]
+        line.set_data(a, b)
+        return line,
+    print(x.shape[0])
+    anim = FuncAnimation(fig, animate, frames=x.shape[0], interval=interval, blit=True)
+    return anim
+```
 
-###NETCDF
+##NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
 Dimensions are essentially also variables itself ("coordinate variables")
 
-###Image processing
+##Image processing
 ####Convolution
 ```python
 from scipy import signal as sig
@@ -511,7 +561,7 @@ boundary: How boundary conditions are treated: fill missing values on the rim wi
 mode: Size of the resulting array, 'full', "valid", or "same"
 
 
-###Create your own modules
+##Create your own modules
 https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
 All about paths and importing from other directories:
 https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html

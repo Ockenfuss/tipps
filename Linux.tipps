@@ -2,6 +2,8 @@
 #bash in general: there are various types of shells: login, interactive, non-interactive
 #if a bash script is executed, this is usually done in a non-interactive shell. Therefore, custom commands from the .bashrc or .zshrc are not available there!
 
+###########################Linux General##########################
+What is a kernel? C't Articles: https://www.heise.de/select/ct/2019/16/softlinks/yzpg?wt_mc=pred.red.ct.ct162019.174.softlink.softlink
 
 ###########################Permissions in Linux##############################
 https://www.guru99.com/file-permissions.html
