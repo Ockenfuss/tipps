@@ -65,6 +65,7 @@
       - [Plot types](#plot-types)
         - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
       - [Animationen](#animationen)
+  - [Subprocess](#subprocess)
   - [NETCDF](#netcdf)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
@@ -546,6 +547,14 @@ def create_1d_animation(fig, ax, x, values, interval):
     anim = FuncAnimation(fig, animate, frames=x.shape[0], interval=interval, blit=True)
     return anim
 ```
+
+##Subprocess
+Library to execute commands on commandline (bash)
+```python
+import subprocess as sp
+sp.call("echo test", shell=True)#Simple execution of string
+```
+
 
 ##NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
