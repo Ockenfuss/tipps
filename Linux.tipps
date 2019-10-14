@@ -20,7 +20,7 @@ userdel -r test #remove user including his home directory
 
 #############################################Useful bash commands################################
 more#show content of ascii file
-
+command1 | xargs -p -i command2 -flag1 {} -flag2#execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution.
 ############################Printing###################
 #All options: https://www.cups.org/doc/options.html
 lpstat -p #show printers
@@ -29,6 +29,12 @@ lpq -a #all jobs of current computer
 lprm -P Druckername Job-ID
 ###########################Searching###################
 #grep: For searches within files find: for searching a file/folder
+
+###########################SVN###################
+svn co https://svn.physik.uni-muenchen.de/repos/libRadtran/trunk libRadtran#Checkout repository
+svn up#Update repository
+svn diff --summarize#show changed files
+svn revert -R src/#Revert all changes in src/ (recursive, be aware that changes can be lost!)
 
 
 #########Everyday commands##############################
