@@ -560,6 +560,23 @@ sp.call("echo test", shell=True)#Simple execution of string
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
 Dimensions are essentially also variables itself ("coordinate variables")
 
+```python
+import netCDF4
+ncf = netCDF4.Dataset("Example.nc", 'r')
+print(ncf)#print overview of whole dataset
+print(ncf.groups)#print groups if available
+print(ncf.dimensions)#print avalabledimensions
+print(ncf.dimensions.keys())#get dimension names
+print(ncf.variables.keys())#get variable names
+pmom=ncf.variables["pmom"]#get one variable
+print(pmom)#get overview
+print(pmom.dimensions)#one variable does not necessarly have to implement all dimensions!
+print(pmom.shape)#get shape of the data
+print(pmom.units)#get units
+print(pmom[1,:,0,1])#data can be accessed like numpy arrays
+ncf.close()#close stream after use
+```
+
 ##Image processing
 ####Convolution
 ```python
