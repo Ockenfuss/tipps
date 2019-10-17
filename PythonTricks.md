@@ -233,6 +233,7 @@ time.sleep(5.5)#5.5 seconds pause
 np.save("folder/file",array)#save as binary numpy object
 array=np.load("folder/file.npy")#load binary object
 array=np.genfromtxt("file")#load from asciifile
+A=np.genfromtxt('file_name',skip_header = N,max_rows =1)#read only specific line/range
 ```
 
 ####Numpy Arrays erstellen
