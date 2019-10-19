@@ -16,6 +16,12 @@ ctrl+W in Terminal: Close it (self defined)
 
 
 #########################Debugging########################################
+tasks.json: File which defines how to compile the open editor file, e.g. gcc with -g and all further arguments for C.
+
+launch.json: File with recipe how to debug the program, after compiling with a task in tasks.json, e.g. use gdb for C debugging.
+
+
+
 Logpoints: Advanced break points, which can e.g. depend on a condition
 
 
