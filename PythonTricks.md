@@ -458,7 +458,7 @@ ax.matshow(Mat, norm=colors.SymLogNorm(linthresh=0.003, linscale=1.0, vmin=-2.0,
 
 #####Color cycle setzen
 ```python
-cm = plt.get_cmap('gist_rainbow')
+cm = plt.get_cmap('gist_rainbow')#Cmaps: https://matplotlib.org/examples/color/colormaps_reference.html
 ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
 ```
 
@@ -514,6 +514,12 @@ im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2
 from matplotlib.colors import LogNorm#falls mit LogNorm
 im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm())#b: 2D Array mit Pixelwerten
 im.cmap.set_under('k',1.) 
+
+contour=ax.contour(x,y,z, colors='k')#Contour plot: Draw height lines ('isobares')
+ax.clabel(contour, colors = 'k', fmt = '%2.1f', fontsize=12)#write height values to lines
+
+ax.contourf(x,y,z, cmap='Greys')#Draw a filled contour plot, i.e. with areas rather than lines.
+
 ```
 
 

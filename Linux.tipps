@@ -74,6 +74,8 @@ in /etc/bluetooth/main.conf: "ControllerMode = bredr" setzen und danach "sudo se
 sshfs:
 killall -9 sshfs
 fusermount -uz ~/Mounts/Remote #Unmount directory "Remote"
+#Usermapping: Map Ownership from remote user to current user
+sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:/project/meteo/work/Paul.Ockenfuss ~/Work
 
 scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from one computer to other
 Login at cip pool: ssh Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de
