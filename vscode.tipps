@@ -23,7 +23,8 @@ launch.json: File with recipe how to debug the program, after compiling with a t
 
 
 Logpoints: Advanced break points, which can e.g. depend on a condition
-
+In watch window:
+Show pointer as array: "*pointer@3"
 
 ###################Latex#################################################
 Strg+Alt+B: Wählt automatisch das erste "Recipe" aus. die hier gelisteten Tools werden nacheinander ausgeführt

@@ -15,6 +15,13 @@ Of the preceding character
 
 ###Character groups
 Formed by `[abc]`
+```bash
+[ae]#matches a and e
+[0-9]#matches a single digit between 0 and 9
+\d#all digits
+\w#word characters
+\l or \u#all lower- or uppercase characters
+```
 
 
 ###Examples

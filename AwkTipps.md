@@ -25,6 +25,14 @@ Columns can also be accessed by variables via `$i`
 gawk '{for(i=0; i<10; i++) print i}'
 gawk '{if (condition){actions}}'
 ```
+###Logical Operators
+```bash
+{ if( $2>50 && $3>50 ) print $1 }#Logical And
+{ if( $2<50 || $3<50 || $4<50 ) print $1 }#Logical Or
+```
+
+###Printing
+
 
 ###Build in functions
 ```bash
@@ -32,6 +40,7 @@ gawk '{if (condition){actions}}'
 'match($0, "Ha..o")'#give the position where the given regex matches the given string (whole line here)
 gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replaces all
 'tolower($0)'#make characters lowercase
+'exit'#end program
 ```
 
 ###Build in variables
@@ -42,7 +51,7 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 ###Regex
 `$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match".
 
-#Examples
+##Examples
 * Invert lines: `gawk '{a[i++]=$0}END{for(j=i-1; j>=0;j--) print a[j]}'`
 
 * Inverse sum (over blocks separated by "x"): `gawk '!/x/{a[count++]=$0} /x/{print $0; sum=0; for(j=count-1; j>=0; j--){ sum+=a[j]; b[j]=sum} for(j=0; j<count; j++) print a[j] " " b[j]; count=0}'`

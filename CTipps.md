@@ -2,14 +2,13 @@
 
 
 ###Pointer
-#Initialize a pointer:
-double *a;
-#How to get the pointer from the variable:
+```C
+double *a;//Initialize a pointer:
 double b=0.0
-&b
+&b//How to get the pointer from the variable:
+```
 
-
-#Create arrays
+###Create arrays
 ```C
 bool boolArray[5] = {true , false , true , false , true}; //only with #include <stdbool.h>
 int array[5];//Without defining values
@@ -21,35 +20,52 @@ free(distance); free(array);//important!!!
 ###Structures
 ####Define
 ```C
-struct person{
+typedef struct person{
     int a;
     int b;
-};
+}person;
 ```
 ####Access members
 ```C
-struct person paul;
+person paul;
 paul.a=5;
+person* philipp;
+philipp->a=4//equals (*paul).a=5, i.e. we follow the pointer
 ```
 
-####Pointers to struct
+##Strings
+
+###Format specifier: 
+https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
 ```C
-struct person *paul;
-paul->a=5;//equals (*paul).a=5, i.e. we follow the pointer
+%i//integer
+%e//scientific notation
+%f//float
+%g//use e or f (what's shorter)
+```
+###String functions
+```C
+strcpy(dest, source);//copy source into destination. !Strings must be long enough!
+strlen(str)//return length of string as integer
 ```
 
 
+String zerteilen: Use `strtok`. Important: modifies string, so create a copy first!!
+```C
+char delimiter[] = ",;";
+char *ptr;
+ptr = strtok(string, delimiter);//Initialize: get pointer to first section
+ptr=strtok(NULL, delimiter);//next call: Use NULL to get the next section
+if(ptr==NULL)//If no more sections, NULL is returned
+//the end of each section is marked with /0 (End of string)
+for (token = strtok(input, delim); token != NULL; token = strtok(NULL, delim))//Short combination
+}
+```
 
-//Format specifier: https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
-%i: integer
-%e: scientific notation
-%f: float
-%g: use e or f (what's shorter)
 
-
-
-#####Complile#####
-
+##Compile
+###Header files
+Declare every function and type in a separate header file
 
 
 ###gcc flags
@@ -57,5 +73,5 @@ paul->a=5;//equals (*paul).a=5, i.e. we follow the pointer
 -g #debug mode, important if you want to use gdb
 
 
-#######Debugging
+###Debugging
 gdb: Debugger for Linux
