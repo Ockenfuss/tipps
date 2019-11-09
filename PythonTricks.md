@@ -15,6 +15,7 @@
       - [Strings](#strings)
       - [Arrays](#arrays)
       - [Lists](#lists)
+      - [Dictionaries](#dictionaries)
       - [File paths](#file-paths)
     - [Datetime module](#datetime-module)
       - [Datum aus String](#datum-aus-string)
@@ -63,6 +64,8 @@
       - [Arange subplots](#arange-subplots)
       - [Text and annotations](#text-and-annotations)
       - [Plot types](#plot-types)
+        - [Lines and points](#lines-and-points)
+        - [Histograms](#histograms)
         - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
       - [Animationen](#animationen)
   - [Subprocess](#subprocess)
@@ -147,6 +150,13 @@ Like Arrays, but can (1) contain different data types and (2) be extended dynami
 `liste=[]`
 `liste.append("Hallo")`
 `liste.append(liste2)`list of lists
+
+#### Dictionaries
+```python
+example={"key": value, "key2": value2}
+print(example["key2"])
+```
+
 #### File paths
 ```python
 import os.path
@@ -411,6 +421,7 @@ ax.get_yaxis().set_visible(False)#hide ticks/axis
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter
+ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
 ```
 ####Beschriftung mit Latex
 ```python
@@ -495,21 +506,36 @@ print(matplotlib.matplotlib_fname()) #find matplotlibrc
 
 
 ####Arange subplots
+```python
 fig, ax=plt.subplots(2,2, figsize=(4,3))#Easiest way
 fig.subplots_adjust(hspace=0.1,wspace=0.1)#Adjust height and width spacing in units of mean axis length
+
+import matplotlib.gridspec as gridspec
 fig = plt.figure(figsize=(4,3))#Define grid and specify over how many cells axes spread
 grid = plt.GridSpec(4, 3, hspace=0.4, wspace=0.2)
 gs = gridspec.GridSpec(4, 2, width_ratios=[1, 1], height_ratios=[1, 10,10, 10])#another possibility
 ax1 = fig.add_subplot(grid[:-1,:])
 ax2 = fig.add_subplot(grid[-1, :])
+```
 
 ####Text and annotations
+```python
 ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
 ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
+```
 
 ####Plot types
+#####Lines and points
+```python
+ax.plot(x,y,'.-', label="label")
+ax.scatter(x,y,alpha=0.5)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well
+ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
+```
+#####Histograms
+```python
 n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff)
 im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
+```
 
 #####Images (2D Verteilung) plotten
 ```python

@@ -7,11 +7,17 @@ Some program examples: https://www.gnu.org/software/gawk/manual/html_node/Miscel
 gawk 'PATTERN {COMMANDS}' File.dat#from command line
 gawk -f Code.awk File.dat#from code file
 ```
+AWK scripts consist of blocks, where each block contains some commands within `{}`brackets.
 There can be multiple commands in one block, separated by ';'
+Each block usually contains a condition before the brackets, which determines whether the block is executed. The whole script is applied to each line in a file.
+
+There are two special blocks `BEGIN {...}` and `END {...}`, which are executed only once before respectively after the main program (useful for e.g. variable declaration or creation of a file without input).
+
 
 ###Command line arguments
 ```bash
 gawk -F ',' -f Code.awk File.dat#specify the column separator, default is ' '
+gawk -i inplace file.txt#Inplace editing: Redirect the output to a temporary file and overwrite the original file with the temporary file after execution
 ```
 
 
@@ -32,7 +38,10 @@ gawk '{if (condition){actions}}'
 ```
 
 ###Printing
-
+```bash
+print $1, $2#print line. Without ',', the values are not separated!
+printf $1 "a" #print without newline
+```
 
 ###Build in functions
 ```bash
@@ -47,11 +56,13 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 * FS: the current file separator
 * NF: Number of fields(=columns) in the current record (=line)
 * FNR: Number of the current line in the current file
+* NR: Number or the current line
 
 ###Regex
 `$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match".
 
 ##Examples
+* Remove empty lines: `gawk 'NF>0`
 * Invert lines: `gawk '{a[i++]=$0}END{for(j=i-1; j>=0;j--) print a[j]}'`
 
 * Inverse sum (over blocks separated by "x"): `gawk '!/x/{a[count++]=$0} /x/{print $0; sum=0; for(j=count-1; j>=0; j--){ sum+=a[j]; b[j]=sum} for(j=0; j<count; j++) print a[j] " " b[j]; count=0}'`

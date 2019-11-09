@@ -7,6 +7,8 @@ double *a;//Initialize a pointer:
 double b=0.0
 &b//How to get the pointer from the variable:
 ```
+#####NULL
+NULL is a special pointer that points nowhere. It cannot be dereferenced. Check for null pointer via: `if(ptr) printf("Pointer is null!");`
 
 ###Create arrays
 ```C
@@ -39,9 +41,11 @@ philipp->a=4//equals (*paul).a=5, i.e. we follow the pointer
 https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
 ```C
 %i//integer
+%zu//size_t
 %e//scientific notation
 %f//float
 %g//use e or f (what's shorter)
+%p//pointer
 ```
 ###String functions
 ```C
