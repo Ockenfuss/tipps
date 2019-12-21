@@ -1,7 +1,7 @@
-#Tips for the AWK programming language
+# Tips for the AWK programming language
 https://www.tutorialspoint.com/awk/index.htm
 Some program examples: https://www.gnu.org/software/gawk/manual/html_node/Miscellaneous-Programs.html#Miscellaneous-Programs
-###Usage
+### Usage
 
 ```bash
 gawk 'PATTERN {COMMANDS}' File.dat#from command line
@@ -14,7 +14,7 @@ Each block usually contains a condition before the brackets, which determines wh
 There are two special blocks `BEGIN {...}` and `END {...}`, which are executed only once before respectively after the main program (useful for e.g. variable declaration or creation of a file without input).
 
 
-###Command line arguments
+### Command line arguments
 ```bash
 gawk -F ',' -f Code.awk File.dat#specify the column separator, default is ' '
 gawk -i inplace file.txt#Inplace editing: Redirect the output to a temporary file and overwrite the original file with the temporary file after execution
@@ -47,8 +47,10 @@ printf $1 "a" #print without newline
 ```bash
 'length($0)>18'#pattern matching all lines with more than 18 characters
 'match($0, "Ha..o")'#give the position where the given regex matches the given string (whole line here)
+'match($0, "Ha..o",a); print a[0]'#in this case, a is an array where the 0th position contains the part of $0 that matches the regex
 gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replaces all
 'tolower($0)'#make characters lowercase
+'system("echo $(ls)")'#call bash commands from awk
 'exit'#end program
 ```
 
@@ -59,7 +61,7 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 * NR: Number or the current line
 
 ###Regex
-`$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match".
+`$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match". Regex can also be combined using logical operators: `a~/REGEX1/ && b!~/REGEX2/{do...}`
 
 ##Examples
 * Remove empty lines: `gawk 'NF>0`

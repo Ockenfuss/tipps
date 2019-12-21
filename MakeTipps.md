@@ -1,5 +1,11 @@
 # Tipps for creation of Makefiles
+Manual: https://www.gnu.org/software/make/manual/html_node/index.html#Top
 
+### Variables
+```makefile
+UV=abc
+$(UV)#Use variable
+```
 
 ### Internal macros
 * `$<`: Name of first prerequisite
@@ -8,8 +14,9 @@
 * `$^`: Name of all prerequisites
 
 
-###Filters and wildcards
+### Filters and wildcards
 *Filter all prerequisites for extension ".o": `$(filter %.o, $^)`
+
 
 
 

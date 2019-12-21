@@ -16,7 +16,7 @@
       - [Arrays](#arrays)
       - [Lists](#lists)
       - [Dictionaries](#dictionaries)
-      - [File paths](#file-paths)
+      - [File paths/IO](#file-pathsio)
     - [Datetime module](#datetime-module)
       - [Datum aus String](#datum-aus-string)
       - [String aus Datum:](#string-aus-datum)
@@ -64,7 +64,7 @@
       - [Arange subplots](#arange-subplots)
       - [Text and annotations](#text-and-annotations)
       - [Plot types](#plot-types)
-        - [Lines and points](#lines-and-points)
+        - [Lines, points and bars](#lines-points-and-bars)
         - [Histograms](#histograms)
         - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
       - [Animationen](#animationen)
@@ -157,11 +157,14 @@ example={"key": value, "key2": value2}
 print(example["key2"])
 ```
 
-#### File paths
+#### File paths/IO
 ```python
+import sys
+sys.argv[1]#Command line arguments. argv[0] contains program name. 
 import os.path
 os.path.join()
 os.path.splitext(filename)#tuple with Path+Name and Extension
+os.path.isfile(filename)#check for type or existence
 ```
 ### Datetime module
 Datum und Zeit
@@ -432,7 +435,7 @@ ax.plot(x,y, label=r'$\phi={0}\pi$'.format(i))#use variable in latex label
 ```
 ####Legende
 ```python
-legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium')#Legende
+legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2)#Legende
 dummy_lines = []#Legende nur mit Linestyle
 dummy_lines.append(ax2.plot([],[], c="black", linestyle ="-", linewidth=1.2)[0])
 dummy_lines.append(ax2.plot([],[], c="black", linestyle ="--", linewidth=1.6)[0])
@@ -458,9 +461,10 @@ cbar=fig.colorbar(im)#If there are multiple axes and we want to assign a colorba
 cbar.set_label("Label")
 cbar.ax.tick_params(labelsize=10)
 from mpl_toolkits.axes_grid1 import make_axes_locatable
-divider = make_axes_locatable(ax[0])#If there are multiple axes 0,1,2,3...
-cax = divider.append_axes('right', size='5%', pad=0.05)
-fig.colorbar(contour, cax=cax)
+def add_colorbar(fig, ax, image):
+  divider = make_axes_locatable(ax)#If there are multiple axes 0,1,2,3...
+  cax = divider.append_axes('right', size='5%', pad=0.05)
+  fig.colorbar(image, cax=cax)
 ```
 #####Colorbar limits and scale
 https://matplotlib.org/users/colormapnorms.html
@@ -525,15 +529,16 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction'
 ```
 
 ####Plot types
-#####Lines and points
+#####Lines, points and bars
 ```python
 ax.plot(x,y,'.-', label="label")
 ax.scatter(x,y,alpha=0.5)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
+ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
 ```
 #####Histograms
 ```python
-n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff)
+n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True, cumulative=False)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff) Cumulative allows for cumulative histograms
 im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
 ```
 
