@@ -35,6 +35,22 @@ person* philipp;
 philipp->a=4//equals (*paul).a=5, i.e. we follow the pointer
 ```
 
+##IO
+Output
+```C
+#include <stdio.h>
+printf("Hello\n");
+fprintf(stdout,"Numbers: %d %d\n",1,2);
+```
+Input
+```C
+#include <stdio.h>
+char c=getchar();//Read one char from stdin. If no character is present, wait until the user specified one or more char and presses ENTER. (if multiple char are typed in, the following calls to getchar() will first return these before waiting again!)
+char string[10];
+gets(string); //Read until newline from stdin. Buffer overflow possible!
+fgets(string, 10, stdin);//Read until newline, but maximal 10 char (including \n and \0)
+```
+
 ##Strings
 
 ###Format specifier: 
@@ -54,13 +70,13 @@ strlen(str)//return length of string as integer
 ```
 
 
-String zerteilen: Use `strtok`. Important: modifies string, so create a copy first!!
+String zerteilen: Use `strtok`. Important: modifies string, so create a copy if necessary! No new memory is allocated, just replaces all delimiters by `\0` and sets the returned pointer to the beginning of a section.
 ```C
 char delimiter[] = ",;";
 char *ptr;
-ptr = strtok(string, delimiter);//Initialize: get pointer to first section
-ptr=strtok(NULL, delimiter);//next call: Use NULL to get the next section
-if(ptr==NULL)//If no more sections, NULL is returned
+token = strtok(string, delimiter);//Initialize: get pointer to first section
+token=strtok(NULL, delimiter);//next call: Use NULL to get the next section
+if(token==NULL)//If no more sections, NULL is returned
 //the end of each section is marked with /0 (End of string)
 for (token = strtok(input, delim); token != NULL; token = strtok(NULL, delim))//Short combination
 }
