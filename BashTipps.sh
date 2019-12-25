@@ -15,10 +15,15 @@ PATH="$HOME/bin:$HOME/.local/bin:$PATH"
 #Remind: stderr is not sent to the right!
 cmd> NewFile#Redirection: Redirect all the output from one command to a (new) file. Its content will be overwritten!
 cmd>>#Redirection with appending the new content
-cmd>&1#Redirect output to stdout. "0" is stdin, 1" is stdout, "2" is stderr
+cmd>&1#Redirect output to stdout. "0" is stdin, "1" is stdout, "2" is stderr
 2>&1#Redirect only errors to stdout
 
 /dev/null #Black hole: Swallows all input redirected to it
 
 #Pipes
 Befehl1 | Befehl2
+
+
+##############Background jobs###########
+jobs #list jobs
+kill %1 # '1' is the Job ID you get by calling jobs: "[1] + Running ..."

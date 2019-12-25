@@ -83,15 +83,15 @@ for (token = strtok(input, delim); token != NULL; token = strtok(NULL, delim))//
 ```
 
 
-##Compile
-###Header files
+## Compile
+### Header files
 Declare every function and type in a separate header file
 
 
-###gcc flags
--iquote abc: set "abc" at the beginning of the list of quote directories, i.e. direcotries which are searched for #include "file"
--g #debug mode, important if you want to use gdb
+### gcc flags
+* -iquote abc: set "abc" at the beginning of the list of quote directories, i.e. direcotries which are searched for #include "file"
+* -g: debug mode, important if you want to use gdb
+* -Wall: Warn all. Enable a lot of warnings.
 
-
-###Debugging
+### Debugging
 gdb: Debugger for Linux
