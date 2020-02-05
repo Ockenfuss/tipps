@@ -28,7 +28,8 @@ lp -d Printer_Name dokument.pdf #print pdf
 lpq -a #all jobs of current computer
 lprm -P Druckername Job-ID
 ###########################Searching###################
-#grep: For searches within files find: for searching a file/folder
+grep#: For searches within files 
+find#: for searching a file/folder
 
 ###########################SVN###################
 svn co https://svn.physik.uni-muenchen.de/repos/libRadtran/trunk libRadtran#Checkout repository
