@@ -22,28 +22,29 @@ gawk -i inplace file.txt#Inplace editing: Redirect the output to a temporary fil
 
 
 
-###Columns
+### Columns
 `$0` represents the whole line, `$1`, `$2`,... are the single columns. If possible, the strings are directly converted to real numbers!
 Columns can also be accessed by variables via `$i`
 
-###Loops and conditions
+### Loops and conditions
 ```bash
 gawk '{for(i=0; i<10; i++) print i}'
 gawk '{if (condition){actions}}'
+gawk '{while (condition) {actions}}'
 ```
-###Logical Operators
+### Logical Operators
 ```bash
 { if( $2>50 && $3>50 ) print $1 }#Logical And
 { if( $2<50 || $3<50 || $4<50 ) print $1 }#Logical Or
 ```
 
-###Printing
+### Printing
 ```bash
 print $1, $2#print line. Without ',', the values are not separated!
 printf $1 "a" #print without newline
 ```
 
-###Build in functions
+### Build in functions
 ```bash
 'length($0)>18'#pattern matching all lines with more than 18 characters
 'match($0, "Ha..o")'#give the position where the given regex matches the given string (whole line here)

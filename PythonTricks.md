@@ -30,22 +30,15 @@
       - [Indexing](#indexing)
       - [Basic Slicing](#basic-slicing)
       - [Numpy sortieren](#numpy-sortieren)
-      - [Numpy Array reshape](#numpy-array-reshape)
-      - [stack/extend/combine numpy arrays](#stackextendcombine-numpy-arrays)
+    - [Numpy array transformations](#numpy-array-transformations)
+      - [Broadcasting](#broadcasting)
+        - [Numpy Array reshape](#numpy-array-reshape)
+      - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
       - [combine multidimensional arrays](#combine-multidimensional-arrays)
-      - [Numpy Datentypen](#numpy-datentypen)
-      - [Numpy Funktionen](#numpy-funktionen)
-      - [Statistics](#statistics)
-      - [Fourier Transformations](#fourier-transformations)
-  - [Pandas](#pandas)
-      - [Create Data Frame](#create-data-frame)
-      - [read from file](#read-from-file)
-      - [acces element](#acces-element)
-      - [boolean indexing](#boolean-indexing)
-      - [get columns](#get-columns)
-      - [Categories in one column](#categories-in-one-column)
-      - [iterration over rows](#iterration-over-rows)
-      - [Groupby](#groupby)
+    - [Numpy Datentypen](#numpy-datentypen)
+    - [Numpy Funktionen](#numpy-funktionen)
+    - [Statistics](#statistics)
+    - [Fourier Transformations](#fourier-transformations)
   - [Pyplot/Matplotlib](#pyplotmatplotlib)
       - [create plot](#create-plot)
       - [Axen und Ticks](#axen-und-ticks)
@@ -56,6 +49,7 @@
         - [Create colorbar](#create-colorbar)
         - [Colorbar limits and scale](#colorbar-limits-and-scale)
         - [Color cycle setzen](#color-cycle-setzen)
+      - [Modify colormaps](#modify-colormaps)
       - [Zweite Axe rechts:](#zweite-axe-rechts)
       - [Figuren](#figuren)
         - [Kreis plotten](#kreis-plotten)
@@ -69,7 +63,21 @@
         - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
       - [Animationen](#animationen)
   - [Subprocess](#subprocess)
+  - [Pandas](#pandas)
+      - [Create Data Frame](#create-data-frame)
+      - [read from file](#read-from-file)
+      - [acces element](#acces-element)
+      - [boolean indexing](#boolean-indexing)
+      - [get columns](#get-columns)
+      - [Categories in one column](#categories-in-one-column)
+      - [iterration over rows](#iterration-over-rows)
+      - [Groupby](#groupby)
   - [NETCDF](#netcdf)
+  - [Xarray](#xarray)
+    - [Selecting data](#selecting-data)
+    - [Coordinates](#coordinates)
+    - [combining data](#combining-data)
+    - [Modifying data](#modifying-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
   - [Create your own modules](#create-your-own-modules)
@@ -118,9 +126,10 @@ combine strings
 ```python
 test="Hallo"+"du"
 ```
-print array elements with the given separator (if necessary: use `[str(i) for i in arr] first`)
+Split and combine arrays
 ```python
-",".join(arr)
+",".join(arr) #print array elements with the given separator (if necessary: use `[str(i) for i in arr] first`)
+string.split(",")#split string into array of strings with the given separator
 ```
 remove occurances at beginning or end
 ```python
@@ -152,9 +161,12 @@ Like Arrays, but can (1) contain different data types and (2) be extended dynami
 `liste.append(liste2)`list of lists
 
 #### Dictionaries
+Unordered storage vor key-values pairs.
 ```python
 example={"key": value, "key2": value2}
-print(example["key2"])
+print(example["key2"])#Access elements by key
+d=dict(zip(keys, values))#use dict to create a dictionary from a list of key-value tupples (zip creates such a list from key and value lists)
+list(d.keys())#get keys as list
 ```
 
 #### File paths/IO
@@ -163,6 +175,8 @@ import sys
 sys.argv[1]#Command line arguments. argv[0] contains program name. 
 import os.path
 os.path.join()
+os.path.abspath(path)#get the absolute filepath
+os.path.dirname(path)#directory name
 os.path.splitext(filename)#tuple with Path+Name and Extension
 os.path.isfile(filename)#check for type or existence
 ```
@@ -292,47 +306,61 @@ np.amax(array)#maximum of array
 np.argmax(array)#index of maximum
 ```
 
-####Numpy Array reshape
+### Numpy array transformations
+#### Broadcasting
+https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
+Whenever you are doing arithmetic with arrays, it is on an element-by-element basis. However, what happens if the arrays do not have the same shape? In this case, the dimensions are compared, starting from the last dimension. If their lengths are not the same, one of them has to be lenght one. This one will be repeated before applying the arithmetic.
+See the example:
+```python
+A      (4d array):  8 x 1 x 6 x 1
+B      (3d array):      7 x 1 x 5
+Result (4d array):  8 x 7 x 6 x 5
+#This does not work:
+A      (2d array):      2 x 1
+B      (3d array):  8 x 4 x 3 # second from last dimensions mismatched
+```
+##### Numpy Array reshape
 Imagine the old array to be flattened first: First, the last dimension is counted up (0,1,2,3...), then the second last is raised +1 and the last counted up again and so on.
 Secondly, the resulting 1d array is filled into the new one by the same principle: the first (50) elements of the 1D array are put in the last dimension (0-50), then the second last dimension (0-400) is raised +1 and the next (50) elements are put into the last dimension (0-50) again, and so on.
 ```python
 new=old.reshape((3,400,50))
 ```
 
-####stack/extend/combine numpy arrays
+#### stack/extend/combine/transpose numpy arrays
 ```python
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
 np.repeat(arr1[:, :, np.newaxis], n_repeat, axis=2)#repeat a given array into a new direction
+arr.transpose(1,0,2)#switch the order of axes. Similar to arr.T in two dimensions
 ```
-####combine multidimensional arrays
+#### combine multidimensional arrays
 ```python
 np.concatenate((arr1, arr2), axis=1)#must have same dimensions except on the concatenation axis
 ```
 
-####Numpy Datentypen
+### Numpy Datentypen
 ```python
 arr2=arr1.astype(int)#Array conversion
 ```
 
-####Numpy Funktionen
+### Numpy Funktionen
 ```python
 np.mean(Array, Axis=0)#Numpy
 np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy
-np.arctan2(y,x)#Gives the angle of a point x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
+np.arctan2(y,x)/np.pi*180#Gives the angle of a point (in radians!) x,y including information about the quadrant (be aware: arctan2(y,x), NOT x,y!)
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
 #Easy transformation 0 to 360: (360+angle)%360
 np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at the adjacent old points. x_old must be increasing if not specified further!
 ```
 
-####Statistics
+### Statistics
 ```python
 np.random.rand(*arr.shape)#produce random numbers between 0 and 1 in an array with the given dimensions
 np.random.normal(0,1,(2,2))#produce normal distributed values in an array with the given shape
 np.random.multivariate_normal(a,b)#produce a set of numbers (vector), such that these variables in the limit of many observations have the given covariance matrix b (around the mean vector a).
 ```
 
-####Fourier Transformations
+### Fourier Transformations
 ```python
 sig_f=np.fft.fft(sig)#Simple discrete Fourier transform
 sig2d_f=np.fft.fft2(sig2d)#For 2d arrays (images)
@@ -340,66 +368,9 @@ sig2d_f=np.fft.fft2(sig2d)#For 2d arrays (images)
 Sig_f contains the amplitudes corresponding to the frequencies given from `np.fft.fftfreq(N, d=1.0)`, with `N=len(sig)`. The general format is [k0, k1, ..., kN/2, k(-N/2), ... k(-1)], and the values are just kn=n/(N*d). Therefore, to get the real frequencies k we usually want in e^(ikx), we have to set d=dx/(2 * pi), with dx the spacing of the real space points in `sig`.
 
 
-##Pandas
-My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
-
-####Create Data Frame
-```python
-test=[[4,5,6],[1,2,3]]
-testdf=pd.DataFrame(test,columns=['A','B','C'])
-```
-####read from file
-```python
-data=pd.read_csv("FileName")
-```
-
-####acces element
-both work with boolean indexing
-```python
-data.loc['A','B']#if you use column/row names
-data.iloc[1:2,3:4]#if you use indices
-```
-important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
-
-####boolean indexing
-```python
- s[(s < -1) | (s > 0.5)]
-```
-
-####get columns
-```python
-datadp.columns
-```
-
-####Categories in one column
-```python
-np.unique(testdf.A)
-```
-
-####iterration over rows
-```python
-for index, line in df.iterrows():
-    print(line)
-```
-####Groupby
-combine rows which have a common feature into subgroups
-(https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html)
-```python
-datgroup=data.groupby("Label")
-```
-if groupby by two labels: multindices occur: https://www.datacamp.com/community/tutorials/pandas-multi-index
-* acces
-```python
-datgroup.get_group["A"]
-```
-* iterate over groups
-```python
-for name, group in enumerate(datgroup):
-    print(group)
-```
 
 
-##Pyplot/Matplotlib
+## Pyplot/Matplotlib
 https://matplotlib.org/faq/usage_faq.html#usage
 Basic structure: A Figure object is the empty window which contains the plots.
 In the figure is a certain number of Axes objects, the actual "plots".
@@ -413,7 +384,7 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 ```
 
 
-####Axen und Ticks
+#### Axen und Ticks
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
 ax.set_xticks([1,2,3])#Ticks setzen. ax.get_xticks() liefert ticks
@@ -426,14 +397,14 @@ ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter
 ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
 ```
-####Beschriftung mit Latex
+#### Beschriftung mit Latex
 ```python
 plt.rc('text', usetex=True) #always necessary?
 ax1.set_xlabel(r'Irradiance [$\frac{mW}{m^{2}nm}]$', fontsize=18)
 ax.plot(x,y, label=r'$\phi={0}\pi$'.format(i))#use variable in latex label
 
 ```
-####Legende
+#### Legende
 ```python
 legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2)#Legende
 dummy_lines = []#Legende nur mit Linestyle
@@ -443,7 +414,7 @@ legend2 = ax2.legend([dummy_lines[i] for i in [0,1]], ["Measurements", "Simulati
 ax2.add_artist(legend2)
 ```
 
-####linestyle cycle
+#### linestyle cycle
 ```python
 from itertools import cycle
 lines = ["-","--","-.",":"]
@@ -452,12 +423,13 @@ ax.plot(x,y, linestyle=next(linecycler))
 ```
 
 
-####colorbar
+#### colorbar
 
-#####Create colorbar
+##### Create colorbar
 They always live in their own axes object!
 ```python
-cbar=fig.colorbar(im)#If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
+cbar=fig.colorbar(im, ax=ax)#In this case, the colorbar space is 'stolen' automatically from ax!
+#Manual way: If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
 cbar.set_label("Label")
 cbar.ax.tick_params(labelsize=10)
 from mpl_toolkits.axes_grid1 import make_axes_locatable
@@ -466,19 +438,30 @@ def add_colorbar(fig, ax, image):
   cax = divider.append_axes('right', size='5%', pad=0.05)
   fig.colorbar(image, cax=cax)
 ```
-#####Colorbar limits and scale
+##### Colorbar limits and scale
 https://matplotlib.org/users/colormapnorms.html
 ```python
 import matplotlib.colors as colors
 ax.matshow(Mat, norm=colors.SymLogNorm(linthresh=0.003, linscale=1.0, vmin=-2.0, vmax=2.0))#log scale with symmetric area around 0. linthresh: the value, where the linear range starts. linscale: if 1.0, the linear range has the width of one order of magnitude on the colorbar.
 ```
 
-#####Color cycle setzen
+##### Color cycle setzen
 ```python
 cm = plt.get_cmap('gist_rainbow')#Cmaps: https://matplotlib.org/examples/color/colormaps_reference.html
 ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
 ```
-
+#### Modify colormaps
+If you want to present the same information, but in an different style, vmin and vmax are not sufficient. You need to create you own colormap, e.g. as a cutout of a predefined colormap.
+```python
+import matplotlib.colors as colors
+def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    new_cmap = colors.LinearSegmentedColormap.from_list(
+        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)))
+    return new_cmap
+cmap = plt.get_cmap('jet')
+new_cmap = truncate_colormap(cmap, 0.2, 0.8)
+```
 
 ####Zweite Axe rechts:
 ```python
@@ -534,6 +517,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction'
 ax.plot(x,y,'.-', label="label")
 ax.scatter(x,y,alpha=0.5)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
+ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
 ```
 #####Histograms
@@ -545,7 +529,7 @@ im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2
 #####Images (2D Verteilung) plotten
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
-im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm())#b: 2D Array mit Pixelwerten
+im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1))#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
 im.cmap.set_under('k',1.) 
 
 contour=ax.contour(x,y,z, colors='k')#Contour plot: Draw height lines ('isobares')
@@ -586,15 +570,72 @@ def create_1d_animation(fig, ax, x, values, interval):
     return anim
 ```
 
-##Subprocess
+## Subprocess
 Library to execute commands on commandline (bash)
 ```python
 import subprocess as sp
 sp.call("echo test", shell=True)#Simple execution of string
 ```
 
+## Pandas
+My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
 
-##NETCDF
+#### Create Data Frame
+```python
+test=[[4,5,6],[1,2,3]]
+testdf=pd.DataFrame(test,columns=['A','B','C'])
+```
+#### read from file
+```python
+data=pd.read_csv("FileName")
+```
+
+#### acces element
+both work with boolean indexing
+```python
+data.loc['A','B']#if you use column/row names
+data.iloc[1:2,3:4]#if you use indices
+```
+important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
+
+#### boolean indexing
+```python
+ s[(s < -1) | (s > 0.5)]
+```
+
+#### get columns
+```python
+datadp.columns
+```
+
+#### Categories in one column
+```python
+np.unique(testdf.A)
+```
+
+#### iterration over rows
+```python
+for index, line in df.iterrows():
+    print(line)
+```
+#### Groupby
+combine rows which have a common feature into subgroups
+(https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html)
+```python
+datgroup=data.groupby("Label")
+```
+if groupby by two labels: multindices occur: https://www.datacamp.com/community/tutorials/pandas-multi-index
+* acces
+```python
+datgroup.get_group["A"]
+```
+* iterate over groups
+```python
+for name, group in enumerate(datgroup):
+    print(group)
+```
+
+## NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
 Dimensions are essentially also variables itself ("coordinate variables")
 
@@ -614,8 +655,51 @@ print(pmom.units)#get units
 print(pmom[1,:,0,1])#data can be accessed like numpy arrays
 ncf.close()#close stream after use
 ```
+## Xarray
+https://xarray.pydata.org/en/stable/index.html
+Generalization of pandas to work with higher dimensional data, basically a front-end for the netcdf format. Basic idea: The fundamental element is the DataArray. It describes values of one variable, which implements certain dimensions. A dimension can be seen as one axis in the higherdimensional space the variable exists in. Each dimension usually has a list of coordinates, these are labels which specify certain positions on the axis (think of the axis 'ticks'). Technically, dimensions are just DataArrays itself.
+Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset needs to implement all dimensions. Datasets are usefull because you can perform some operations on many DataArrays at once, e.g. slicing along one dimension, which will slice every DataArray which implements this dimension.
 
-##Image processing
+```python
+import xarray as xr
+ds=xr.open_dataset("filename")#open Dataset
+ds['temp']#select a Data variable of dimension
+ds['temp']=ds['temp'].astype(float)#convert a variable or dimension to another type
+```
+
+### Selecting data
+https://xarray.pydata.org/en/stable/indexing.html
+```python
+ds=ds.isel(temp=0)#selection based on index along the dimension
+ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
+```
+### Coordinates
+Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign furhter coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
+Be aware: Dimensions have names. You see them in () when printing. Coordinates can have the same names as the dimension they label (e.g. 'space') or different names (e.g. 'weekday' for dimension 'time'). In the latter case, you must of course tell xarray that 'weekday' belongs to the dimension 'time'.
+```python
+locs = ['A','B','C']
+weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
+foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])
+#Dataset with two dimension with coordinates
+foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
+foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
+```
+
+### combining data
+```python
+new=xr.concat([old1, old2], dim='time')
+```
+
+### Modifying data
+```python
+ds.mean(dim='time')#calculate mean/sum/...
+ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
+
+```
+
+
+
+## Image processing
 ####Convolution
 ```python
 from scipy import signal as sig
@@ -625,7 +709,7 @@ boundary: How boundary conditions are treated: fill missing values on the rim wi
 mode: Size of the resulting array, 'full', "valid", or "same"
 
 
-##Create your own modules
+## Create your own modules
 https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
 All about paths and importing from other directories:
 https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
@@ -637,7 +721,7 @@ for intellisense: set in settings json: "python.autoComplete.extraPaths": ["/hom
 e.g. in /usr/lib/python3/dist-packages
 intellisense should work automatically
 
-####import from parent directory
+#### import from parent directory
 ```python
 def load_src(name, fpath):
     import os, imp
@@ -648,7 +732,7 @@ load_src("Tools", "/example/example/Tools.py")#absolute or relative path possibl
 import Tools
 ```
 
-####How to write proper docstrings for functions/classes:
+#### How to write proper docstrings for functions/classes:
 ```python
 https://www.python.org/dev/peps/pep-0257/
 def complex(real=0.0, imag=0.0):
