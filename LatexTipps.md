@@ -1,23 +1,33 @@
+# Latex
+Tipps and code snippets to format texts in Latex
+
 Checkliste vor Druck:
--Hyperlinks in Farbe ausschalten! \usepackage[hidelinks]{hyperref}
--Seitenanordnung richig? Leerseiten? Seitenränder? \documentclass[a4paper,10pt, twoside]{report}
+-Hyperlinks in Farbe ausschalten! `\usepackage[hidelinks]{hyperref}`
+-Seitenanordnung richig? Leerseiten? Seitenränder? `\documentclass[a4paper,10pt, twoside]{report}`
 
 
-##########Geometry############
-#show geometry:
+##########Geometry
+show geometry:
 \usepackage{layout}
 \begin{document}\layout
 ...
 
 
+# Tikz
+Extremly comprehensive package to create all kinds of graphics.
 
+# Science
+## Units
+Recommended to use the si package. It allows you to adapt the format afterwards, e.g. to fulfill the requirements of a journal.
+```latex
+\usepackage{siunitx}
+\SI{100}{\per\cubic\centi\metre}
+```
 
-% ############Formatierung#######################
--Einheiten: Space between value and unit, unit non italic font: $412$ nm
-
-
-##############Equations####################
-### Align multiple quations in one row side by side with labels
+# Math
+## Aligning
+Align multiple quations in one row side by side with labels
+```latex
 \begin{center}
     \begin{minipage}[b]{.45\textwidth}
     \begin{equation}
@@ -33,12 +43,13 @@ Checkliste vor Druck:
       \end{equation}
     \end{minipage}
   \end{center}
+```
 
 
 
-
-
-% #Minimum working example:
+# Examples
+Full working example
+```latex
 \documentclass[a4paper,10pt, twoside]{report}
 \usepackage[utf8]{inputenc}
 \usepackage[T1]{fontenc}
@@ -77,3 +88,4 @@ test, test
 \printbibliography[title={Bibliography},heading=bibintoc]
 
 \end{document}
+```
