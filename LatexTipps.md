@@ -1,6 +1,20 @@
 # Latex
 Tipps and code snippets to format texts in Latex
 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Latex](#latex)
+- [Tikz](#tikz)
+- [Science](#science)
+  - [Units](#units)
+- [Math](#math)
+  - [Aligning](#aligning)
+- [Examples](#examples)
+
+<!-- /code_chunk_output -->
+
 Checkliste vor Druck:
 -Hyperlinks in Farbe ausschalten! `\usepackage[hidelinks]{hyperref}`
 -Seitenanordnung richig? Leerseiten? Seitenränder? `\documentclass[a4paper,10pt, twoside]{report}`
