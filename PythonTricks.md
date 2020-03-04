@@ -15,6 +15,7 @@
       - [Strings](#strings)
       - [Arrays](#arrays)
       - [Lists](#lists)
+      - [List comprehensions](#list-comprehensions)
       - [Dictionaries](#dictionaries)
       - [File paths/IO](#file-pathsio)
     - [Datetime module](#datetime-module)
@@ -160,6 +161,13 @@ Like Arrays, but can (1) contain different data types and (2) be extended dynami
 `liste=[]`
 `liste.append("Hallo")`
 `liste.append(liste2)`list of lists
+
+#### List comprehensions
+```python
+arr=[expr(i) for i in indices]
+arr=[expr(i) for i in indices if condition(i)]
+arr=[expr(i) if condition(i) else expression2(i) for i in indices]
+```
 
 #### Dictionaries
 Unordered storage vor key-values pairs.
