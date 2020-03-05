@@ -7,6 +7,7 @@ Tipps and code snippets to format texts in Latex
 
 - [Latex](#latex)
   - [ToDo package](#todo-package)
+  - [Subfiles](#subfiles)
 - [Tikz](#tikz)
 - [Science](#science)
   - [Units](#units)
@@ -34,6 +35,20 @@ show geometry:
 \missingfigure{some text}
 ```
 
+## Subfiles
+Very useful package when a big latex project should be splitted into different subfiles. 
+```latex
+% In the main document
+\usepackage{subfiles}
+\begin{document}
+\subfile{title}
+...
+% In the subfiles
+\documentclass[../Main.tex]{subfiles}
+\begin{document}
+...
+```
+
 # Tikz
 Extremly comprehensive package to create all kinds of graphics.
 
@@ -44,6 +59,7 @@ https://www.namsu.de/Extra/pakete/Siunitx.html
 ```latex
 \usepackage{siunitx}
 \SI{100}{\per\cubic\centi\metre}
+\SI{90}{\degree} %Alternatively, use $^{\circ}$
 ```
 
 # Math

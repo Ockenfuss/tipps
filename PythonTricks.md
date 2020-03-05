@@ -403,6 +403,7 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
 ax.set_xticks([1,2,3])#Ticks setzen. ax.get_xticks() liefert ticks
+ax.set_xticklabels(["A", "B", "C"])
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
 ax.yaxis.set_label_coords(-0.1, 0.5)#exakte position
