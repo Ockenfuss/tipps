@@ -35,6 +35,7 @@
         - [Numpy Array reshape](#numpy-array-reshape)
       - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
       - [combine multidimensional arrays](#combine-multidimensional-arrays)
+      - [masked arrays](#masked-arrays)
     - [Numpy Datentypen](#numpy-datentypen)
     - [Numpy Funktionen](#numpy-funktionen)
     - [Statistics](#statistics)
@@ -337,7 +338,12 @@ arr.transpose(1,0,2)#switch the order of axes. Similar to arr.T in two dimension
 ```python
 np.concatenate((arr1, arr2), axis=1)#must have same dimensions except on the concatenation axis
 ```
-
+#### masked arrays
+numpy support masked arrays with `numpy.ma` module. These are useful in combination with e.g. some plots
+```python
+arr_mask = np.ma.masked_where(mask, arr)
+ax.imshow(arr_mask, cmap=mymap)#use mymap.set_bad('b') to set the masked values to blue!
+```
 ### Numpy Datentypen
 ```python
 arr2=arr1.astype(int)#Array conversion
@@ -351,6 +357,7 @@ np.arctan2(y,x)/np.pi*180#Gives the angle of a point (in radians!) x,y including
 #x=1, y=1: 45°, x=-1, y=1: 135°, x=-1, y=-1: -135°, x=1, y=-1: -45° (upper half (y>0) positive angles, lower half negative angles)
 #Easy transformation 0 to 360: (360+angle)%360
 np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at the adjacent old points. x_old must be increasing if not specified further!
+np.trapz(y, x)#integral over y (sampling points located at x)
 ```
 
 ### Statistics
@@ -463,28 +470,28 @@ cmap = plt.get_cmap('jet')
 new_cmap = truncate_colormap(cmap, 0.2, 0.8)
 ```
 
-####Zweite Axe rechts:
+#### Zweite Axe rechts:
 ```python
 ax2=ax.twinx()#twiny() for axis on top
 ```
 
-####Figuren
+#### Figuren
 ```python
 ax.axvline(x=20)#axhline(y=20)
 ```
-#####Kreis plotten
+##### Kreis plotten
 ```python
 circle1 = plt.Circle((1000, 1000), 30, color='r', fill=True)
 ax.add_artist(circle1)
 ```
 
-####Save File Location default and default extension (pdf)
+#### Save File Location default and default extension (pdf)
 ```python
 plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#need to "import os"
 plt.rcParams["savefig.format"]="pdf"
 fig.savefig("Plot1.pdf")#save plot
 ```
-####Backend
+#### Backend
 ```python
 matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set. Alternative: TkAgg
 matplotlib.get_backend()#get backend
@@ -492,7 +499,7 @@ print(matplotlib.matplotlib_fname()) #find matplotlibrc
 ```
 
 
-####Arange subplots
+#### Arange subplots
 ```python
 fig, ax=plt.subplots(2,2, figsize=(4,3))#Easiest way
 fig.subplots_adjust(hspace=0.1,wspace=0.1)#Adjust height and width spacing in units of mean axis length
@@ -505,28 +512,28 @@ ax1 = fig.add_subplot(grid[:-1,:])
 ax2 = fig.add_subplot(grid[-1, :])
 ```
 
-####Text and annotations
+#### Text and annotations
 ```python
 ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
 ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
 ```
 
-####Plot types
-#####Lines, points and bars
+#### Plot types
+##### Lines, points and bars
 ```python
-ax.plot(x,y,'.-', label="label")
+ax.plot(x,y,'.-', linewidth=0.4,label="label")
 ax.scatter(x,y,alpha=0.5)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
 ```
-#####Histograms
+##### Histograms
 ```python
 n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True, cumulative=False)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff) Cumulative allows for cumulative histograms
-im=ax2.hist2d(distance,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
+im=ax2.hist2d(x,y,bins=100, weights=values, range=(-60,60))[3]#histogramm 2d, object for colorbar is the fourth returned object
 ```
 
-#####Images (2D Verteilung) plotten
+##### Images (2D Verteilung) plotten
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
 im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1))#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
@@ -540,7 +547,7 @@ ax.contourf(x,y,z, cmap='Greys')#Draw a filled contour plot, i.e. with areas rat
 ```
 
 
-####Animationen
+#### Animationen
 Animation Artist:
 ```python
 import matplotlib.animation as animation

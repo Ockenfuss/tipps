@@ -16,6 +16,23 @@ Checkliste vor Druck:
 -Einheiten: Space between value and unit, unit non italic font: $412$ nm
 
 
+##############Equations####################
+### Align multiple quations in one row side by side with labels
+\begin{center}
+    \begin{minipage}[b]{.45\textwidth}
+    \begin{equation}
+        P_{\lambda}=2f\delta (1-\mu)+(1-f)P_{\lambda}^* 
+        \label{eq:wiscombe}
+      \end{equation}
+    \end{minipage}
+    \quad
+    \begin{minipage}[b]{.45\textwidth}
+      \begin{equation}
+        P_{\lambda}^*=\sum^{\infty}_{l=0}p_l^* P_l(\mu)
+        \label{eq:wiscombe2}
+      \end{equation}
+    \end{minipage}
+  \end{center}
 
 
 
