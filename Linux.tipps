@@ -4,6 +4,11 @@
 
 ###########################Linux General##########################
 What is a kernel? C't Articles: https://www.heise.de/select/ct/2019/16/softlinks/yzpg?wt_mc=pred.red.ct.ct162019.174.softlink.softlink
+#Change kernel parameters at runtime
+cd /proc/sys #Here, kernel parameters are stored
+sysctl -a#list all parameters with value
+sysctl -w parameter=value #make a non-persistent change (reset by reboot)
+#persistent changes can be made by modifying the .conf files in /etc/sysctl.d/
 
 ###########################Permissions in Linux##############################
 https://www.guru99.com/file-permissions.html

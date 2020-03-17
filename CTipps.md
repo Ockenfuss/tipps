@@ -95,3 +95,9 @@ Declare every function and type in a separate header file
 
 ### Debugging
 gdb: Debugger for Linux
+
+### Profiling
+perf: profiler for linux
+Eventually, you need to set the kernel parameter: `sudo sysctl -w kernel/perf_event_paranoid=0`
+`perf record --call-graph dwarf ./Main`
+hotspot: GUI to analyze perf output (alternatively, use `perf report`): `hotspot perf.data`
