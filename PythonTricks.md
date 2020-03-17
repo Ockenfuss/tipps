@@ -137,6 +137,10 @@ remove occurances at beginning or end
 ```python
 string.strip("\n")
 ```
+Format specifiers
+```python
+print("%d %f %s"%(1, 0.314,"hallo"))#Write a percent sign and then the tuple with the values
+```
 
 #### Arrays
 returns the position as well as the value of the array
@@ -287,7 +291,6 @@ Boolsche Indizes: auswählen eines bestimmten Teilarrays
 <,>,== geht direkt, für Verknüpfung (Oder, Und) mehrerer Ausdrücke:
 ```python
 b=np.logical_and(t<deltat, t>=0)
-print(t[b])
 ```
 Elementwise boolean operations: https://docs.scipy.org/doc/numpy-1.13.0/reference/routines.logic.html
 ```python
@@ -304,6 +307,10 @@ argsort: Liefert array mit den Indizes in der sortierten Reihenfolge => einsetze
 ```python
 ind=np.argsort(a)
 print(a[ind])#sortiert
+def multiargsort(array):#for multidimensional arrays, we can flatten them first
+    flat=array.flatten()
+    ind=flat.argsort()
+    return np.unravel_index(ind,array.shape)#unravel_index does the stride arithmetic to convert linear to multidimensional indices
 ```
 
 
@@ -443,6 +450,7 @@ ax.plot(x,y, linestyle=next(linecycler))
 
 ##### Create colorbar
 They always live in their own axes object!
+All maps: https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html
 ```python
 cbar=fig.colorbar(im, ax=ax)#In this case, the colorbar space is 'stolen' automatically from ax!
 #Manual way: If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
@@ -531,7 +539,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='figure fraction'
 ##### Lines, points and bars
 ```python
 ax.plot(x,y,'.-', linewidth=0.4,label="label")
-ax.scatter(x,y,alpha=0.5)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well
+ax.scatter(x,y,alpha=0.5, marker='.')#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
@@ -681,6 +689,7 @@ import xarray as xr
 ds=xr.open_dataset("filename")#open Dataset
 ds['temp']#select a Data variable of dimension
 ds['temp']=ds['temp'].astype(float)#convert a variable or dimension to another type
+ds=ds.squeeze()#Fix all dimensions with length one
 ```
 
 ### Selecting data
@@ -688,6 +697,7 @@ https://xarray.pydata.org/en/stable/indexing.html
 ```python
 ds=ds.isel(temp=0)#selection based on index along the dimension
 ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
+ds.sel(temp=30, method='nearest')#Nearest neighbour lookup to find a value close to 30!
 ```
 ### Coordinates
 Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign furhter coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
@@ -709,8 +719,9 @@ new=xr.concat([old1, old2], dim='time')
 ### Modifying data
 ```python
 ds.mean(dim='time')#calculate mean/sum/...
+dist.where(dist==dist.min(), drop=True)#find index of mean/min/max/...
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
-
+ds.drop_vars('a')#remove a variable
 ```
 
 

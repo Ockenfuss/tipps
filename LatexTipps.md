@@ -14,6 +14,7 @@ Tipps and code snippets to format texts in Latex
 - [Math](#math)
   - [Aligning](#aligning)
   - [Symbols](#symbols)
+- [Figures](#figures)
 - [Examples](#examples)
 
 <!-- /code_chunk_output -->
@@ -89,6 +90,8 @@ $\hat{\alpha}$ %Small hat over a letter
 $\tilde{\alpha}$ %Small tilde over a letter
 ```
 
+# Figures
+My personal best practice: Already set the correct figsize in matplotlib so that no scaling in latex is necessary! For this, use `\showthe\textwidth` in latex and combine it with the Pytex package in my template collection.
 
 # Examples
 Full working example
