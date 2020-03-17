@@ -69,6 +69,9 @@ in "tasks.json":
          }]
 }
 
+Latex subfile package:
+-Option: "Use sub file" to specify which file should be used for the autobuild (main file or the currently open editor subfile)
+-Option: "do not prompt" to specify whether you want to be asked each time
 ##############################Python###############################
 #Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
 
