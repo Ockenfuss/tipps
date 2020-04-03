@@ -13,11 +13,18 @@
       - [Variable reference in Python](#variable-reference-in-python)
       - [Datatypes](#datatypes)
       - [Strings](#strings)
+        - [f-Strings](#f-strings)
       - [Arrays](#arrays)
       - [Lists](#lists)
       - [List comprehensions](#list-comprehensions)
+      - [Iterables](#iterables)
       - [Dictionaries](#dictionaries)
       - [File paths/IO](#file-pathsio)
+    - [Exceptions](#exceptions)
+    - [Object Orientation](#object-orientation)
+      - [Decorators](#decorators)
+      - [Get/Set](#getset)
+      - [Operator overloading](#operator-overloading)
     - [Datetime module](#datetime-module)
       - [Datum aus String](#datum-aus-string)
       - [String aus Datum:](#string-aus-datum)
@@ -85,6 +92,7 @@
   - [Create your own modules](#create-your-own-modules)
       - [import from parent directory](#import-from-parent-directory)
       - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
+  - [Unittests](#unittests)
 
 <!-- /code_chunk_output -->
 
@@ -137,9 +145,17 @@ remove occurances at beginning or end
 ```python
 string.strip("\n")
 ```
-Format specifiers
+Format specifiers: These are deprecated, better to use f=Strings!
 ```python
 print("%d %f %s"%(1, 0.314,"hallo"))#Write a percent sign and then the tuple with the values
+```
+##### f-Strings
+https://realpython.com/python-f-strings/
+A way to 'insert' python code into strings. Currently the recommended way to format strings (python 3.6 or newer).
+```python
+name="Paul"
+print(f"Hallo{name}")
+print(f"This is {object!r}")#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
 ```
 
 #### Arrays
@@ -162,15 +178,24 @@ np.atleast_2d(array)
 
 #### Lists
 Like Arrays, but can (1) contain different data types and (2) be extended dynamically
-`liste=[]`
-`liste.append("Hallo")`
-`liste.append(liste2)`list of lists
-
+```python
+liste=[]
+liste.append("Hallo")
+liste.append(liste2)#list of lists
+a=[1]+[2,3]#List concatenation
+b=[1]*3#=[1]+[1]+[1]
+if a: #a returns false is len(a)=0 (list is empty). The same holds for most collections like dict, tuple, ...
+```
 #### List comprehensions
 ```python
 arr=[expr(i) for i in indices]
 arr=[expr(i) for i in indices if condition(i)]
 arr=[expr(i) if condition(i) else expression2(i) for i in indices]
+```
+#### Iterables
+Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
+```python
+iterable=(obj.evalute() for obj in objlist)
 ```
 
 #### Dictionaries
@@ -180,6 +205,7 @@ example={"key": value, "key2": value2}
 print(example["key2"])#Access elements by key
 d=dict(zip(keys, values))#use dict to create a dictionary from a list of key-value tupples (zip creates such a list from key and value lists)
 list(d.keys())#get keys as list
+dict1.update(dict2)#update a dictionary with the values from another one (replace keys or create if not existing)
 ```
 
 #### File paths/IO
@@ -193,6 +219,106 @@ os.path.dirname(path)#directory name
 os.path.splitext(filename)#tuple with Path+Name and Extension
 os.path.isfile(filename)#check for type or existence
 ```
+### Exceptions
+Rasising Exceptions
+```python
+raise Exception("Message")
+assert(1==2)#Assertions raise an AssertionError
+```
+
+Try statement
+```python
+try:
+  somecode()
+except KeyError:
+  someOtherCode #Can use 'pass' to jump out of this section
+else:
+  code #if no exception was thrown
+finally:
+  code #Always execute this code. Usually, you can also write it directly after without finally
+```
+
+Custom Exceptions
+```python
+class MyError(Exception): #Derived from Exception class
+    def __init__(self, value): 
+        self.value = value 
+    def __str__(self): 
+        return(repr(self.value)) 
+```
+
+
+
+### Object Orientation
+General syntax:
+```python
+class test(object):#Derived from 'object'
+  def __init__(self, var1, var2):#Konstruktor
+    self._var1=var1
+    self._var2=var2
+    super().__init__()#If derived from another class, we can access parent methods through super()
+  
+  @classmethod
+  def formString(cls, string):#The recommended way to create different Constructors are multiple classmethods
+    v1,v2=parse(string)
+    return cls(v1,v2)
+
+  def method(self, var):
+    dosomething
+  def _method2(self, var):#Private method
+    dosomething
+    return something  
+  def __str__(self):#This method is invoked by 'repr(obj)' and returns a string representation for the object
+    return repr(self.var1)
+```
+Comparing objects:
+https://realpython.com/python-is-identity-vs-equality/
+```python
+mo=MyObject()
+type(mo)==MyObject#Check the exact type
+isinstance(mo, MyObject)
+isinstance(mo, Parent)#Is instance is also true for the parent type
+mo1==mo2#This checks whether the objects are equal according to their __eq__ implemntation (for example they have the same content)
+mo1 is mo2#Whether mo1 and mo2 relly point the the same instance in memory
+```
+#### Decorators
+https://realpython.com/primer-on-python-decorators/
+Decorators: define two functions a:int->int, F:func->func. Now, you can do `a=F(a)` to get a new function a passed through F. Usually, F is a wrapper that does some pre and post processing. Shorthand for this is `@F`. Useful applications: Debugging: Print function arguments! Timers, Register function in dict, ...
+```python
+def F(func):
+  def wrapper(*args, **kwargs):
+    #do something before
+    val=func(*args, **kwargs)
+    #do something after
+    return val
+@F
+def a(var):
+  ...
+```
+
+#### Get/Set
+```python
+class OurClass:
+    def __init__(self, a):
+        self.var = a
+    @property
+    def var(self):
+        return self.__var
+    @var.setter
+    def var(self, val):
+        if val < 0:
+            self.__var = 0
+        else:
+            self.__var = val
+```
+
+#### Operator overloading
+https://realpython.com/operator-function-overloading/#making-your-objects-capable-of-being-added-using
+Implement by use of special methods like `__add__`, `__mul__`,... By convenction, add and similar should return a new instance of the class!
+```python
+
+```
+
 ### Datetime module
 Datum und Zeit
 Übersicht: https://www.programiz.com/python-programming/datetime
@@ -687,6 +813,7 @@ Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset 
 ```python
 import xarray as xr
 ds=xr.open_dataset("filename")#open Dataset
+ds.to_netcdf("filename")#save Dataset
 ds['temp']#select a Data variable of dimension
 ds['temp']=ds['temp'].astype(float)#convert a variable or dimension to another type
 ds=ds.squeeze()#Fix all dimensions with length one
@@ -722,6 +849,7 @@ ds.mean(dim='time')#calculate mean/sum/...
 dist.where(dist==dist.min(), drop=True)#find index of mean/min/max/...
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
 ds.drop_vars('a')#remove a variable
+ds.drop_dims('time')#remove a dimension and all related variables
 ```
 
 
@@ -747,7 +875,12 @@ for intellisense: set in settings json: "python.autoComplete.extraPaths": ["/hom
 * option2: set a link in one of the default locations (import sys, print(sys.path))
 e.g. in /usr/lib/python3/dist-packages
 intellisense should work automatically
-
+* option3: If you need a selfmade module only for some project and do not want to add it to the path permanently, you can import it in a specific code by:
+```python
+import sys
+sys.path.append("path/to/module/")
+import module
+```
 #### import from parent directory
 ```python
 def load_src(name, fpath):
@@ -771,4 +904,9 @@ def complex(real=0.0, imag=0.0):
     """
     if imag == 0.0 and real == 0.0:
         return complex_zero
+```
+
+## Unittests
+https://realpython.com/python-testing/
+```python
 ```
