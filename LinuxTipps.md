@@ -7,6 +7,8 @@ Also includes a lot of useful snippets when working with the command line
 
 - [Tipps for daily Linux work](#tipps-for-daily-linux-work)
 - [Linux General](#linux-general)
+- [Change kernel parameters at runtime](#change-kernel-parameters-at-runtime)
+- [persistent changes can be made by modifying the .conf files in /etc/sysctl.d/](#persistent-changes-can-be-made-by-modifying-the-conf-files-in-etcsysctld)
   - [Permissions in Linux](#permissions-in-linux)
   - [User Handling](#user-handling)
   - [Links](#links)
@@ -15,11 +17,12 @@ Also includes a lot of useful snippets when working with the command line
   - [Searching](#searching)
   - [SVN](#svn)
   - [PDF](#pdf)
+  - [ssh](#ssh)
+    - [sshfs](#sshfs)
+    - [scp](#scp)
   - [Everyday commands](#everyday-commands)
 - [External Devices](#external-devices)
   - [Bluetooth](#bluetooth)
-- [Usermapping: Map Ownership from remote user to current user](#usermapping-map-ownership-from-remote-user-to-current-user)
-- [Meteo](#meteo)
 - [Change colors of command prompt:](#change-colors-of-command-prompt)
 
 <!-- /code_chunk_output -->
@@ -83,6 +86,40 @@ svn revert -R src/#Revert all changes in src/ (recursive, be aware that changes 
 ```bash
 qpdf -decrypt pdffile_protected.pdf pdffile_notprotected.pdf #Remove read only e.g. to make annotations to the pdf
 ```
+## ssh
+Usual directory: `~/.ssh`. There, you find your private key (`id_rsa`, keep it safe!) and your public key (`id_rsa.pub`). To use it for automatic login on a server, the public key must be added in the servers `.ssh/known_hosts` file. Therefore, you need to provide another method of authentification to the server, like a password or send an email to the admin, whatever. The usual way is to use ssh-copy-id, which automatically copies your public key in the servers known_hosts list (using e.g. password authentification). Now, the server trusts everyone who can prove to have the private key to the public one in known_hosts (Imagine the server encrypting a test message and sending it to the client. If the client can decrypt the message and send it back (encrypted with e.g. the servers public key, of course), the client can be trusted). 
+```bash
+ssh-keygen -t rsa -b 4096 -C "p-necko@t-online.de" #Generate a key public private key pair
+ssh-copy-id -i id_rsa.pub Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de #Add public key to server known_hosts
+ssh -X User@ServerAddress #Now log in to server (use -X to enable X11 forwarding)
+```
+Config file for ssh. Use it for configuration, abbreviation of long names, etc.
+```bash
+Host MyNickname
+  HostName ServerAddress
+  User MyLoginNameOnTheServer
+```
+### sshfs
+```bash
+sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:/project/meteo/work/Paul.Ockenfuss ~/Work #Usermapping: Map Ownership from remote user to current user
+fusermount -uz ~/Mounts/Remote #Unmount directory "Remote"
+killall -9 sshfs #If stuck :)
+```
+### scp
+```bash
+scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from one computer to other
+Login at cip pool: ssh Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de
+Copy to cip pool: scp Bilderseite.pdf Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de:~/
+```
+
+Meteo
+```bash
+ssh Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de
+ssh Paul.Ockenfuss@ComputerName
+rsync -a -v --exclude=".*" SimulationGit Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:
+Ergebnisse zurückholen: rsync -a -v Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:SimulationGit/NamederErgebnisse.results . <=Punkt: legt Ergebnisse in akt. Verzeichnis
+```
+
 
 ## Everyday commands
 Rename
@@ -117,25 +154,6 @@ in /etc/bluetooth/main.conf: "ControllerMode = bredr" setzen und danach "sudo se
 
 
 
-########################ssh##########################################
-sshfs:
-killall -9 sshfs
-fusermount -uz ~/Mounts/Remote #Unmount directory "Remote"
-#Usermapping: Map Ownership from remote user to current user
-sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:/project/meteo/work/Paul.Ockenfuss ~/Work
-
-scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from one computer to other
-Login at cip pool: ssh Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de
-Copy to cip pool: scp Bilderseite.pdf Paul.Ockenfuss@cip-sv-login01.cip.physik.uni-muenchen.de:~/
-
-#Meteo
-ssh Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de
-ssh Paul.Ockenfuss@ComputerName
-rsync -a -v --exclude=".*" SimulationGit Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:
-Ergebnisse zurückholen: rsync -a -v Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:SimulationGit/NamederErgebnisse.results . <=Punkt: legt Ergebnisse in akt. Verzeichnis
-
-SSHFS:
-sshfs Paul.Ockenfuss@login.meteo.physik.uni-muenchen.de:/home/p/Paul.Ockenfuss Ordner_wo_der_Baum_eingehängt_werden_soll
 
 
 

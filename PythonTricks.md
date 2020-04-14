@@ -10,6 +10,7 @@
     - [Installation](#installation)
     - [General](#general)
       - [Functions:](#functions)
+        - [Type hints](#type-hints)
       - [Variable reference in Python](#variable-reference-in-python)
       - [Datatypes](#datatypes)
       - [Strings](#strings)
@@ -85,14 +86,15 @@
   - [Xarray](#xarray)
     - [Selecting data](#selecting-data)
     - [Coordinates](#coordinates)
-    - [combining data](#combining-data)
+    - [combining/extending data](#combiningextending-data)
     - [Modifying data](#modifying-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
   - [Create your own modules](#create-your-own-modules)
-      - [import from parent directory](#import-from-parent-directory)
+      - [Module Structure](#module-structure)
       - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
   - [Unittests](#unittests)
+    - [Execute tests](#execute-tests)
 
 <!-- /code_chunk_output -->
 
@@ -120,6 +122,13 @@ sys.exit()
 #### Functions: 
 often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
 Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
+##### Type hints
+https://realpython.com/python-type-checking/
+They have no effect during runtime, but help understanding the code and are often used by linters to detect errors and deliver better suggestions.
+```python
+def myfunc(a : int, b : str) -> str:
+  ...
+```
 
 #### Variable reference in Python
 in general, every object has an id (similar to pointer in C)
@@ -196,6 +205,20 @@ arr=[expr(i) if condition(i) else expression2(i) for i in indices]
 Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
 ```python
 iterable=(obj.evalute() for obj in objlist)
+```
+Iterables can be created with the `yield` operator. It is similar to `return`, but keeps the function state in memory and continues execution when the next element is requested.
+```python
+def com(l, k):
+  """Example: Generates an iterator over all possible k-size subsets of l"""
+    if k==0:
+        yield []
+    elif k>=len(l):
+        yield l
+    else:
+        for com_without in com(l[1:], k):
+            yield com_without
+        for com_without in com(l[1:],k-1):
+            yield [l[0]]+com_without
 ```
 
 #### Dictionaries
@@ -838,9 +861,11 @@ foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 ```
 
-### combining data
+### combining/extending data
 ```python
 new=xr.concat([old1, old2], dim='time')
+data.expand_dims({'newdim':[1,2,3]})
+data1=data1.combine_first(data2)#extend data1 by the values of data2 (introducing nans if empty areas are created), but keep the values of data1 if there are already some present.
 ```
 
 ### Modifying data
@@ -850,6 +875,7 @@ dist.where(dist==dist.min(), drop=True)#find index of mean/min/max/...
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
 ds.drop_vars('a')#remove a variable
 ds.drop_dims('time')#remove a dimension and all related variables
+da.rename({'old':'new'})#Rename a var or coord in a DataArray
 ```
 
 
@@ -878,10 +904,27 @@ intellisense should work automatically
 * option3: If you need a selfmade module only for some project and do not want to add it to the path permanently, you can import it in a specific code by:
 ```python
 import sys
-sys.path.append("path/to/module/")
+sys.path.append("path/to/new_project/")
 import module
 ```
-#### import from parent directory
+#### Module Structure
+Typical directory structure
+```text
+new_project
+├── packagename
+│   ├── __init__.py         # make it a package
+│   └── antigravity.py
+└── test
+    ├── __init__.py         # also make test a package
+    └── test_antigravity.py
+```
+```python
+import packagename# import the functions provided in __init__.py
+from packagename import antigravity# import the antigravity module
+from antigravity.antigravity import my_object# or an object inside the antigravity module
+```
+
+import from parent directory
 ```python
 def load_src(name, fpath):
     import os, imp
@@ -891,6 +934,7 @@ def load_src(name, fpath):
 load_src("Tools", "/example/example/Tools.py")#absolute or relative path possible!
 import Tools
 ```
+
 
 #### How to write proper docstrings for functions/classes:
 ```python
@@ -905,8 +949,25 @@ def complex(real=0.0, imag=0.0):
     if imag == 0.0 and real == 0.0:
         return complex_zero
 ```
-
 ## Unittests
 https://realpython.com/python-testing/
 ```python
+import unittest as ut
+class SomeTests(ut.TestCase):
+  def setUp(self):
+    #come code if necessary
+  def test_something(self):#Must start with test_
+    #testing with asserts
+```
+### Execute tests
+Best to use the command line interface. Take the example from 
+[the importing modules section](#module-structure)
+```bash
+cd new_project
+python3 -m unittest discover #All tests in test directory. use -t testdir if not named test.
+python3 -m unittest test.test_antigravity #one specific test (python notation)
+```
+unittest introduces a few improved assertions:
+```python
+with self.assertRaises(SomeException): MyFunc(arguments)#Test for exception
 ```
