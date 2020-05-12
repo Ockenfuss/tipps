@@ -23,7 +23,14 @@ cmd>&1#Redirect output to stdout. "0" is stdin, "1" is stdout, "2" is stderr
 #Pipes
 Befehl1 | Befehl2
 
+### xargs
+```bash
+command1 | xargs -p -i command2 -flag1 {} -flag2#execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution.
+```
 
 ##############Background jobs###########
+Ctrl-Z: Pause job
+bg:Continue job in background
+fg: bring job to foreground
 jobs #list jobs
 kill %1 # '1' is the Job ID you get by calling jobs: "[1] + Running ..."

@@ -56,11 +56,6 @@ ln -s Source Destination#create symbolic link
 readlink [-f]#get destination of existing link
 
 
-# Useful bash commands
-```bash
-more#show content of ascii file
-command1 | xargs -p -i command2 -flag1 {} -flag2#execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution.
-```
 ## Printing
 All options: https://www.cups.org/doc/options.html
 ```bash
