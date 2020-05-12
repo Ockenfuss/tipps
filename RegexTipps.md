@@ -27,6 +27,7 @@ Formed by `[abc]`
 \d#all digits
 \w#word characters
 \l or \u#all lower- or uppercase characters
+[:blank:]#space and tab
 ```
 
 ### Subexpressions
