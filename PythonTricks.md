@@ -15,6 +15,7 @@
       - [Datatypes](#datatypes)
       - [Strings](#strings)
         - [f-Strings](#f-strings)
+        - [Regex](#regex)
       - [Arrays](#arrays)
       - [Lists](#lists)
       - [List comprehensions](#list-comprehensions)
@@ -86,10 +87,12 @@
       - [Groupby](#groupby)
   - [NETCDF](#netcdf)
   - [Xarray](#xarray)
+    - [Inspecting data](#inspecting-data)
     - [Selecting data](#selecting-data)
     - [Coordinates](#coordinates)
     - [combining/extending data](#combiningextending-data)
     - [Modifying data](#modifying-data)
+    - [apply_ufunc](#apply_ufunc)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
   - [Create your own modules](#create-your-own-modules)
@@ -143,9 +146,11 @@ convert to integer
 `int(x)`
 
 #### Strings
-combine strings
 ```python
-test="Hallo"+"du"
+test="Hallo"+"du" #Combination
+8*'hey' #Repetition
+if 'ocken' in 'ockenfuss' #Test for substrings (no need for regex here)
+
 ```
 Split and combine arrays
 ```python
@@ -168,6 +173,17 @@ name="Paul"
 print(f"Hallo{name}")
 print(f"This is {object!r}")#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
 ```
+##### Regex
+https://realpython.com/regex-python/
+```python
+import re
+match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like
+if re.search... :
+match.groups()#Tuple with all groups
+match.group(1)#Select a group. Index is one-based!
+
+```
+
 
 #### Arrays
 returns the position as well as the value of the array
@@ -235,6 +251,9 @@ print(example["key2"])#Access elements by key
 d=dict(zip(keys, values))#use dict to create a dictionary from a list of key-value tupples (zip creates such a list from key and value lists)
 list(d.keys())#get keys as list
 dict1.update(dict2)#update a dictionary with the values from another one (replace keys or create if not existing)
+d.pop('key', default)#return & remove key if existing and return default otherwise
+func(**kwargs):
+  key=kwargs.pop('key', default)#Very useful for function argument defaults
 ```
 
 #### File paths/IO
@@ -471,6 +490,7 @@ array[start:stop:step]#if start/stop<0, replace by start/stop+n with n the dimen
 #### Numpy sortieren
 argsort: Liefert array mit den Indizes in der sortierten Reihenfolge => einsetzen liefert sortiertes Array
 ```python
+np.unique(a, return_counts=False)#Find unique elements or count elements
 ind=np.argsort(a)
 print(a[ind])#sortiert
 def multiargsort(array):#for multidimensional arrays, we can flatten them first
@@ -584,14 +604,14 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 #### Axen und Ticks
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
-ax.set_xticks([1,2,3])#Ticks setzen. ax.get_xticks() liefert ticks
-ax.set_xticklabels(["A", "B", "C"])#use [] to turn off labels
+ax.set_xticks([1,2,3], minor=False)#Ticks setzen. ax.get_xticks() liefert ticks
+ax.set_xticklabels(["A12", "B12", "C12"], rotation=90, minor=False)#use [] to turn off labels
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
 ax.get_yaxis().set_visible(False)#hide ticks/axis
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
-ax.grid(True, which='major')#Gitter
+ax.grid(True, which='major')#Gitter. Positions according to xticks major/minor
 ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
 ```
 #### Beschriftung mit Latex
@@ -870,11 +890,26 @@ Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset 
 
 ```python
 import xarray as xr
+#Datasets
 ds=xr.open_dataset("filename")#open Dataset
 ds.to_netcdf("filename")#save Dataset
-ds['temp']#select a Data variable of dimension
-ds['temp']=ds['temp'].astype(float)#convert a variable or dimension to another type
+ds.temp#select a Data variable
+ds['temp']=ds.temp.astype(float)#convert a variable or dimension to another type. You have to use the [.] notation for assignments
 ds=ds.squeeze()#Fix all dimensions with length one
+#DataArrays
+da.name='radiance'#DataArrays can have names to identify them in Datasets
+da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
+da.attrs['units']='km'#long_name and units is used by the .plot() routine
+```
+### Inspecting data
+```python
+#DataArrays:
+da.dims#The dimension names of the data
+list(da.coords.keys())#The names of the coordinates (also non-active ones which are squeezed)
+#Datasets:
+list(ds.data_vars)#The names of the Data variables in the set
+list(ds.variables)#Everything: names of the variables AND coordinates (also squeezed ones)
+npt.assert_equal(sorted(list(ds.data_vars)), ['a', 'b'])#Check the formatting
 ```
 
 ### Selecting data
@@ -895,6 +930,7 @@ weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
 foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])#DataArray with two dimensions with coordinates
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
+da.get_axis_num('y')#useful when using numpy with da.values
 ```
 
 ### combining/extending data
@@ -914,10 +950,27 @@ ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
 ds.drop_vars('a')#remove a variable
 ds.drop_dims('time')#remove a dimension and all related variables
 da.rename({'old':'new'})#Rename a var or coord in a DataArray
-da.transpose('y', 'z', 'x')#Reorder dimensions
+da.transpose('y', 'z',..., 'x')#Reorder dimensions. Use ellipsis if further dimensions are present.
 da.sortby('time')#Also sortby(['time', 'lat'])
 da.dropna(dim='time', how='any')#Drop the label if any (alternative: all) value is nan
-da.name='radiance'#DataArrays can have names to identify them in Datasets
+da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
+```
+
+### apply_ufunc
+https://xarray.pydata.org/en/stable/examples/apply_ufunc_vectorize_1d.html#apply_ufunc
+Idea: Apply a function which works for numpy arrays to xarray. Super useful, because it cares about all the fiddling with dimensions, coordinates. Example: You have a function which takes scalar or 1D data and want to apply it for all dimensions in a dataarray and return the result as a new dataarray.
+```python
+interped = xr.apply_ufunc(
+  interp1d_np,  # first your function
+  air,  # now arguments in the order expected by 'interp1_np'
+  air.lat,  # as above
+  newlat,  # as above
+  input_core_dims=[["lat"], ["lat"], ["new_lat"]],  # list with one entry per arg
+  output_core_dims=[["new_lat"]],  # returned data has one dimension
+  exclude_dims=set(("lat",)),  # dimensions allowed to change size. Must be a set! Regard the comma!
+  vectorize=True,  # loop over non-core dims
+)
+result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_dims=[['theta'], ['theta']], output_core_dims=[['retresult']], exclude_dims=set(('theta',)), vectorize=True) #Another similar example
 ```
 
 
@@ -979,6 +1032,7 @@ import Tools
 Reload a module in the REPL
 ```python
 import importlib
+importlib.reload(module)
 ```
 
 
