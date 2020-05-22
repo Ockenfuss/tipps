@@ -895,7 +895,7 @@ ds=xr.open_dataset("filename")#open Dataset
 ds.to_netcdf("filename")#save Dataset
 ds.temp#select a Data variable
 ds['temp']=ds.temp.astype(float)#convert a variable or dimension to another type. You have to use the [.] notation for assignments
-ds=ds.squeeze()#Fix all dimensions with length one
+ds=ds.squeeze(drop=False)#Fix/Drop all dimensions with length one
 #DataArrays
 da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
@@ -917,7 +917,7 @@ https://xarray.pydata.org/en/stable/indexing.html
 ```python
 ds=ds.isel(temp=0)#selection based on index along the dimension
 ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
-ds.sel(temp=30, method='nearest')#Nearest neighbour lookup to find a value close to 30!
+ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30!
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
 ```
@@ -931,6 +931,7 @@ foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), '
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 da.get_axis_num('y')#useful when using numpy with da.values
+da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
 ```
 
 ### combining/extending data

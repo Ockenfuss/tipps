@@ -59,6 +59,7 @@ Recommended to use the si package. It allows you to adapt the format afterwards,
 https://www.namsu.de/Extra/pakete/Siunitx.html
 ```latex
 \usepackage{siunitx}
+\si{\km} %unit only
 \SI{100}{\per\cubic\centi\metre}
 \SI{90}{\degree} %Alternatively, use $^{\circ}$
 ```

@@ -7,5 +7,6 @@ Ideally, you want to share the settings and Email folder to allow parallel usage
 ## Workflow
 So far, I do not use folders for topics or personnes. This would lead to the questions of defining criteria which email belongs to which folder. If the main criterium is the sender, we do not gain any value as we can already search for specific senders.
 
-If possible, I leave all recent (last two years) emails on the IMAP server in order to have them available anytime and anywhere. Older emails can be archived in thunderbird to a local folder (Local/Empfangen/EmailAddress), which deletes them on the IMAP server. 
+If possible, I leave all recent (last two years) emails on the IMAP server in order to have them available anytime and anywhere. Emails which require an answer are left in the inbox, everything handled is put in an IMAP folder "Handled".
+Emails older than two years  can be archived in thunderbird to a local folder (Local/Empfangen/EmailAddress), which deletes them on the IMAP server. 
 This folder has to be listed in Settings->Kopien und Ordner->Nachrichtenarchiv for every Email account. Afterwards, just select all the emails to archive and click the archive button in thunderbird. Depending on the mail service, deleted messages are still in a trash folder on the server and count on the disk quota.
