@@ -52,6 +52,7 @@
     - [Fourier Transformations](#fourier-transformations)
   - [Scipy](#scipy)
     - [Statistics](#statistics-1)
+      - [Distribution functions](#distribution-functions)
   - [Pyplot/Matplotlib](#pyplotmatplotlib)
       - [create plot](#create-plot)
       - [Axen und Ticks](#axen-und-ticks)
@@ -212,6 +213,8 @@ liste.append(liste2)#list of lists
 a=[1]+[2,3]#List concatenation
 b=[1]*3#=[1]+[1]+[1]
 if a: #a returns false is len(a)=0 (list is empty). The same holds for most collections like dict, tuple, ...
+sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
+sl.start#slice objects have members start, step and stop
 ```
 #### List comprehensions
 ```python
@@ -262,6 +265,7 @@ import sys
 sys.argv[1]#Command line arguments. argv[0] contains program name. 
 import os.path
 os.path.join()
+os.path.basename(path)#basename if a file, empty for directory. might not work with Windows
 os.path.abspath(path)#get the absolute filepath
 os.path.dirname(path)#directory name
 os.path.splitext(filename)#tuple with Path+Name and Extension
@@ -585,6 +589,17 @@ Sig_f contains the amplitudes corresponding to the frequencies given from `np.ff
 ```python
 from scipy import stats
 stats.binned_statistic_2d(x, y, values, 'mean', bins=[binx,biny])#Extended version of histogram2d in numpy. Also allows to take the mean and more over all weights.
+```
+#### Distribution functions
+stats contains a lot of statistical distribution functions like gaussian, lognormal or poisson. You can easily create samples, plot the function and more
+```python
+from scipy.stats import norm, lognorm
+norm # Gaussian distribution
+lognorm #lognormal distribution
+norm.pdf(values, loc, scale) #evaluate gaussian at values: mean:loc  standard dev:scale
+norm.cdf(values, loc, scale) #cumulative distr. function
+norm.ppf(values, loc, scale) #Percent point function (inverse of cdf)
+samples=norm.rvs(size=100) #Get gaussian samples
 ```
 
 ## Pyplot/Matplotlib

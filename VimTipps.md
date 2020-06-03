@@ -13,6 +13,6 @@ Add in this file:
 set runtimepath^=~/.vim runtimepath+=~/.vim/after
 let &packpath=&runtimepath
 source ~/.vimrc
-The execute in nvim:
+Then execute in nvim:
 :PlugInstall
 

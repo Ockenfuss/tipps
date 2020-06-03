@@ -1,9 +1,21 @@
 #######Variables###########
 test=hallo #simple variable
+a=1
+b=1
+c=$(($a+$b))#$((...)) provides an arithmetic environment. Inside, expressions are evaluated in c style
+
 test=$(ls) #store function output in variable !there are no spaces allowed around the "="!
 test="$variable"variable2 #Insert the variable expression and directly add variable2
 
+### Progamm logic
+if [[ $A -eq $B ]] #Actually, [[ is a small bash programm that evaluates the given expression
+then
+    ...
+fi
 
+for (( run=$STARTNUM; run<=$ENDNUM; run++ )); do
+...
+done
 
 ######Set PATH###########
 #not in .zshrc or similar, because these will be synchronized between computers via my git repo!

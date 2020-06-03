@@ -60,13 +60,23 @@ https://www.namsu.de/Extra/pakete/Siunitx.html
 ```latex
 \usepackage{siunitx}
 \si{\km} %unit only
+\num{10} %Number only
 \SI{100}{\per\cubic\centi\metre}
 \SI{90}{\degree} %Alternatively, use $^{\circ}$
+\SIrange{1}{2}{\km} %range of values
 ```
 
 # Math
 ## Aligning
-Align multiple quations in one row side by side with labels
+Align multiple equations with one label
+```latex
+\begin{align}\label{eq:example}
+        a&=b &
+        c&=d &
+        e&=f
+\end{align}
+```
+Align multiple quations in one row side by side with separate labels
 ```latex
 \begin{center}
     \begin{minipage}[b]{.45\textwidth}
