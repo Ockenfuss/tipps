@@ -9,6 +9,7 @@ Also includes a lot of useful snippets when working with the command line
 - [Linux General](#linux-general)
   - [Permissions in Linux](#permissions-in-linux)
   - [User Handling](#user-handling)
+  - [Process Handling](#process-handling)
   - [Links](#links)
   - [Packages](#packages)
   - [Printing](#printing)
@@ -52,6 +53,13 @@ groups #command to show my groups
 ## User Handling
 `useradd test` Add new account
 `userdel -r test` remove user including his home directory
+
+## Process Handling
+```shell
+top -u User.Name #Show Interactive process overview
+kill -HUP -1 #send SIGHUP ("Hang up") signal to all processes, the "friendly" request for termination
+kill -KILL <pid> #send SIGKILL: process cannot ignore this signal
+```
 
 ## Links
 ln -s Source Destination#create symbolic link
@@ -101,10 +109,17 @@ ssh-copy-id -i id_rsa.pub My.Loginname@some.server.de #Add public key to server 
 ssh -X User@ServerAddress #Now log in to server (use -X to enable X11 forwarding)
 ```
 Config file for ssh. Use it for configuration, abbreviation of long names, etc.
-```bash
+```shell
 Host MyNickname
   HostName ServerAddress
   User MyLoginNameOnTheServer
+```
+Control Master: Allows you to use one tcp connection for multiple ssh sessions. Has the advantage that you need to login only once!
+```shell
+Host MyNickname #Use "Host *" if you want it always
+  controlmaster auto #enable it
+  ControlPath  ~/.ssh/sockets/%r@%h-%p #files with the sockets will be created here. Can be any folder, e.g. in \tmp\... Create .ssh/sockets manually if not existent
+  ControlPersist  600 #if you log out on the master session, the connections remains this many seconds open in background if other subsession are still connected. This allows a re-login without a blocked terminal, if you accidentally logged out.
 ```
 ### sshfs
 ```bash

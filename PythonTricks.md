@@ -20,6 +20,7 @@
       - [Lists](#lists)
       - [List comprehensions](#list-comprehensions)
       - [Iterables](#iterables)
+      - [Sets](#sets)
       - [Dictionaries](#dictionaries)
       - [File paths/IO](#file-pathsio)
     - [Exceptions](#exceptions)
@@ -86,6 +87,10 @@
       - [Categories in one column](#categories-in-one-column)
       - [iterration over rows](#iterration-over-rows)
       - [Groupby](#groupby)
+  - [Geopandas](#geopandas)
+    - [Maps (Contextily)](#maps-contextily)
+      - [Plot geopandas](#plot-geopandas)
+      - [Details](#details)
   - [NETCDF](#netcdf)
   - [Xarray](#xarray)
     - [Inspecting data](#inspecting-data)
@@ -94,6 +99,7 @@
     - [combining/extending data](#combiningextending-data)
     - [Modifying data](#modifying-data)
     - [apply_ufunc](#apply_ufunc)
+    - [Plotting data](#plotting-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
   - [Create your own modules](#create-your-own-modules)
@@ -178,7 +184,7 @@ print(f"This is {object!r}")#By default, __str__ of an object is used, but with 
 https://realpython.com/regex-python/
 ```python
 import re
-match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like
+match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like:
 if re.search... :
 match.groups()#Tuple with all groups
 match.group(1)#Select a group. Index is one-based!
@@ -244,6 +250,18 @@ def com(l, k):
 There are a lot of useful function, which work with iterables.
 ```python
 list1, list2=zip(*sorted(zip(list1, list2)))#Sort multiple lists according to the first one
+```
+#### Sets
+Unordered collections, where each element appears only once. Pretty much the same thing as you know from mathematics! Elements must be immutable
+https://realpython.com/python-sets/
+```python
+a=set(['foo', 'foo', 'bar']) #Create from iterable of immutables. Result: a={'foo', 'bar'}
+a | b #Union: elements in a or b
+a & b #Interection: elements in a and b
+a - b #Difference: elements in a and not in b
+a <=b #a is subset of b
+a < b #a is real subset of b
+a |=b #Update a to be a | b. Works with & and - as well
 ```
 
 #### Dictionaries
@@ -503,6 +521,7 @@ def multiargsort(array):#for multidimensional arrays, we can flatten them first
     return np.unravel_index(ind,array.shape)#unravel_index does the stride arithmetic to convert linear to multidimensional indices
 np.searchsorted(a,v)#a must be sorted. Find the places where the elements of v must be inserted. Use it e.g. to find the nearest/closest values to v in a.
 def nearest(a,v):
+    assert(np.all(np.diff(a)>=0))#check sorted
     _am=convolve(a,[0.5,0.5],mode='valid')#from scipy.signal import convolve
     return a[np.searchsorted(_am, v)]
 ```
@@ -623,6 +642,7 @@ ax.set_xticks([1,2,3], minor=False)#Ticks setzen. ax.get_xticks() liefert ticks
 ax.set_xticklabels(["A12", "B12", "C12"], rotation=90, minor=False)#use [] to turn off labels
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
+a.xaxis.tick_top()#Ticks oben setzen
 ax.get_yaxis().set_visible(False)#hide ticks/axis
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
@@ -639,12 +659,19 @@ ax.yaxis.set_label_coords(-0.1, 0.5)#exakte position
 ```
 #### Legende
 ```python
-legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2)#Legende
+legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2, title='Some lines')#Legende
 dummy_lines = []#Legende nur mit Linestyle
-dummy_lines.append(ax2.plot([],[], c="black", linestyle ="-", linewidth=1.2)[0])
-dummy_lines.append(ax2.plot([],[], c="black", linestyle ="--", linewidth=1.6)[0])
-legend2 = ax2.legend([dummy_lines[i] for i in [0,1]], ["Measurements", "Simulation"], loc="upper left")
-ax2.add_artist(legend2)
+dummy_lines.append(ax.plot([],[], c="black", linestyle ="-", linewidth=1.2)[0])
+dummy_lines.append(ax.plot([],[], c="black", linestyle ="--", linewidth=1.6)[0])
+legend = ax.legend(dummy_lines, ["Measurements", "Simulation"])
+ax.add_artist(legend2)
+```
+Multiple legends in one axes object
+```python
+leg1=ax.legend()
+leg2=ax.legend()
+ax.add_artist(leg1)
+ax.add_artist(leg2)
 ```
 
 #### linestyle cycle
@@ -749,8 +776,9 @@ ax2 = fig.add_subplot(gs[-1, :])
 ```
 
 #### Text and annotations
+Generally, font sizes can be given absolute in pt or relative to `font.size` from the rc parames. Relative measures are: `xx-small, x-small,small, medium, large, x-large, xx-large, larger, or smaller`
 ```python
-ax1.text(1,2,"Hallo", rotation=45)#Annotation, Text
+ax1.text(1,2,"Hallo", rotation=45,fontsize='large')#Annotation, Text
 ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='axes fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
 ```
 
@@ -770,13 +798,15 @@ im=ax2.hist2d(x,y,bins=100, weights=values, range=(-60,60), cmin=1)[3]#histogram
 ```
 
 ##### Images (2D Verteilung) plotten
+Imshow is usually the fastest solution. It is for data on a regular grid. Use 'extent' to set the axes coordinates if they should be something else than pixels. Things become tricky together with 'aspect', which is like a scaling factor height=aspect*width. By default, aspect=1, i.e. the PIXELS are kept squares IN AXES COORDINATES. E.g. if your xaxis is 1000 (m) and your y axis 1 (m), the image will appear extremly elongated. In this case, set aspect to 1000 and the yaxis will be stretched, such that the RESULTING IMAGE looks like a square.
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
 im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1))#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
 im.cmap.set_under('k',1.) 
-
+```
+```python
 contour=ax.contour(x,y,z, colors='k')#Contour plot: Draw height lines ('isobares')
-ax.clabel(contour, colors = 'k', fmt = '%2.1f', fontsize=12)#write height values to lines
+ax.clabel(contour, colors = 'k', fmt = '%2.1f', fontsize='medium')#write height values to lines
 
 ax.contourf(x,y,z, cmap='Greys')#Draw a filled contour plot, i.e. with areas rather than lines.
 ax.pcolormesh(x,y,c)#plot 2d with non-regular grid. x,y: 1D arr with length one greater than c. C: 2darr, rows are plotted as y, columns are x
@@ -878,6 +908,33 @@ for name, group in enumerate(datgroup):
     print(group)
 ```
 
+## Geopandas
+Library on top of pandas and shapely, which allows to plot maps. Basic idea: A pandas dataframe with a special column "geometry", which contains shapely objects (Points, LineStrings or Polygons), which can represent cities, streets or countries.
+```python
+
+```
+
+### Maps (Contextily)
+However, if you want to plot data on a map, you need more than geopandas, since geopandas is basically just shapely with coordinate transformations. Maps of the earth usually consist of tiles, which are provided by different providers like e.g. OSM. To download such tiles and add them to a matplotlib figure, `contextily` is made.
+Documentation: https://contextily.readthedocs.io/en/stable/index.html
+Generally, contextily works in Spheric Mercator projection (EPSG:3857), so you need to convert all your coordinates first! (Sometimes, lon/lat is also accepted)
+
+#### Plot geopandas
+```python
+import contextily as ctx
+gdf=gdf.to_crs(epsg=3857) #Convert your geopandas dataframe to the projection used by contextily 
+ax=gdf.plot()
+ctx.add_basemap(ax,zoom=6) #Add basemap to axes. Use the axes you get back from geopandasdf.plot()
+```
+
+#### Details
+```python
+ctx.howmany(w, s, e, n, 6, ll=False) #How many tiles will be downloaded at zoom level 6. If ll, bounding box is given in lon/lat
+sources=[i for i in dir(ctx.tile_providers) if i[0]!='_'] #list all providers included in ctx
+srcurl=getattr(ctx.sources, sources[2]) #select a provider
+img, ext=ctx.bounds2img(w, s, e, n, 6, url=srcurl, ll=False)#If you want the map as an array image
+plt.imshow(img, extent=ext)
+```
 ## NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
 Dimensions are essentially also variables itself ("coordinate variables")
@@ -907,11 +964,13 @@ Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset 
 import xarray as xr
 #Datasets
 ds=xr.open_dataset("filename")#open Dataset
+ds=xr.Dataset({'name':DataArray})#create Dataset
 ds.to_netcdf("filename")#save Dataset
 ds.temp#select a Data variable
 ds['temp']=ds.temp.astype(float)#convert a variable or dimension to another type. You have to use the [.] notation for assignments
 ds=ds.squeeze(drop=False)#Fix/Drop all dimensions with length one
 #DataArrays
+da=xr.DataArray(nparray, coords=[('x',xarr), ('y', yarr)])#Create a DataArray from numpy
 da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
 da.attrs['units']='km'#long_name and units is used by the .plot() routine
@@ -961,7 +1020,7 @@ xr.combine_nested([[a1, a2], [a3, a4]], concat_dim=['x', 'y'])#Combine with posi
 ### Modifying data
 ```python
 ds.mean(dim='time')#calculate mean/sum/...
-dist.where(dist==dist.min(), drop=True)#find index of mean/min/max/...
+dist.where(condition,other=na, drop=False)#return where cond is true and fill in 'other' where it is false (default na). If drop, coordinates with only false are dropped.
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
 ds.drop_vars('a')#remove a variable
 ds.drop_dims('time')#remove a dimension and all related variables
@@ -989,6 +1048,13 @@ interped = xr.apply_ufunc(
 result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_dims=[['theta'], ['theta']], output_core_dims=[['retresult']], exclude_dims=set(('theta',)), vectorize=True) #Another similar example
 ```
 
+### Plotting data
+```python
+da.plot(x='a') #1D. Data is automatically plotted in the 'open' dimension y
+da.plot(x='a', hue='b') #2D
+da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
+da.plot(x='a', hue='b', col='c', row='d') #4D
+```
 
 
 ## Image processing

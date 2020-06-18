@@ -8,6 +8,7 @@ Tipps and code snippets to format texts in Latex
 - [Latex](#latex)
   - [ToDo package](#todo-package)
   - [Subfiles](#subfiles)
+- [Biblatex](#biblatex)
 - [Tikz](#tikz)
 - [Science](#science)
   - [Units](#units)
@@ -15,6 +16,8 @@ Tipps and code snippets to format texts in Latex
   - [Aligning](#aligning)
   - [Symbols](#symbols)
 - [Figures](#figures)
+- [Tables](#tables)
+- [Glossaries](#glossaries)
 - [Examples](#examples)
 
 <!-- /code_chunk_output -->
@@ -48,6 +51,12 @@ Very useful package when a big latex project should be splitted into different s
 \documentclass[../Main.tex]{subfiles}
 \begin{document}
 ...
+```
+# Biblatex
+Citation commands:
+```latex
+\cite{PublicationKey} %Normal textual citation
+\parencite{PubKey} %Cite within parentheses
 ```
 
 # Tikz
@@ -100,9 +109,65 @@ Typical alterations of variable names
 $\hat{\alpha}$ %Small hat over a letter
 $\tilde{\alpha}$ %Small tilde over a letter
 ```
+Mathematical symbols
+```latex
+\coloneqq %defined: := (in package mathtools)
+\leq %less than or equal
+\geq %greater than or equal
+\partial %Partial derivative
+\int_0^1 %integral
+\sum_0^1 %sum symbol
+\in %is element symbol
+```
 
 # Figures
 My personal best practice: Already set the correct figsize in matplotlib so that no scaling in latex is necessary! For this, use `\showthe\textwidth` in latex and combine it with the Pytex package in my template collection.
+
+# Tables
+```latex
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ c | c | c  c }
+        \hline
+        Quantity&Symbol&Definition&Unit\\
+        \hline
+        Radiant Energy&Q&&$J$\\
+        Radiant Power&$\phi_\lambda$&$\frac{dQ}{dt\cdot d\lambda}$&$Wnm^{-1}$\\
+        \hline
+    \end{tabular}
+    \caption{some caption}
+    \label{tab:mytable}
+\end{table}
+```
+
+# Glossaries
+Package to create an overview of acronyms and technical terms. Generally, there are two types of entries: Glossaryentries are meant to contain descriptions of technical terms and definitions, while acronyms list the long version of abbreviated names.
+```latex
+\usepackage[acronym]{glossaries}
+\newglossaryentry{cosmo}{name=Cosmo,description={NWP model, originally developed by DWD in 1999. \glslink{COSMO}{COSMO}}}
+\newacronym{COSMO}{COSMO}{Consortium for Small-scale Modeling. \gls{cosmo}}
+\newacronym[longplural={diagonal matrices}]{dm}{DM}{diagonal matrix}
+```
+In order to use the entries in your latex document, use:
+```latex
+\makeglossaries
+\begin{document}
+\gls{cosmo}%Normal reference
+\Gls{cosmo}%Capitalize first letter
+\glspl{cosmo}%Term in plural form, i.e. add an 's'. Alternativly, you need to define the "longplural" and "shortplural" keys. Also \Glspl{cosmo} is possible.
+\glsunset{cosmo}%Acronyms are displayed with definition when used the first time. Use this to manually mark an acronym as defined
+\glsunsetall %Mark all as defined
+\glsaddall %Adding all the elements to the glossary, regardless of whether they are used somewhere
+
+\printglossaries
+\end{document}
+```
+In order to compile a document with a glossary:
+```bash
+pdflatex Glossary
+makeglossaries Glossary
+pdflatex Glossary
+```
 
 # Examples
 Full working example
