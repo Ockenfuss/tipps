@@ -95,6 +95,7 @@
   - [Xarray](#xarray)
     - [Inspecting data](#inspecting-data)
     - [Selecting data](#selecting-data)
+    - [Asignments](#asignments)
     - [Coordinates](#coordinates)
     - [combining/extending data](#combiningextending-data)
     - [Modifying data](#modifying-data)
@@ -102,6 +103,7 @@
     - [Plotting data](#plotting-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
+  - [CLI Arguments](#cli-arguments)
   - [Create your own modules](#create-your-own-modules)
       - [Module Structure](#module-structure)
       - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
@@ -164,9 +166,10 @@ Split and combine arrays
 ",".join(arr) #print array elements with the given separator (if necessary: use `[str(i) for i in arr] first`)
 string.split(",")#split string into array of strings with the given separator
 ```
-remove occurances at beginning or end
+Modify
 ```python
-string.strip("\n")
+string.strip("\n")#remove at beginning or end
+string.replace('a','b')
 ```
 Format specifiers: These are deprecated, better to use f=Strings!
 ```python
@@ -184,9 +187,10 @@ print(f"This is {object!r}")#By default, __str__ of an object is used, but with 
 https://realpython.com/regex-python/
 ```python
 import re
+re.findall('ABC', 'ABCD')#Return match
 match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like:
 if re.search... :
-match.groups()#Tuple with all groups
+match.groups()#Tuple with all groups. () needs to be defined!
 match.group(1)#Select a group. Index is one-based!
 
 ```
@@ -638,11 +642,13 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 #### Axen und Ticks
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
+ax.invert_yaxis()#Invert axis
 ax.set_xticks([1,2,3], minor=False)#Ticks setzen. ax.get_xticks() liefert ticks
 ax.set_xticklabels(["A12", "B12", "C12"], rotation=90, minor=False)#use [] to turn off labels
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
 a.xaxis.tick_top()#Ticks oben setzen
+a.xaxis.set_label_position('top')#Label open setzen
 ax.get_yaxis().set_visible(False)#hide ticks/axis
 
 ax2.set(ylabel="ratio", title="Titel")#Beschriftung
@@ -689,7 +695,7 @@ ax.plot(x,y, linestyle=next(linecycler))
 They always live in their own axes object!
 All maps: https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html
 ```python
-cbar=fig.colorbar(im, ax=ax)#In this case, the colorbar space is 'stolen' automatically from ax!
+cbar=fig.colorbar(im, ax=ax, orientation='vertical')#In this case, the colorbar space is 'stolen' automatically from ax! Otherwise, use 'cax=ax'
 #Manual way: If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
 cbar.set_label("Label")
 cbar.ax.tick_params(labelsize=10)
@@ -969,6 +975,7 @@ ds.to_netcdf("filename")#save Dataset
 ds.temp#select a Data variable
 ds['temp']=ds.temp.astype(float)#convert a variable or dimension to another type. You have to use the [.] notation for assignments
 ds=ds.squeeze(drop=False)#Fix/Drop all dimensions with length one
+da.drop([d for d in list(data.coords.keys()) if d not in data.dims])#Drop all non-dimensional coordinates
 #DataArrays
 da=xr.DataArray(nparray, coords=[('x',xarr), ('y', yarr)])#Create a DataArray from numpy
 da.name='radiance'#DataArrays can have names to identify them in Datasets
@@ -989,12 +996,20 @@ npt.assert_equal(sorted(list(ds.data_vars)), ['a', 'b'])#Check the formatting
 ### Selecting data
 https://xarray.pydata.org/en/stable/indexing.html
 ```python
+da[...,2]#based on coordinate index and dimension index
+da.loc[...,'z']#based on coordinate label and dimension index
 ds=ds.isel(temp=0)#selection based on index along the dimension
 ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
 ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30!
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
 ```
+### Asignments
+This is something a little counterintuitive in xarray: You can never assign values to isel() or sel()! Instead, it is possible with loc[] or xr.where(cond, returnTrue, returnFalse)
+```python
+da.loc[db.coords]=db#Assign values of db to a subset of da
+```
+
 ### Coordinates
 Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign furhter coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
 Be aware: Dimensions have names. You see them in () when printing. Coordinates can have the same names as the dimension they label (e.g. 'space') or different names (e.g. 'weekday' for dimension 'time'). In the latter case, you must of course tell xarray that 'weekday' belongs to the dimension 'time'.
@@ -1066,6 +1081,17 @@ AcM=sig.convolve2d(A,M, mode='full', boundary='fill', fillvalue=0)
 boundary: How boundary conditions are treated: fill missing values on the rim with a value, use periodic boundary conditions ('wrap') or mirror the values directly at the rim to the outside ('symm')
 mode: Size of the resulting array, 'full', "valid", or "same"
 
+## CLI Arguments
+`argparse` is a useful package to parse command line arguments
+```python
+import argparse
+par=argparse.ArgumentParser()
+par.add_argument('flight', type=str)#Add command line arguments
+par.add_argument('mode', type=int)
+par.add_argument('-s',action='store_true')#Boolean flag
+args=par.parse_args()
+number=args.mode#Access argument values
+```
 
 ## Create your own modules
 https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
@@ -1074,7 +1100,7 @@ https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
 
 Configure paths:
 * option1: define PYTHONPATH variable in .bashrc (problem: might be system dependent, dotfiles are synchronized via github)
-for intellisense: set in settings json: "python.autoComplete.extraPaths": ["/home/p/Paul.Ockenfuss/Documents/CodeTemplates/Python"]
+for intellisense: set in settings json: "python.autoComplete.extraPaths": ["Path/To/ModuleFolder"]
 * option2: set a link in one of the default locations (import sys, print(sys.path))
 e.g. in /usr/lib/python3/dist-packages
 intellisense should work automatically
