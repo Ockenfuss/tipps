@@ -114,10 +114,18 @@ Mathematical symbols
 \coloneqq %defined: := (in package mathtools)
 \leq %less than or equal
 \geq %greater than or equal
+\lessapprox %approx. smaller
+\gtrapprox %approx. greater
 \partial %Partial derivative
 \int_0^1 %integral
 \sum_0^1 %sum symbol
 \in %is element symbol
+```
+Brackets
+```latex
+\left[ %Open a big/resizeable bracket Also: \left(, \left{, ...
+\right) %Close resizeable bracket
+\left. %Invisible bracket. Useful if you want to show just the right one.
 ```
 
 # Figures
@@ -156,6 +164,8 @@ In order to use the entries in your latex document, use:
 \Gls{cosmo}%Capitalize first letter
 \glspl{cosmo}%Term in plural form, i.e. add an 's'. Alternativly, you need to define the "longplural" and "shortplural" keys. Also \Glspl{cosmo} is possible.
 \glsunset{cosmo}%Acronyms are displayed with definition when used the first time. Use this to manually mark an acronym as defined
+\acrlong{cosmo}%Print long version. I don't know whether this marks the acronym as used.
+\acrfull{cosmo}%Print long and short version
 \glsunsetall %Mark all as defined
 \glsaddall %Adding all the elements to the glossary, regardless of whether they are used somewhere
 
