@@ -20,6 +20,7 @@ Also includes a lot of useful snippets when working with the command line
     - [sshfs](#sshfs)
     - [scp](#scp)
     - [rsync](#rsync)
+  - [gpg2](#gpg2)
   - [Everyday commands](#everyday-commands)
 - [External Devices](#external-devices)
   - [Bluetooth](#bluetooth)
@@ -138,7 +139,28 @@ scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from 
 rsync -a -v --exclude=".*" SimulationGit My.Loginname@server.de:
 Ergebnisse zurückholen: rsync -a -v My.Loginname@UniversityLogin.de:SimulationGit/NamederErgebnisse.results . 
 ```
-
+## gpg2
+GnuPG, where pgp is 'pretty good privacy'. Use it to encrypt or decrypt files.
+Working principle: The basis is the usual principle of asymmetric encryption. Like e.g. ssh, I have a public key and a private key, which is ideally additionally protected with a password. When creating, it is useful to create an additional revocation certificate. This certificate can only be created with the private key available, but afterwards it can be used to designate the key as invalid on a key server, even if the private key is lost (or compromised). Therefore, try to keep it safe as well.
+```bash
+gpg2 -k #list public keys in keyring
+gpg2 -full-gen-key #create key pair
+gpg2 --delete-secret-key <ID> #delete public and private key
+gpg2 --keyserver 'pgpkeys.eu' --search-keys 'Prename Name' #Search key in web of trust. Server list: https://www.sks-keyservers.net/status/
+gpg2 --recv-keys <ID> #download key from server
+gpg2 --refresh-keys [ID] #refresh key (all if no ID given)
+gpg2 -e -r Name1 -r Name2 File.txt #Encrypt file for recipients Name1, Name2. Use -a to get result as ascii instead of binary.
+gpg2 -d -o Output.txt File.txt.asc #Decrypt file. 
+gpg2 -b -a File.txt #Make a separate signature for File.txt
+gpg2 --verify File.txt.asc #Verify signature. Without second argument, it is assumed in 'File.txt'
+```
+Web of Trust: Problem: I have a public key, but do I know that it really belongs to the person which owns the corresponding email address and name? (i.e. that person has the private key?) I can either: a) Ask the person itself for a proof and then trust this key, or b) ask anyone else who I trust that this key is trustworthy. The latter is the idea of the web of trust. There are 5 trust levels which you can assign to keys and which determine, whether gpg will trust new keys which are signed by one of the trusted keys. Usually, use 3, only if you really trust a person use 4. 5 is only for yourself.
+```bash
+gpg2 --edit-key Name #Start key editing
+>sign #Sign this key if you are sure that it belongs to the person with this name and email. This is useful for others, which trust you such that they can also trust this key.
+>trust #Choose a level of trust associated with this key. This is useful for you, because now gpg2 trusts other keys which are signed by this key.
+>save #save your changes
+```
 
 ## Everyday commands
 Rename
