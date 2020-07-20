@@ -28,6 +28,16 @@ git checkout -b newBranch #Create a new branch
 git push origin master #Push the current branch to the remote branch 'master' on the remote repository 'origin' ('origin' is just a name for the remote url and can be customized)
 git push -f origin master #Force push. Dangerous!
 ```
+## Rebase
+Suppose two branches, e.g. your local master and origin/master diverged after a certain commit. In this case, `git rebase` applies your local commits on top of the commits on origin master. The result looks like you would have done all your coding after the changes in origin happened and not in parallel.
+```bash
+#do some changes locally and commit them
+git add ...
+git commit ...
+git fetch #fetch remote branches
+git rebase origin/master #Apply the commits of your current branch (master) on top of origin/master
+```
+
 ## Miscellaneous commands
 #Rename a file or folder
 git mv Old/ New/
