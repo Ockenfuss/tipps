@@ -3,28 +3,48 @@
 <!-- code_chunk_output -->
 
 - [General](#general)
+  - [Execution](#execution)
   - [Variables](#variables)
-  - [Progamm logic](#progamm-logic)
+    - [Definition](#definition)
+    - [Environment variables](#environment-variables)
+  - [Program logic](#program-logic)
   - [PATH](#path)
   - [Pipes and redirection](#pipes-and-redirection)
+  - [Subshells](#subshells)
   - [Displaying text](#displaying-text)
+  - [Searching](#searching)
   - [xargs](#xargs)
   - [Background jobs](#background-jobs)
+  - [User managment](#user-managment)
 - [Tmux](#tmux)
 
 <!-- /code_chunk_output -->
 
 # General
-## Variables
+## Execution
 ```bash
-test=hallo #simple variable
+./Test #Execute a binary
+./Test.sh #Execute a shell script in a subshell
+source ./Test.sh #Execute a script in this shell
+. ./Test.sh #'.' is short for source
+```
+## Variables
+### Definition
+```bash
+test=hallo #local variable. No spaces around =!
 a=1
 b=1
 c=$(($a+$b))#$((...)) provides an arithmetic environment. Inside, expressions are evaluated in c style
 test=$(ls) #store function output in variable !there are no spaces allowed around the "="!
 test="$variable"variable2 #Insert the variable expression and directly add variable2
+export test #export local var to global environment such that it is available in subshells
+unset test #undefine a variable
 ```
-## Progamm logic
+### Environment variables
+```bash
+PS1; PS2 #the format of the bash prompt 1 and 2 (latter e.g. for multiline constructs)
+```
+## Program logic
 ```bash
 if [[ $A -eq $B ]] #Actually, [[ is a small bash programm that evaluates the given expression
 then
@@ -51,12 +71,22 @@ cmd>&1 #Redirect output to stdout. "0" is stdin, "1" is stdout, "2" is stderr
 2>&1 #Redirect only errors to stdout
 /dev/null #Black hole: Swallows all input redirected to it
 ```
-
+## Subshells
+```bash
+(sleep 2; echo "hallo") #created by ()
+(echo $BASH_SUBSHELL)& #can be sent to background
+coproc sleep 10 #start command in background. Allows for communication.
+```
 ## Displaying text
 ```bash
 cat file #Concatenate concent of files and print to stdout. Often used to just print one file
 more file #Display sequentially.
 less file #Similar to more. Interactive view.
+```
+## Searching
+```bash
+grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive -n: line number -i: ignore case --include: search only within if GLOB matches
+find #: for searching a file/folder
 ```
 
 ## xargs
@@ -73,6 +103,29 @@ fg #bring job to foreground
 jobs #list jobs
 kill %1 # '1' is the Job ID you get by calling jobs: "[1] + Running ..."
 ```
+
+## User managment
+Users are listed in /etc/passwd file.
+```bash
+useradd -m test #Add user account. -m: with home directory containing files from /etc/skel
+useradd -D #show defaults
+userdel test #Remove entry from /etc/passwd
+usermod #modify account in general
+passwd #change password
+```
+Groups are in /etc/group
+```bash
+groupadd test #create a group
+usermod -G test username #add user to group
+```
+Translate Permissions: r-x=>binary 101=>octal value 5; for user,group,other:e.g. 775
+New files: subtract from default (666 for files, 777 for directories) the umask value (e.g. 002)
+```bash
+umask #list or set default with a umask
+chmod u=rwx #set user (g group, o other) to rwx (+ add perm., - subtr. perm)
+chown username file #change the owner of a file
+```
+SUID, SGID, sticky bit: three additional bits for every directory and file. Set default group for dir. and executing permissions for files. Can be used to create a shared directory for a group.
 
 # Tmux
 Terminal multiplexer. Allows to keep your session alive after remote logout.
