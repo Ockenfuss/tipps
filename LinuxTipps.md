@@ -12,8 +12,6 @@ Also includes a lot of useful snippets when working with the command line
   - [Process Handling](#process-handling)
   - [Links](#links)
   - [Packages](#packages)
-  - [Printing](#printing)
-  - [Searching](#searching)
   - [SVN](#svn)
   - [PDF](#pdf)
   - [ssh](#ssh)
@@ -22,6 +20,10 @@ Also includes a lot of useful snippets when working with the command line
     - [rsync](#rsync)
   - [gpg2](#gpg2)
   - [Everyday commands](#everyday-commands)
+- [Printing](#printing)
+- [Network](#network)
+  - [VPN](#vpn)
+    - [Cisco Anyconnect](#cisco-anyconnect)
 - [External Devices](#external-devices)
   - [Bluetooth](#bluetooth)
 - [Change colors of command prompt:](#change-colors-of-command-prompt)
@@ -77,19 +79,6 @@ apt show neovim #Show package information (version, description, etc.)
 Manually: put them into or create a link in e.g. /usr/bin/local. Meanwhile, many projects provide an AppImage which runs on most linux systems without installation. I collect them e.g. in ~/Software and create a link to a folder within the $PATH.
 
 
-## Printing
-All options: https://www.cups.org/doc/options.html
-```bash
-lpstat -p #show printers
-lp -d Printer_Name dokument.pdf #print pdf
-lpq -a #all jobs of current computer
-lprm -P Druckername Job-ID
-```
-## Searching
-```bash
-grep#: For searches within files 
-find#: for searching a file/folder
-```
 ## SVN
 ```bash
 svn co https://svn.physik.uni-muenchen.de/repos/libRadtran/trunk libRadtran#Checkout repository
@@ -103,6 +92,7 @@ svn revert -R src/#Revert all changes in src/ (recursive, be aware that changes 
 qpdf --encrypt pwd_user pwd_owner 256 -- A.pdf A_encrypt.pdf #Encrypt a pdf with 256 bit
 qpdf -decrypt pdffile_protected.pdf pdffile_notprotected.pdf #Remove read only e.g. to make annotations to the pdf
 pdfcrop in.pdf out.pdf #Crop all white space around the content in a pdf
+pdfunite pdf1.pdf pdf2.pdf out.pdf #Combine pdfs
 ```
 ## ssh
 Usual directory: `~/.ssh`. There, you find your private key (`id_rsa`, keep it safe!) and your public key (`id_rsa.pub`). To use it for automatic login on a server, the public key must be added in the servers `.ssh/known_hosts` file. Therefore, you need to provide another method of authentification to the server, like a password or send an email to the admin, whatever. The usual way is to use ssh-copy-id, which automatically copies your public key in the servers known_hosts list (using e.g. password authentification). Now, the server trusts everyone who can prove to have the private key to the public one in known_hosts (Imagine the server encrypting a test message and sending it to the client. If the client can decrypt the message and send it back (encrypted with e.g. the servers public key, of course), the client can be trusted). 
@@ -145,10 +135,13 @@ Working principle: The basis is the usual principle of asymmetric encryption. Li
 ```bash
 gpg2 -k #list public keys in keyring
 gpg2 -full-gen-key #create key pair
+gpg2 -a -o key.asc --export Name #Export public key as ascii
+gpg2 --import key.asc #Import to keyring. Without --import, just print the key
 gpg2 --delete-secret-key <ID> #delete public and private key
 gpg2 --keyserver 'pgpkeys.eu' --search-keys 'Prename Name' #Search key in web of trust. Server list: https://www.sks-keyservers.net/status/
 gpg2 --recv-keys <ID> #download key from server
 gpg2 --refresh-keys [ID] #refresh key (all if no ID given)
+
 gpg2 -e -r Name1 -r Name2 File.txt #Encrypt file for recipients Name1, Name2. Use -a to get result as ascii instead of binary.
 gpg2 -d -o Output.txt File.txt.asc #Decrypt file. 
 gpg2 -b -a File.txt #Make a separate signature for File.txt
@@ -159,6 +152,7 @@ Web of Trust: Problem: I have a public key, but do I know that it really belongs
 gpg2 --edit-key Name #Start key editing
 >sign #Sign this key if you are sure that it belongs to the person with this name and email. This is useful for others, which trust you such that they can also trust this key.
 >trust #Choose a level of trust associated with this key. This is useful for you, because now gpg2 trusts other keys which are signed by this key.
+>expire #Change the expiration date of the key. This is always possible, therefore you can choose a short one (1-2 years)
 >save #save your changes
 ```
 
@@ -181,7 +175,41 @@ wc # counts words (-w), lines (-l) or characters (-m)
 ```
 .zshrc
 `source ~/.zshrc #reload configurations`
+# Printing
+All options: https://www.cups.org/doc/options.html
+Usually, printing is handled by CUPS (common unix printing system). It is preinstalled on all Ubuntu distributions. It has a client/server structure and can handle many printers and also provide them in network. Usually, you have a local cups server running which handles the printers for your local system. It can be reached in browser via 'http://localhost:631/'
+```bash
+lpstat -p #show printers (from local cups server)
+lspstat -h "cups.mycompany.de:631/version=1.1" #specify a remote cups server
+CUPS_SERVER=server:port evince document.pdf #Specify an alternative cups server for a given process 
+lp -d Printer_Name dokument.pdf #print pdf
+lpq -a #all jobs of current computer
+lprm -P Druckername Job-ID
+```
+Add a printer from a server according to https://superuser.com/questions/98520/print-over-remote-cups-server-but-just-show-a-subset-of-the-printers:
+```bash
+lpadmin -p newprinter -v ipp://cups.mycompany.de:631/printers/printername
+cupsenaple newprinter
+cupsaccept newprinter
+```
 
+# Network
+## VPN
+### Cisco Anyconnect
+In order to add a profile, go to folder /opt/cisco/anyconnect/profile and add
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+
+<AnyConnectProfile xmlns="http://schemas.xmlsoap.org/encoding/">
+<ServerList>
+     <HostEntry>
+          <User>your username</User>
+          <HostName>your hostname</HostName>
+          <HostAddress>you host url</HostAddress>
+     </HostEntry>
+</ServerList>
+</AnyConnectProfile>
+```
 # External Devices
 ## Bluetooth
 Bose qc 35 verbinden: https://askubuntu.com/questions/833322/pair-bose-quietcomfort-35-with-ubuntu-over-bluetooth
