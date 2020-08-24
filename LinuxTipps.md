@@ -10,6 +10,7 @@ Also includes a lot of useful snippets when working with the command line
   - [Permissions in Linux](#permissions-in-linux)
   - [User Handling](#user-handling)
   - [Process Handling](#process-handling)
+  - [Files](#files)
   - [Links](#links)
   - [Packages](#packages)
   - [SVN](#svn)
@@ -24,6 +25,7 @@ Also includes a lot of useful snippets when working with the command line
 - [Network](#network)
   - [VPN](#vpn)
     - [Cisco Anyconnect](#cisco-anyconnect)
+  - [SAMBA/CIFS](#sambacifs)
 - [External Devices](#external-devices)
   - [Bluetooth](#bluetooth)
 - [Change colors of command prompt:](#change-colors-of-command-prompt)
@@ -48,14 +50,13 @@ sysctl -w parameter=value #make a non-persistent change (reset by reboot)
 https://www.guru99.com/file-permissions.html
 Syntax:
 -rwxr-xr-x#file Type | rwx: User permissions|r-x: Group permissions| r-x: World permissions (all others)
-r: read, w: write, x: execute
-chmod u=rwx #change permissions of user to rwx
-/etc/group #all groups
-groups #command to show my groups
+* for files: r: read, w: write, x: execute
+* for directories: r: list files within, w: create/delete files within, x: change into
+
 
 ## User Handling
-`useradd test` Add new account
-`userdel -r test` remove user including his home directory
+Important files: /etc/passwd, /etc/shadow
+/etc/group #all groups
 
 ## Process Handling
 ```shell
@@ -63,11 +64,20 @@ top -u User.Name #Show Interactive process overview
 kill -HUP -1 #send SIGHUP ("Hang up") signal to all processes, the "friendly" request for termination
 kill -KILL <pid> #send SIGKILL: process cannot ignore this signal
 ```
+## Files
+'Everything is a file'
+* -: regular file
+* b: block oriented device: HDD's, USB, partitions,...
+* c: character oriented device: serial ports
+* l: link, symbolic or hard
+* p: pipe
 
 ## Links
-ln -s Source Destination#create symbolic link
+```bash
+ln source destination #create hard link: pointer to the same physical memory area. 
+ln -s Source Destination #create symbolic link: pointer to the original path. Invalid if original is removed.
 readlink [-f]#get destination of existing link
-
+```
 ## Packages
 Using a package manager:
 ```bash
@@ -210,6 +220,13 @@ In order to add a profile, go to folder /opt/cisco/anyconnect/profile and add
 </ServerList>
 </AnyConnectProfile>
 ```
+
+## SAMBA/CIFS
+```bash
+sudo mount -t cifs -o user=username,uid=1234 //smb.server.de/projects/folder ~/Work #necessary to install 'sudo apt install cifs-utils'
+sudo umount Work #Unmount samba share
+```
+
 # External Devices
 ## Bluetooth
 Bose qc 35 verbinden: https://askubuntu.com/questions/833322/pair-bose-quietcomfort-35-with-ubuntu-over-bluetooth
