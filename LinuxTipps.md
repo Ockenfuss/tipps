@@ -9,16 +9,21 @@ Also includes a lot of useful snippets when working with the command line
 - [Linux General](#linux-general)
   - [Permissions in Linux](#permissions-in-linux)
   - [User Handling](#user-handling)
-  - [Process Handling](#process-handling)
   - [Files](#files)
+    - [Types](#types)
+    - [Filesystems](#filesystems)
+    - [Typical directories](#typical-directories)
   - [Links](#links)
+  - [Boot process](#boot-process)
   - [Packages](#packages)
   - [SVN](#svn)
   - [PDF](#pdf)
   - [ssh](#ssh)
+    - [Portforwarding](#portforwarding)
     - [sshfs](#sshfs)
     - [scp](#scp)
     - [rsync](#rsync)
+    - [unison](#unison)
   - [gpg2](#gpg2)
   - [Everyday commands](#everyday-commands)
 - [Printing](#printing)
@@ -28,6 +33,8 @@ Also includes a lot of useful snippets when working with the command line
   - [SAMBA/CIFS](#sambacifs)
 - [External Devices](#external-devices)
   - [Bluetooth](#bluetooth)
+- [Useful Tools](#useful-tools)
+  - [Webmin](#webmin)
 - [Change colors of command prompt:](#change-colors-of-command-prompt)
 
 <!-- /code_chunk_output -->
@@ -58,19 +65,39 @@ Syntax:
 Important files: /etc/passwd, /etc/shadow
 /etc/group #all groups
 
-## Process Handling
-```shell
-top -u User.Name #Show Interactive process overview
-kill -HUP -1 #send SIGHUP ("Hang up") signal to all processes, the "friendly" request for termination
-kill -KILL <pid> #send SIGKILL: process cannot ignore this signal
-```
 ## Files
 'Everything is a file'
+### Types
 * -: regular file
 * b: block oriented device: HDD's, USB, partitions,...
 * c: character oriented device: serial ports
 * l: link, symbolic or hard
 * p: pipe
+
+### Filesystems
+Linux:
+* ext4: today standard on linux
+* btrfs: binary tree fs
+* zfs
+
+Windows:
+* FAT, FAT32: traditional, old. FAT32 often on USB sticks
+* ntfs: more modern, linux usage possible.
+
+Network based:
+* nfs: network file system, unix/linux
+* cifs: common internet file system (invented by microsoft). smb is the corresponding protocoll
+
+### Typical directories
+Some first level directories:
+* /bin: binaries
+* /dev: device files
+* /etc: configurations
+* /mnt: manual mounts
+* /media: mounts like usb sticks, sd cards
+* /var: logs, spools
+* /sbin: superuser binaries
+* /lib: drivers
 
 ## Links
 ```bash
@@ -78,13 +105,36 @@ ln source destination #create hard link: pointer to the same physical memory are
 ln -s Source Destination #create symbolic link: pointer to the original path. Invalid if original is removed.
 readlink [-f]#get destination of existing link
 ```
-## Packages
-Using a package manager:
+
+## Boot process
+two different boot processes are common today: systemV and systemd
+
+SystemV:Starts scripts sequentially. In /etc/rc#.d/ collection of links to scripts. If `S...`: call this command with `start` option
+
+systemd: Event based booting consisting of units. Use `systemctl` command to handle them.
 ```bash
+systemctl list-units #list all units
+systemctl status apache2 #status of service
+systemclt start service #start (or stop) a service
+journalctl -f #command to see systemd log
+```
+
+
+## Packages
+Use a package manager. There are debian based distributions (Debian, Ubuntu,...) and rpm based (Suse).
+```bash
+dpkg -L nmap #package manager, but cannot handle dependencies. Better: apt. -L cmd: show all files created when installing
+dpkg -i dir/package #install package directly from file
 man apt #Good overview without details!
+vi /etc/apt/sources.list #urls of package repositories
+apt search package #search in repository
 sudo apt install package #Install package
 sudo apt update; sudo apt upgrade #update list and upgrade all packages
-apt show neovim #Show package information (version, description, etc.)
+apt show package #Show package information (version, description, etc.)
+apt remove package #deinstall program
+apt autoremove #remove unnecessary, automatically installed packages
+apt purge #remove everything, even configuration files
+apt -f install #force install of packages which are flagged as missing (e.g. dependencies from an attempt to install with dpkg before)
 ```
 Manually: put them into or create a link in e.g. /usr/bin/local. Meanwhile, many projects provide an AppImage which runs on most linux systems without installation. I collect them e.g. in ~/Software and create a link to a folder within the $PATH.
 
@@ -124,6 +174,11 @@ Host MyNickname #Use "Host *" if you want it always
   ControlPath  ~/.ssh/sockets/%r@%h-%p #files with the sockets will be created here. Can be any folder, e.g. in \tmp\... Create .ssh/sockets manually if not existent
   ControlPersist  600 #if you log out on the master session, the connections remains this many seconds open in background if other subsession are still connected. This allows a re-login without a blocked terminal, if you accidentally logged out.
 ```
+### Portforwarding
+```bash
+ssh -L2002:111.111.111.111:443 user@222.222.222.222 #build a secure connection via unsecure network, if ssh server is running on remote host. 2002:local port to be forwarded. 111...: remote server address 443:remote server port 
+```
+
 ### sshfs
 ```bash
 sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) My.Loginname@some.server.de:/folder/on/server ~/Work #Usermapping: Map Ownership from remote user to current user
@@ -139,6 +194,9 @@ scp Path/fileTocopy user@university_computer:File/path/#Copy files via ssh from 
 rsync -a -v --exclude=".*" SimulationGit My.Loginname@server.de:
 Ergebnisse zurückholen: rsync -a -v My.Loginname@UniversityLogin.de:SimulationGit/NamederErgebnisse.results . 
 ```
+### unison
+progam to synchronize directories via ssh. `apt install unison-all-gtk` for graphical program.
+
 ## gpg2
 GnuPG, where pgp is 'pretty good privacy'. Use it to encrypt or decrypt files.
 Working principle: The basis is the usual principle of asymmetric encryption. Like e.g. ssh, I have a public key and a private key, which is ideally additionally protected with a password. When creating, it is useful to create an additional revocation certificate. This certificate can only be created with the private key available, but afterwards it can be used to designate the key as invalid on a key server, even if the private key is lost (or compromised). Therefore, try to keep it safe as well.
@@ -223,8 +281,9 @@ In order to add a profile, go to folder /opt/cisco/anyconnect/profile and add
 
 ## SAMBA/CIFS
 ```bash
-sudo mount -t cifs -o user=username,uid=1234 //smb.server.de/projects/folder ~/Work #necessary to install 'sudo apt install cifs-utils'
+sudo mount -t cifs -o user=username,uid=1234,password=abc //smb.server.de/projects/folder ~/Work #necessary to install 'sudo apt install cifs-utils'. Use an 'unc path' to specify the server but replace '\' with '/' for unix. Use password option only for e.g. fstab, normally you will get a dialog
 sudo umount Work #Unmount samba share
+sudo umount -a -t cifs -l #Lazy Unmount all CIFS mounts
 ```
 
 # External Devices
@@ -234,7 +293,9 @@ in /etc/bluetooth/main.conf: "ControllerMode = bredr" setzen und danach "sudo se
 => neu im Bluetooth Menü verbinden. Anschließend kann ggf. wieder "#ControllerMode = dual" gesetzt werden (LE=Low energy) und wieder "sudo service bluetooth restart"
 
 
-
+# Useful Tools
+## Webmin
+Starts a server, where you can log in and control most of your system as root.
 
 
 

@@ -55,7 +55,7 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 'exit'#end program
 ```
 
-###Build in variables
+### Build in variables
 * FS: the current file separator
 * NF: Number of fields(=columns) in the current record (=line)
 * FNR: Number of the current line in the current file
@@ -64,8 +64,9 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 ###Regex
 `$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match". Regex can also be combined using logical operators: `a~/REGEX1/ && b!~/REGEX2/{do...}`
 
-##Examples
+## Examples
 * Remove empty lines: `gawk 'NF>0`
+* Remove double lines: `gawk "!a[$0]++"`
 * Invert lines: `gawk '{a[i++]=$0}END{for(j=i-1; j>=0;j--) print a[j]}'`
 * Find file extension: Here, we use subexpressions in regex to get the extension in a[2].  `echo 'abc.def' | gawk '{match($0, "(^.*)\\.(.*$)", a); print a[2]}'`
 * Inverse sum (over blocks separated by "x"): `gawk '!/x/{a[count++]=$0} /x/{print $0; sum=0; for(j=count-1; j>=0; j--){ sum+=a[j]; b[j]=sum} for(j=0; j<count; j++) print a[j] " " b[j]; count=0}'`
