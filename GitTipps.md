@@ -5,18 +5,30 @@
 
 - [Git Tipps](#git-tipps)
 - [General](#general)
+  - [Setup](#setup)
   - [Branches](#branches)
   - [Push/Pull](#pushpull)
+  - [Rebase](#rebase)
   - [Miscellaneous commands](#miscellaneous-commands)
 - [Rename a file or folder](#rename-a-file-or-folder)
 - [Web frontends](#web-frontends)
   - [Github](#github)
+- [SVN Tipps](#svn-tipps)
 
 <!-- /code_chunk_output -->
 
 Tutorial: https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
 
 # General
+
+## Setup
+```bash
+git config --global user.name 'Name'
+git config --global user.email 'a@b.com'
+git config --global core.editor vim # standard is $EDITOR evn. variable
+git config --list #see all settings
+```
+
 ## Branches
 ```bash
 git branch -a #Show available branches
@@ -59,3 +71,10 @@ git remote set-url origin git@github.com:Ockenfuss/dotfiles.git #if we want to c
 Neuen ssh key bei github registrieren:
 https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-the-ssh-agent
 
+
+# SVN Tipps
+```bash
+svn info #get info like upstream url
+svn checkout url #checkout repository
+
+```

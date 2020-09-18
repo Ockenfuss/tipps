@@ -31,6 +31,8 @@
   - [User interaction](#user-interaction)
   - [Modifying text](#modifying-text)
   - [Searching](#searching)
+  - [Filesystem](#filesystem)
+    - [Partitions & Creation](#partitions-creation)
   - [Filepaths](#filepaths)
   - [Process Handling](#process-handling)
     - [Background jobs](#background-jobs)
@@ -134,7 +136,18 @@ done
 They are lazy: ` [ -f file ] && delete ` deletes only if file exists
 
 ### Unary operators
-
+-d: exists and is directory
+-f: exists and is regular file
+-h: symbolic link
+-w: writable
+-r: readable
+-x: executable
+-u: user bit set
+-g: group bit set
+-k: sticky bit set
+-z: true if string length zero
+[ string ] : true if length of string nonzero
+  
 
 ### Comparison operators
 Number  | String
@@ -213,6 +226,7 @@ useradd -D #show defaults
 userdel test #Remove entry from /etc/passwd
 usermod #modify account in general
 passwd #change password
+su - username #start a shell as the specified user. '-' creates a login shell similar to real login.
 ```
 Groups are in /etc/group
 ```bash
@@ -301,6 +315,16 @@ egrep 'ab|cd' -o file #egrep necessary for extended regular expressions. -o: Sho
 grep -v 'abc' file # -v: invert
 grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive -n: line number -i: ignore case --include: search only within if GLOB matches
 ```
+## Filesystem
+### Partitions & Creation
+A physical storage device is usually divided in partitions to create logical disks for the OS. The partition table contains the information about the partitions. On each partition, a different filesystem can be implemented.
+```bash
+fdisk -l #List partition tables. Also lists the physical device names
+umount /dev/abc* #unmount all partitions on device abc
+wipefs --all /dev/abc #remove filesystem by deleting the signature
+cfdisk /dev/sda #an interactive CLI frontend to fdisk. Use it to create a partition table on a device
+mkfs.vfat -n 'NAME' /dev/abc1 #create FAT filesystem on partition 1
+```
 
 ## Filepaths
 ```bash
@@ -371,6 +395,8 @@ mail user #send email to another user
 ```bash
 jpegoptim file.jpg #lossless jpeg compression, overwrite original
 jpegoptim -S20% -d dir/ file.jpg #reduce quality to 20% filesize and save in dir/
+exiftool file.jpg #show metadata
+exiftool -all= file.jpg #remove all metadata
 ```
 
 ## Backup
