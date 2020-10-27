@@ -33,12 +33,14 @@
   - [Searching](#searching)
   - [Filesystem](#filesystem)
     - [Partitions & Creation](#partitions-creation)
+    - [Mounting](#mounting)
   - [Filepaths](#filepaths)
   - [Process Handling](#process-handling)
     - [Background jobs](#background-jobs)
   - [Archiving](#archiving)
   - [Networking](#networking)
   - [Automated Execution](#automated-execution)
+    - [Systemd](#systemd)
   - [Mail](#mail)
   - [Images](#images)
   - [Backup](#backup)
@@ -251,6 +253,7 @@ SUID, GUID, sticky bit: three additional bits for every directory and file. Set 
 ## Basic
 ```bash
 cd, cp, mv, touch, ls #really basic stuff
+mkdir -p /path/dir/ #create directory. -p: create if not existent, including intermediate directories.
 man 5 passwd #Show manpage for commands, files,... They are organized in levels, see man man.
 apropos keyword #Seach manpages short descriptions
 yes test #Repeat string until program ends
@@ -277,6 +280,12 @@ diff file1 file2 #compare files line by line
 ## User interaction
 ```bash
 read TEST #Stop execution and wait for input, which is saved in variable TEST
+read -p "Continue? (y/n)" CHOICE #ask the user for input with -p
+case $CHOICE in
+  [yY]) cmd;;
+  [nN]) cmd;;
+  *) cmd;;
+esac
 select CHOICE in $LIST #let the user select one value from a list to be stored in CHOICE
 getopt ab:c -a -b test test2 -c #Output Options first, then parameters: -a -b test -c -- test2
 while getopts ab:c opt
@@ -320,10 +329,20 @@ grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive 
 A physical storage device is usually divided in partitions to create logical disks for the OS. The partition table contains the information about the partitions. On each partition, a different filesystem can be implemented.
 ```bash
 fdisk -l #List partition tables. Also lists the physical device names
+fdisk /dev/sda #start interactive mode on disk /dev/sda. E.g. 'p' will list information about the partitions on this disk.
 umount /dev/abc* #unmount all partitions on device abc
 wipefs --all /dev/abc #remove filesystem by deleting the signature
 cfdisk /dev/sda #an interactive CLI frontend to fdisk. Use it to create a partition table on a device
 mkfs.vfat -n 'NAME' /dev/abc1 #create FAT filesystem on partition 1
+fsck -N /dev/sda1 #check filesystem. -N: do not execute checks, just show.
+```
+### Mounting
+```bash
+sudo mount /dev/sda1 /mnt/mountpoint #mount a device file 
+sudo umount /dev/sda1 #unmount a device, either by specifying device file or mountpoint.
+findmnt -n -o TARGET /dev/sda1 #find the mount point of a device. -o: output columns, -n: do not print header
+udisksctl mount -b /dev/sda1 #Automount device in folder media. Works without root in Ubuntu.
+udisksctl power-off /dev/sda #Power off external hard drive to safely remove it.
 ```
 
 ## Filepaths
@@ -383,6 +402,25 @@ Things to note:
 * be careful with time consuming jobs. Make sure they are not started multiple times in parallel
 ```bash
 crontab -e #edit the cron configuration via this command and not directly.
+```
+
+### Systemd
+Alternatively, you can use systemd units to execute jobs. This provides more flexibility than cron, since you can define dependencies and conditions on jobs.
+```bash
+cd /etc/systemd/system #place your files here
+touch testunit.service #service units are most common for manually defined tasks
+touch test@.service #it is possible to define templates to create unit files dynamically. Within these, you can use specifiers like %i to refer everything between @ and .service.
+systemctl --no-block start SERVICEFILE #start a unit. If already running, no second process will be started. --no-block: do not wait until finished.
+systemctl --user start SERVICEFILE #Alternatively, place files in /ect/systemd/user and start them with --user flag. These units are executed as the current user without root privileges.
+```
+Example for a simple backup service named `backup@.service`
+```text
+[Unit]
+ Description=Backup to USB Flash Disk
+
+[Service]
+ Type=simple
+ ExecStart=/path/to/backup.sh %i
 ```
 
 ## Mail
