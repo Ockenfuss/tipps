@@ -43,6 +43,7 @@
     - [Systemd](#systemd)
   - [Mail](#mail)
   - [Images](#images)
+  - [Conversion](#conversion)
   - [Backup](#backup)
 - [Examples](#examples)
 - [Shells](#shells)
@@ -79,7 +80,8 @@ unset test #undefine a variable
 ```
 ### Arrays
 ```bash
-a=(1 2 3 4) #set array elements
+a=(1 2 3 4) #set array elements.
+a=($VAR) #use VAR to set elements (separated by IFS) 
 a=($(seq 0 10)) #create with seq
 a[1]="eins" #set single element
 echo ${a[0]} #access element
@@ -99,6 +101,7 @@ echo ${arr[key2]}
 env #show environment variables
 $? #Contains the exit status of the last command
 PS1; PS2 #the format of the bash prompt 1 and 2 (latter e.g. for multiline constructs)
+IFS=$'\n' #set independent field separator to newline. Used e.g. by for loop or in Array creation to separate fields.
 ```
 ### Aliases
 ```bash
@@ -130,6 +133,7 @@ esac
 #### For loops
 ```bash
 for A in 1 2 3 4; do echo $A; done #simple for loop over list
+for A in $VAR; do #Will use IFS to read entries from variable
 for (( run=$STARTNUM; run<=$ENDNUM; run++ )); do #C style environment
 ...
 done
@@ -291,11 +295,12 @@ getopt ab:c -a -b test test2 -c #Output Options first, then parameters: -a -b te
 while getopts ab:c opt
 do
   case $opt in 
-    a) cmd
-    b) cmd $OPTARG
+    a) cmd ;;
+    b) cmd $OPTARG ;;
     c) cmd
   esac
 done
+shift $[ $OPTIND - 1 ] #Now shift to have all non optional arguments in $1, $2, ...
 ```
 
 ## Modifying text
@@ -304,6 +309,7 @@ nl file #show with line numbers
 sort file #sort alphabetically. -n for numeric
 uniq file #Remove double lines. They have to be adjacent!
 cut -d ':' -f1-3 #print columns 1 to 3 with delimiter ':'
+cut -c1-10 #print only first to tenth character from line. Also useful to trim/remove characters from line
 ```
 ## Searching
 Search after files
@@ -391,6 +397,7 @@ traceroute www.google.de #route of the package
 ss -atp #active connections
 nmap <ip or domain> #show open ports
 systemctl start ssh #start (or stop, reload) services
+vnstat -i enp0s31f6 -h #show traffic on device. -i: specific device (default: all) -h: hourly statistic
 ```
 
 ## Automated Execution
@@ -435,6 +442,12 @@ jpegoptim file.jpg #lossless jpeg compression, overwrite original
 jpegoptim -S20% -d dir/ file.jpg #reduce quality to 20% filesize and save in dir/
 exiftool file.jpg #show metadata
 exiftool -all= file.jpg #remove all metadata
+```
+
+## Conversion
+```bash
+convert -density 300 a.pdf a.png #convert pdf to image
+convert -transparent white a.png a2.png #make all white in image transparent
 ```
 
 ## Backup
