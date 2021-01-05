@@ -1,6 +1,24 @@
 # Tips for the AWK programming language
 https://www.tutorialspoint.com/awk/index.htm
 Some program examples: https://www.gnu.org/software/gawk/manual/html_node/Miscellaneous-Programs.html#Miscellaneous-Programs
+
+<!-- @import "[TOC]" {cmd="toc" depthFrom=2 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+  - [Usage](#usage)
+  - [Command line arguments](#command-line-arguments)
+  - [Columns](#columns)
+  - [Loops and conditions](#loops-and-conditions)
+  - [Logical Operators](#logical-operators)
+  - [Printing](#printing)
+  - [Build in functions](#build-in-functions)
+  - [Build in variables](#build-in-variables)
+  - [Regex](#regex)
+- [Examples](#examples)
+
+<!-- /code_chunk_output -->
+
 ### Usage
 
 ```bash
@@ -40,7 +58,7 @@ gawk '{while (condition) {actions}}'
 
 ### Printing
 ```bash
-print $1, $2#print line. Without ',', the values are not separated!
+print $1,$2 #print line. Without ',', the values are not separated. The output separator can be specified with the built in variable OFS.
 printf $1 "a" #print without newline
 ```
 
