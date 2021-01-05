@@ -13,6 +13,8 @@
   - [Copy-Paste](#copy-paste)
   - [Commands](#commands)
   - [Marks](#marks)
+- [Neovim and Plugins](#neovim-and-plugins)
+  - [Nerdtree](#nerdtree)
 - [Pure vi](#pure-vi)
 
 <!-- /code_chunk_output -->
@@ -75,6 +77,7 @@ da], di) #same for (), []
 /word #search for word
 n #next occurence
 1,$/search/replace/<g,i> #search and replace from first to last line. g: global, all occurences per line. i: case insensitive
+s,abc,def,g #The character that follows 's' is the delimiter character
 ```
 
 ## Copy-Paste
@@ -96,6 +99,9 @@ ma #set mark 'a'
 'a #go to mark 'a'
 d'a #delete until mark 'a'
 ```
+
+# Neovim and Plugins
+## Nerdtree
 
 # Pure vi
 ```
