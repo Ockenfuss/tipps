@@ -29,12 +29,10 @@
       - [Get/Set](#getset)
       - [Operator overloading](#operator-overloading)
     - [Datetime module](#datetime-module)
-      - [Datum aus String](#datum-aus-string)
-      - [String aus Datum:](#string-aus-datum)
-      - [Differenz in Sekunden:](#differenz-in-sekunden)
-      - [Zeiten addieren:](#zeiten-addieren)
       - [Zeiten Plotten](#zeiten-plotten)
     - [time Module](#time-module)
+    - [Serialization](#serialization)
+  - [JSON](#json)
   - [Numpy](#numpy)
       - [Numpy I/O](#numpy-io)
       - [Numpy Arrays](#numpy-arrays)
@@ -54,6 +52,8 @@
   - [Scipy](#scipy)
     - [Statistics](#statistics-1)
       - [Distribution functions](#distribution-functions)
+    - [Interpolation](#interpolation)
+      - [Multidimensional](#multidimensional)
   - [Pyplot/Matplotlib](#pyplotmatplotlib)
       - [create plot](#create-plot)
       - [Axen und Ticks](#axen-und-ticks)
@@ -407,30 +407,16 @@ Datum und Zeit
 Übersicht: https://www.programiz.com/python-programming/datetime
 Vergleiche: PlotSeries.py
 ```python
-import datetime
+from datetime import datetime, timedelta
 from dateutil.parser import parse
-```
-#### Datum aus String 
-```python
-strptime()
-time = np.array([datetime.datetime.strptime(TimeString[i],"%m.%d.%y %H:%M:%S") for i in range(len(TimeString))])
+time = datetime.strptime(TimeString,"%m.%d.%y %H:%M:%S") #date from string
 "%m.%d.%y %H:%M:%S.%f"#falls mit Milliseconds
-```
-####String aus Datum:
-```python
-s=time.strftime("%H:%M")
+time.strftime("%H:%M") #String from date
+(a-b).total_seconds() #Difference in seconds
+time=time+timedelta(hours=7) #Add times
+
 ```
 
-####Differenz in Sekunden: 
-(a-b).total_seconds()
-```python
-t=np.array([(time[i]-time[i+1]).total_seconds() for i in range(len(time))])
-```
-
-####Zeiten addieren:
-```python
-time=time+timedelta(hours=7)
-```
 
 #### Zeiten Plotten 
 "time" muss dabei wieder ein Array aus datetime-Objekten sein.
@@ -440,9 +426,7 @@ import matplotlib.dates as dates
 ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))
 ```
 
-
 Wichtig: Wenn Daten außer einer Uhrzeit auch ein Datum enthalten, muss dieses in den Limits auch angegeben werden.
-
 ```python
 ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%y %H:%M:%S"))
 ```
@@ -453,25 +437,25 @@ ax.xaxis.set_major_locator(dates.MinuteLocator(interval=2))
 plt.plot(time,d)
 ```
 
-
-
-
-
-
 ### time Module
 
 ```python
 import time
 time.sleep(5.5)#5.5 seconds pause
 ```
+### Serialization
+Idea: convert python objects to byte streams, which you can send or store. There are three modules in the python standard library for this:
+* `marshal`: Do not use this one. Mainly for the python interpreter.
+* `pickle`: Serialize to binary, supports many types
+* `json`: Save as human-readable ascii file, only limited types.
 
-
-
-
-
-
-
-
+## JSON
+Supports:   int, long, float, str, tuple, list, dict, True, False, None
+```python
+import json
+with open('file.json', 'w') as f:
+  json.dump(data,f) #dump data to file
+```
 
 
 
@@ -624,6 +608,17 @@ norm.cdf(values, loc, scale) #cumulative distr. function
 norm.ppf(values, loc, scale) #Percent point function (inverse of cdf)
 samples=norm.rvs(size=100) #Get gaussian samples
 ```
+
+### Interpolation
+#### Multidimensional
+https://stackoverflow.com/questions/37872171/how-can-i-perform-two-dimensional-interpolation-using-scipy
+* Rbf: My recommendation for irregular points. Gives a reusable object after fitting to the input data.
+```python
+from scipy.interpolate import Rbf
+rbfi = Rbf(x, y, z, values)  #input coordinates and values as arrays 
+di = rbfi(xi, yi, zi)   # interpolated values
+```
+* griddata: 
 
 ## Pyplot/Matplotlib
 https://matplotlib.org/faq/usage_faq.html#usage
@@ -978,6 +973,7 @@ ds=ds.squeeze(drop=False)#Fix/Drop all dimensions with length one
 da.drop([d for d in list(data.coords.keys()) if d not in data.dims])#Drop all non-dimensional coordinates
 #DataArrays
 da=xr.DataArray(nparray, coords=[('x',xarr), ('y', yarr)])#Create a DataArray from numpy
+da2=da1.copy(data=arr)#create a DataArray with new values based on an existing DataArray
 da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
 da.attrs['units']='km'#long_name and units is used by the .plot() routine
@@ -998,7 +994,7 @@ https://xarray.pydata.org/en/stable/indexing.html
 ```python
 da[...,2]#based on coordinate index and dimension index
 da.loc[...,'z']#based on coordinate label and dimension index
-ds=ds.isel(temp=0)#selection based on index along the dimension
+ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
 ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
 ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30!
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
@@ -1011,7 +1007,7 @@ da.loc[db.coords]=db#Assign values of db to a subset of da
 ```
 
 ### Coordinates
-Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign furhter coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
+Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign further coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
 Be aware: Dimensions have names. You see them in () when printing. Coordinates can have the same names as the dimension they label (e.g. 'space') or different names (e.g. 'weekday' for dimension 'time'). In the latter case, you must of course tell xarray that 'weekday' belongs to the dimension 'time'.
 ```python
 locs = ['A','B','C']
@@ -1065,7 +1061,7 @@ result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_
 
 ### Plotting data
 ```python
-da.plot(x='a') #1D. Data is automatically plotted in the 'open' dimension y
+da.plot(x='a', ax=ax1) #1D. Data is automatically plotted in the 'open' dimension y. 'ax' allows to specify a matplotlib axes object.
 da.plot(x='a', hue='b') #2D
 da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
 da.plot(x='a', hue='b', col='c', row='d') #4D
