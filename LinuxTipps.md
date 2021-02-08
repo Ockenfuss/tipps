@@ -30,6 +30,7 @@ Also includes a lot of useful snippets when working with the command line
   - [VPN](#vpn)
     - [Cisco Anyconnect](#cisco-anyconnect)
   - [SAMBA/CIFS](#sambacifs)
+  - [NTP Timeserver](#ntp-timeserver)
 - [Encryption](#encryption)
   - [gpg2](#gpg2)
   - [LUKS](#luks)
@@ -260,8 +261,17 @@ In order to add a profile, go to folder /opt/cisco/anyconnect/profile and add
 ## SAMBA/CIFS
 ```bash
 sudo mount -t cifs -o user=username,uid=1000,gid=1000,password=abc //smb.server.de/projects/folder ~/Work #necessary to install 'sudo apt install cifs-utils'. Use an 'unc path' to specify the server but replace '\' with '/' for unix. Use password option only for e.g. fstab, normally you will get a dialog. Uid and gid important if fileattributes are not transmitted from server.
+-o rw #mount read/write
+-o noperm #do not perform permission checks. Can help if you have problems with permission denied when writing.
 sudo umount Work #Unmount samba share
 sudo umount -a -t cifs -l #Lazy Unmount all CIFS mounts
+```
+
+## NTP Timeserver
+```bash
+sudo vim /etc/systemd/timesyncd.conf #write "NTP=IP/Servername"
+timedatectl set-ntp 1 #Activate the ntp server as time source
+systemctl status systemd-timesyncd.service #check that the connection is working
 ```
 # Encryption
 ## gpg2
