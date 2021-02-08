@@ -368,12 +368,15 @@ mo1 is mo2#Whether mo1 and mo2 relly point the the same instance in memory
 https://realpython.com/primer-on-python-decorators/
 Decorators: define two functions a:int->int, F:func->func. Now, you can do `a=F(a)` to get a new function a passed through F. Usually, F is a wrapper that does some pre and post processing. Shorthand for this is `@F`. Useful applications: Debugging: Print function arguments! Timers, Register function in dict, ...
 ```python
+import functools
 def F(func):
+  @functools.wraps(func) #this line ensures that the wrapped function returns the original .__name__ attribute
   def wrapper(*args, **kwargs):
     #do something before
     val=func(*args, **kwargs)
     #do something after
     return val
+  return wrapper
 @F
 def a(var):
   ...
@@ -409,7 +412,7 @@ Vergleiche: PlotSeries.py
 ```python
 from datetime import datetime, timedelta
 from dateutil.parser import parse
-time = datetime.strptime(TimeString,"%m.%d.%y %H:%M:%S") #date from string
+time = datetime.strptime("8.21.2017 15:00:00","%m.%d.%Y %H:%M:%S") #date parsed from string
 "%m.%d.%y %H:%M:%S.%f"#falls mit Milliseconds
 time.strftime("%H:%M") #String from date
 (a-b).total_seconds() #Difference in seconds
@@ -428,7 +431,7 @@ ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))
 
 Wichtig: Wenn Daten außer einer Uhrzeit auch ein Datum enthalten, muss dieses in den Limits auch angegeben werden.
 ```python
-ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%y %H:%M:%S"))
+ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%Y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%Y %H:%M:%S"))
 ```
 
 Abstände der Labels (hier 2 Minuten)
