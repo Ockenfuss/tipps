@@ -31,6 +31,7 @@
   - [User interaction](#user-interaction)
   - [Modifying text](#modifying-text)
   - [Searching](#searching)
+  - [Stream Editing](#stream-editing)
   - [Filesystem](#filesystem)
     - [Partitions & Creation](#partitions-creation)
     - [Mounting](#mounting)
@@ -43,7 +44,9 @@
     - [Systemd](#systemd)
   - [Mail](#mail)
   - [Images](#images)
+  - [Video](#video)
   - [Conversion](#conversion)
+  - [Date and Time](#date-and-time)
   - [Backup](#backup)
 - [Examples](#examples)
 - [Shells](#shells)
@@ -100,6 +103,8 @@ echo ${arr[key2]}
 ```bash
 env #show environment variables
 $? #Contains the exit status of the last command
+$$ #Contains the process id of the shell
+$# #number of positional parameters
 PS1; PS2 #the format of the bash prompt 1 and 2 (latter e.g. for multiline constructs)
 IFS=$'\n' #set independent field separator to newline. Used e.g. by for loop or in Array creation to separate fields.
 ```
@@ -140,6 +145,7 @@ done
 ```
 ### Boolean operators
 They are lazy: ` [ -f file ] && delete ` deletes only if file exists
+!: Inversion. E.g., `[ ! -f file ]` checks for non-existence.
 
 ### Unary operators
 -d: exists and is directory
@@ -275,7 +281,7 @@ printf "%20s%10i %3.2f" "Hello" 10 20.1234 #C Style formatting
 cat file #Concatenate concent of files and print to stdout. Often used to just print one file
 tac file #cat inverse
 head -1 file #show first lines
-tail -20 file #Use -f to have a live view
+tail -20 file #Use -f to have a live view. tail +20 to print line 20 and following.
 more file #Display sequentially.
 less file #Similar to more. Interactive view.
 diff file1 file2 #compare files line by line
@@ -330,6 +336,8 @@ egrep 'ab|cd' -o file #egrep necessary for extended regular expressions. -o: Sho
 grep -v 'abc' file # -v: invert
 grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive -n: line number -i: ignore case --include: search only within if GLOB matches
 ```
+## Stream Editing
+
 ## Filesystem
 ### Partitions & Creation
 A physical storage device is usually divided in partitions to create logical disks for the OS. The partition table contains the information about the partitions. On each partition, a different filesystem can be implemented.
@@ -345,6 +353,7 @@ fsck -N /dev/sda1 #check filesystem. -N: do not execute checks, just show.
 ### Mounting
 ```bash
 sudo mount /dev/sda1 /mnt/mountpoint #mount a device file 
+sudo mount -a #mount all filesystems listed in /etc/fstab
 sudo umount /dev/sda1 #unmount a device, either by specifying device file or mountpoint.
 findmnt -n -o TARGET /dev/sda1 #find the mount point of a device. -o: output columns, -n: do not print header
 udisksctl mount -b /dev/sda1 #Automount device in folder media. Works without root in Ubuntu.
@@ -444,18 +453,32 @@ exiftool file.jpg #show metadata
 exiftool -all= file.jpg #remove all metadata
 ```
 
+## Video
+For video editing, ffmpeg is the most versatile tool.
+```bash
+ffmpeg -ss 00:04:32.200 -i vid.mp4 -vframes 1 -q:v 1 out.jpg #extract a single image from a video. -q:v control the quality from 1 to 31, with 1 meaning highest quality
+```
+
 ## Conversion
 ```bash
 convert -density 300 a.pdf a.png #convert pdf to image
 convert -transparent white a.png a2.png #make all white in image transparent
 ```
 
+## Date and Time
+```bash
+date +"%Y-%m-%d %H:%M:%S" #Display current date and time
+date --date='10 days ago' #Relative time strings are possible
+```
+
 ## Backup
 `rsync` is a tool which is really powerful for backups. It copies directories based on file changes, which are detected using time stamp or changes in size. It is powerful for remote connections, but requires that rsync is available on both sides.
 ```bash
-rsync -av from/ to/ #synchronize two directories -a: all subdirectories with attributes. -v: verbose
-rsync -uav user@server:dir/ local/ #uses ssh (standard) to copy from remote server
+rsync -av from/ to/ #synchronize the content of from to 'to' -a: all subdirectories with attributes. -v: verbose.
+rsync from to/ #Without a trailing slash in the source, an additional folder 'to/from/' is created, i.e. not only the content, but the folder with content is copied.
+rsync -uavz user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data.
 -c # use checksums instead of timestamps
+rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
 ```
 
 # Examples
