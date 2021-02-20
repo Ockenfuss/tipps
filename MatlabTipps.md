@@ -11,9 +11,11 @@ Tipps for Matlab
     - [Loops](#loops)
   - [Strings](#strings)
   - [Functions](#functions)
-- [Use](#use)
-- [Declare](#declare)
-- [Optional arguments](#optional-arguments)
+    - [Use](#use)
+    - [Declare](#declare)
+    - [Optional arguments](#optional-arguments)
+  - [I/O](#io)
+  - [Dates](#dates)
 - [Plotting](#plotting)
 
 <!-- /code_chunk_output -->
@@ -59,12 +61,12 @@ a='abc' % character array. common before strings were introduced.
 ```
 
 ## Functions
-# Use
+### Use
 ```matlab
 a(b,c) % call function with two arguments
 [a,b]=c $ function c returns two arguments, which are expanded into a and b.
 ```
-# Declare
+### Declare
 ```matlab
 function a=name(b) % function 'name' with input b and return value a
     a=2*b
@@ -72,11 +74,21 @@ end
 sqr = @(x) x.^2 % 'anonymous' function. Compare to python lambda expr.
 nargin % contains the number of provided arguments inside a function.
 ```
-# Optional arguments 
+### Optional arguments 
 ```matlab
 
 ```
 
+## I/O
+Printing
+```matlab
+disp(A) %Display variables value
+```
+## Dates
+```matlab
+now % Current date as serial date number (fractional number of days since reference) call 'datetime(now, 'ConvertFrom', 'datenum')' to get datetime object
+[datenum(2010,1,1):datenum(2010,2,28)] % Convert datetime to serial date number
+```
 # Plotting
 ```matlab
 plot(x,y,'g:*') % plot a line plot with a green, dotted, star-marked line
