@@ -442,7 +442,8 @@ Example for a simple backup service named `backup@.service`
 ## Mail
 Originally, every linux system has its own mail client
 ```bash
-mail user #send email to another user
+mail -s subject -A attachment -r return_address address #send email to someone.
+echo -e "~b mail@mail.de\nText\n" | mail -s subject #mail reads text from standard-in. For bcc and further commands, use so called "compose escapes" (standard character is "~", followed by the command)
 ```
 
 ## Images

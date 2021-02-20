@@ -9,6 +9,8 @@ Some program examples: https://www.gnu.org/software/gawk/manual/html_node/Miscel
   - [Usage](#usage)
   - [Command line arguments](#command-line-arguments)
   - [Columns](#columns)
+  - [Variables](#variables)
+    - [Arrays](#arrays)
   - [Loops and conditions](#loops-and-conditions)
   - [Logical Operators](#logical-operators)
   - [Printing](#printing)
@@ -43,7 +45,14 @@ gawk -i inplace file.txt#Inplace editing: Redirect the output to a temporary fil
 ### Columns
 `$0` represents the whole line, `$1`, `$2`,... are the single columns. If possible, the strings are directly converted to real numbers!
 Columns can also be accessed by variables via `$i`
-
+### Variables
+```bash
+```
+#### Arrays
+```bash
+a[0]=1 #Create Array. In awk, all arrays are associative, i.e. indexed by string values (compare dictionaries in python).
+a[i,j]=1 #The content of i and j will be concatenated a single string that forms the key for this element.
+```
 ### Loops and conditions
 ```bash
 gawk '{for(i=0; i<10; i++) print i}'
@@ -79,8 +88,12 @@ gawk '{sub("[0-3]","y",$0); print $0}'#Replace first regex match, 'gsub' replace
 * FNR: Number of the current line in the current file
 * NR: Number or the current line
 
-###Regex
+### Regex
+See man gawk, Regular Expressions.
 `$0~/REGEX/`: true if $0 does match the regex. `!~` means "does not match". Regex can also be combined using logical operators: `a~/REGEX1/ && b!~/REGEX2/{do...}`
+```bash
+match($0,".*_[[:digit:]]{6}(..)_(..)\\.txt",a); This example will match files with a date appendix like 'File_20201216_14.txt'. It contains a character class '[[:digit:]]', a repetition of a command '{6}', regex groups '(..)' (which can be accessed by a[0] and a[1]) and a dereference of a regex special character '\\.'
+```
 
 ## Examples
 * Remove empty lines: `gawk 'NF>0`
