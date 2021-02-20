@@ -9,6 +9,7 @@ Manual: https://www.gnu.org/software/make/manual/html_node/index.html#Top
     - [Variables](#variables)
     - [Internal macros](#internal-macros)
     - [Filters and wildcards](#filters-and-wildcards)
+    - [Multiline](#multiline)
 
 <!-- /code_chunk_output -->
 
@@ -33,6 +34,15 @@ $(UV)#Use variable
 
 ### Filters and wildcards
 *Filter all prerequisites for extension ".o": `$(filter %.o, $^)`
+
+### Multiline
+Make spawn a new subshell for each new line. Therefore, you cannot use multiline commands in the usual way, e.g. for an if-condition. Instead, you need to write them like
+```makefile
+check:
+    if [ condition ]; then \
+        command; \
+    fi
+```
 
 
 

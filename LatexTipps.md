@@ -6,6 +6,7 @@ Tipps and code snippets to format texts in Latex
 <!-- code_chunk_output -->
 
 - [Latex](#latex)
+  - [Installation](#installation)
   - [ToDo package](#todo-package)
   - [Subfiles](#subfiles)
 - [Biblatex](#biblatex)
@@ -31,7 +32,19 @@ Checkliste vor Druck:
 show geometry:
 \usepackage{layout}
 \begin{document}\layout
-...
+
+## Installation
+Usually, the easiest way is to use a distribution like texlive, which includes many often used packages. Texlive features different versions with additional packages for science.
+```bash
+pdflatex --version #get information about your distribution
+tlmgr 
+```
+## Compilation
+Generally, use pdflatex. To abort the compilation, enter 'x', since Ctrl-C does not work in interactive mode.
+```bash
+pdflatex 
+```
+
 ## ToDo package
 ```latex
 \usepackage{todonotes}
