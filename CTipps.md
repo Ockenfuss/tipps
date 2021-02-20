@@ -76,7 +76,7 @@ person* philipp;
 philipp->a=4//equals (*paul).a=5, i.e. we follow the pointer
 ```
 
-##IO
+## IO
 Output
 ```C
 #include <stdio.h>
@@ -102,7 +102,7 @@ attributest.st_size; //filesize in bytes
 ```
 Open, write and close files
 ```C
-
+fwrite(*char, blocksize_bytes, num_blocks, stream) //write fixed number of bytes from a string to a stream. This does not care about null-char! If you want to include it (uncommon in files, but anyway), use num_blocks=strlen(str)+1 and blocksize_bytes=1
 ```
 Manipulate file pointers
 ```C
@@ -112,7 +112,10 @@ rewind(fp);//set position to the beginning of the file
 ```
 
 ## Strings
-
+They are represented by character arrays. Usually, the last character must be a `\0`, which signals the end of the string. This is used by many function, e.g. `strlen`.
+```C
+char string[]={ "Hallo Welt" };
+```
 ### Format specifiers: 
 https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
 ```C
@@ -128,8 +131,8 @@ https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.ht
 ### String functions
 ```C
 #include <string.h>
-strcpy(dest, source);//copy source into destination. !Strings must be long enough!
-strlen(str)//return length of string as integer
+strlen(str); // return length of string as integer, excluding terminating null-char.
+strcpy(dest, source); //copy source into destination. !Strings must be long enough!
 strstr(haystack, needle);//find the string needle in the string haystack and return a pointer to the first occurrence (null if not found)
 int i = sscanf(string, "%s %d", strptr, &double); //try to read the values in the format string from the given string and put the results in the given variables. Returns the number of successfully read variables.
 ```
