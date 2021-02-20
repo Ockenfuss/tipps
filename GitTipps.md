@@ -52,7 +52,9 @@ git rebase origin/master #Apply the commits of your current branch (master) on t
 
 ## Miscellaneous commands
 #Rename a file or folder
+```bash
 git mv Old/ New/
+```
 
 
 
@@ -76,5 +78,7 @@ https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-th
 ```bash
 svn info #get info like upstream url
 svn checkout url #checkout repository
-
+svn status #get status of repo
+svn up #update repository
+svn switch --relocate OldURL NewURL
 ```
