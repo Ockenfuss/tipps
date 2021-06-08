@@ -8,7 +8,9 @@
 - [Python Tricks](#python-tricks)
   - [Python General](#python-general)
     - [Installation](#installation)
+    - [Virtual Environments](#virtual-environments)
     - [General](#general)
+      - [Loops and Conditions](#loops-and-conditions)
       - [Functions:](#functions)
         - [Type hints](#type-hints)
       - [Variable reference in Python](#variable-reference-in-python)
@@ -20,15 +22,22 @@
       - [Lists](#lists)
       - [List comprehensions](#list-comprehensions)
       - [Iterables](#iterables)
+        - [Zip](#zip)
+      - [Hashables](#hashables)
       - [Sets](#sets)
       - [Dictionaries](#dictionaries)
-      - [File paths/IO](#file-pathsio)
+    - [IO](#io)
+      - [File paths](#file-paths)
+      - [Shell](#shell)
+      - [CLI Arguments](#cli-arguments)
     - [Exceptions](#exceptions)
     - [Object Orientation](#object-orientation)
       - [Decorators](#decorators)
       - [Get/Set](#getset)
       - [Operator overloading](#operator-overloading)
     - [Datetime module](#datetime-module)
+      - [Creation](#creation)
+      - [Operations](#operations)
       - [Zeiten Plotten](#zeiten-plotten)
     - [time Module](#time-module)
     - [Serialization](#serialization)
@@ -53,13 +62,16 @@
     - [Statistics](#statistics-1)
       - [Distribution functions](#distribution-functions)
     - [Interpolation](#interpolation)
+      - [Onedimensional](#onedimensional)
       - [Multidimensional](#multidimensional)
   - [Pyplot/Matplotlib](#pyplotmatplotlib)
-      - [create plot](#create-plot)
+      - [Create plot](#create-plot)
       - [Axen und Ticks](#axen-und-ticks)
       - [Beschriftung mit Latex](#beschriftung-mit-latex)
       - [Legende](#legende)
-      - [linestyle cycle](#linestyle-cycle)
+      - [Lines and colors](#lines-and-colors)
+        - [Specifiying colors](#specifiying-colors)
+        - [Linestyle cycle](#linestyle-cycle)
       - [colorbar](#colorbar)
         - [Create colorbar](#create-colorbar)
         - [Colorbar limits and scale](#colorbar-limits-and-scale)
@@ -68,7 +80,7 @@
       - [Zweite Axe rechts:](#zweite-axe-rechts)
       - [Figuren](#figuren)
         - [Kreis plotten](#kreis-plotten)
-      - [Save File Location default and default extension (pdf)](#save-file-location-default-and-default-extension-pdf)
+      - [Saving figures](#saving-figures)
       - [Backend](#backend)
       - [Arange subplots](#arange-subplots)
       - [Text and annotations](#text-and-annotations)
@@ -103,8 +115,7 @@
     - [Plotting data](#plotting-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
-  - [CLI Arguments](#cli-arguments)
-  - [Create your own modules](#create-your-own-modules)
+  - [Creating your own modules](#creating-your-own-modules)
       - [Module Structure](#module-structure)
       - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
   - [Unittests](#unittests)
@@ -117,12 +128,24 @@
 
 ### Installation
 
+```bash
 `sudo apt install python3`
 Pip: `sudo apt install python3-Pip`
 install package with pip: use `--user` flag if you have problems
-also possible: install with `python3 -m pip install`
-list packages (python3 -m) `pip list`
-upgrade pip: 
+python3 -m pip install package #install packages. Use package==1.0.1 to install a specific version
+pip3 list #list installed packages
+pip3 freeze > requirements.txt #list installed and version, in the form for requirements.txt
+python3 -m pip install --upgrade pip #Upgrade pip. Here, it is necessary to call pip via `python3 -m`, since this loads the module into memory before execution. This is necessary, since pip will be uninstalled first and then the new version is installed.
+```
+
+### Virtual Environments
+```bash
+mkdir MyEnv; cd MyEnv #make a folder for the environment. Can be in your package folder, but does usually not belong to the project (put in .gitignore)
+python3 -m venv env #create virtual environment
+source bin/activate #activate virtual environment
+pip3 install package # install packages. Do not use sudo! Use pip install -r requirements.txt to install version specifically for your package.
+deactivate #Deactivate virtual environment
+```
 
 ### General
 
@@ -131,6 +154,20 @@ beendet ein Python Program
 ```python
 import sys
 sys.exit()
+```
+#### Loops and Conditions
+```python
+if condition: #if conditions
+  code
+elif condition:
+  code
+else:
+  code
+a=0 if condition else a=1 #ternary operator
+```
+```python
+for i in iterable:#for loop
+  code
 ```
 
 #### Functions: 
@@ -151,8 +188,11 @@ Generally, expressions are evaluated from the right
 Expressions like a=a+10 (a can be numpy array!): Create a new, deep copy and assign its reference to a
 
 #### Datatypes
-convert to integer
-`int(x)`
+```python
+int(x) #convert to integer
+chr(97) #convert to character 'a'
+str(97) #convert to string "97"
+```
 
 #### Strings
 ```python
@@ -170,10 +210,11 @@ Modify
 ```python
 string.strip("\n")#remove at beginning or end
 string.replace('a','b')
+string.lower()# turn to lowercase
 ```
 Format specifiers: These are deprecated, better to use f=Strings!
 ```python
-print("%d %f %s"%(1, 0.314,"hallo"))#Write a percent sign and then the tuple with the values
+"%d %f %s"%(1, 0.314,"hallo")#the % operator applied to strings will insert the values from the tuple into the format string.
 ```
 ##### f-Strings
 https://realpython.com/python-f-strings/
@@ -237,7 +278,7 @@ Closely related to list comprehensions are generator expressions. They create it
 ```python
 iterable=(obj.evalute() for obj in objlist)
 ```
-Iterables can be created with the `yield` operator. It is similar to `return`, but keeps the function state in memory and continues execution when the next element is requested.
+Generators can be created with the `yield` operator. It is similar to `return`, but keeps the function state in memory and continues execution when the next element is requested.
 ```python
 def com(l, k):
   """Example: Generates an iterator over all possible k-size subsets of l"""
@@ -251,20 +292,31 @@ def com(l, k):
         for com_without in com(l[1:],k-1):
             yield [l[0]]+com_without
 ```
-There are a lot of useful function, which work with iterables.
+There are a lot of useful functions, which work with iterables.
+##### Zip
 ```python
+zip_iter=zip(a,b,c)#zip takes multiple iterables and aggregates the first, second,... elements each in a tuple. It returns an iterator.
+transposed=list(map(list, zip(*l))) #With zip, you can "transpose" a list of lists
 list1, list2=zip(*sorted(zip(list1, list2)))#Sort multiple lists according to the first one
+for i,j in zip(l1,l2) #iterate over multiple lists in parallel. With .items(), this works for dicts as well.
+from itertools import zip_longest
+zip_longest(a,b,c, fillvalue=" ")#usually, zip stops after the shortest iterable reaches its end. Zip_longest will continue and insert fill values instead.
 ```
+
+#### Hashables
+An object is hashable if it has a hash value which never changes during its lifetime (it needs a `__hash__()` method), and can be compared to other objects (it needs an `__eq__()` or `__cmp__()` method). Hashable objects which compare equal must have the same hash value. (from the Python glossary)
 #### Sets
 Unordered collections, where each element appears only once. Pretty much the same thing as you know from mathematics! Elements must be immutable
 https://realpython.com/python-sets/
 ```python
 a=set(['foo', 'foo', 'bar']) #Create from iterable of immutables. Result: a={'foo', 'bar'}
+a={'foo','bar','baz'} #Alternative definition
 a | b #Union: elements in a or b
 a & b #Interection: elements in a and b
 a - b #Difference: elements in a and not in b
 a <=b #a is subset of b
 a < b #a is real subset of b
+a == b #elements in a and b are equal
 a |=b #Update a to be a | b. Works with & and - as well
 ```
 
@@ -272,21 +324,22 @@ a |=b #Update a to be a | b. Works with & and - as well
 Unordered storage vor key-values pairs.
 ```python
 example={"key": value, "key2": value2}
-print(example["key2"])#Access elements by key
+example["key2"]#Access elements by key
 d=dict(zip(keys, values))#use dict to create a dictionary from a list of key-value tupples (zip creates such a list from key and value lists)
 list(d.keys())#get keys as list
+for k,v in d.items(): #items() provides a view on the dict keys and values, which is useful for iterations
 dict1.update(dict2)#update a dictionary with the values from another one (replace keys or create if not existing)
+d.get('key',default)#return default if key not existent
 d.pop('key', default)#return & remove key if existing and return default otherwise
 func(**kwargs):
   key=kwargs.pop('key', default)#Very useful for function argument defaults
 ```
 
-#### File paths/IO
+### IO
+#### File paths
 ```python
-import sys
-sys.argv[1]#Command line arguments. argv[0] contains program name. 
 import os.path
-os.path.join()
+os.path.join(str1, str2) #join to one filepath
 os.path.basename(path)#basename if a file, empty for directory. might not work with Windows
 os.path.abspath(path)#get the absolute filepath
 os.path.dirname(path)#directory name
@@ -301,6 +354,27 @@ with open('file', 'w') as f:#w: writing, r: reading, a: append
   for line in f:#f is an iterable over the lines
   f.write(str)#write string
   f.writelines(seq)#NO line endings are added
+```
+#### Shell
+```python
+import os
+os.environ["HOME"] #Access environment variables
+expanded=os.path.expandvars(string) #expand environment variables in a string
+``` 
+#### CLI Arguments
+```python
+import sys
+sys.argv[1]#Command line arguments. argv[0] contains program name. 
+```
+`argparse` is a useful package in the standard library to parse command line arguments
+```python
+import argparse
+par=argparse.ArgumentParser(description="What this script does")
+par.add_argument('path', type=str, help="path to something", default="a/b")#Add command line arguments
+par.add_argument('-i', type=int, default=1)
+par.add_argument('-s',action='store_true')#Boolean flag
+args=par.parse_args()
+number=args.mode#Access argument values
 ```
 ### Exceptions
 Rasising Exceptions
@@ -339,6 +413,7 @@ class test(object):#Derived from 'object'
   def __init__(self, var1, var2):#Konstruktor
     self._var1=var1
     self._var2=var2
+    self.__dict__.update(kwargs) #shortcut to set all keyword arguments as class attributes
     super().__init__()#If derived from another class, we can access parent methods through super()
   
   @classmethod
@@ -361,8 +436,16 @@ mo=MyObject()
 type(mo)==MyObject#Check the exact type
 isinstance(mo, MyObject)
 isinstance(mo, Parent)#Is instance is also true for the parent type
-mo1==mo2#This checks whether the objects are equal according to their __eq__ implemntation (for example they have the same content)
-mo1 is mo2#Whether mo1 and mo2 relly point the the same instance in memory
+mo1==mo2#This checks whether the objects are equal according to their __eq__ implementation (for example they have the same content). Similarly, you can overload __ne__, __le__, __lt__, __ge__, __gt__ for the other comparison operators.
+mo1 is mo2#Whether mo1 and mo2 really point the the same instance in memory
+```
+
+Object introspection
+Get information about an object and its members.
+```python
+dir(obj) #list attributes and methods
+import inspect #module to get detailed information about objects
+inspect.getmembers(obj) #list members
 ```
 #### Decorators
 https://realpython.com/primer-on-python-decorators/
@@ -408,16 +491,23 @@ Implement by use of special methods like `__add__`, `__mul__`,... By convenction
 ### Datetime module
 Datum und Zeit
 Übersicht: https://www.programiz.com/python-programming/datetime
-Vergleiche: PlotSeries.py
+#### Creation
 ```python
-from datetime import datetime, timedelta
+from datetime import datetime
 from dateutil.parser import parse
+t=datetime(2021,4,3) #specify year, month, day, hour, ...
 time = datetime.strptime("8.21.2017 15:00:00","%m.%d.%Y %H:%M:%S") #date parsed from string
 "%m.%d.%y %H:%M:%S.%f"#falls mit Milliseconds
 time.strftime("%H:%M") #String from date
-(a-b).total_seconds() #Difference in seconds
-time=time+timedelta(hours=7) #Add times
+datetime.date.today() #get current date
+```
 
+#### Operations
+```python
+from datetime import timedelta
+(a-b).total_seconds() #Difference in seconds
+t=t+timedelta(hours=7) #Add times
+t2=t.replace(hour=8,month=8) #Create new datetime from existing
 ```
 
 
@@ -613,6 +703,12 @@ samples=norm.rvs(size=100) #Get gaussian samples
 ```
 
 ### Interpolation
+#### Onedimensional
+```python
+from scipy.interplate import interp1d
+f=interp1d(x,y,kind='cubic') #linear or cubic (spline) interplation
+ynew=f(xnew) #returns a callable object
+```
 #### Multidimensional
 https://stackoverflow.com/questions/37872171/how-can-i-perform-two-dimensional-interpolation-using-scipy
 * Rbf: My recommendation for irregular points. Gives a reusable object after fitting to the input data.
@@ -629,7 +725,7 @@ Basic structure: A Figure object is the empty window which contains the plots.
 In the figure is a certain number of Axes objects, the actual "plots".
 Each Axes object can have for example two or three Axis-objects, the actual "axes of the plots". Axes!=Axis!!!
 
-####create plot
+#### Create plot
 ```python
 fig,ax=plt.subplots()
 fig2, ax2=plt.subplots(nrows=2, ncols=2)#ax2: either 1D or 2D array => use atleast2d().T if necessary
@@ -643,6 +739,7 @@ ax.set_ylim(1e-7,5e1)#Limits
 ax.invert_yaxis()#Invert axis
 ax.set_xticks([1,2,3], minor=False)#Ticks setzen. ax.get_xticks() liefert ticks
 ax.set_xticklabels(["A12", "B12", "C12"], rotation=90, minor=False)#use [] to turn off labels
+ax.set_major_formatter("{x} km") # strings can be used as formatter
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
 a.xaxis.tick_top()#Ticks oben setzen
@@ -663,12 +760,12 @@ ax.yaxis.set_label_coords(-0.1, 0.5)#exakte position
 ```
 #### Legende
 ```python
-legend2 = ax2.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2, title='Some lines')#Legende
-dummy_lines = []#Legende nur mit Linestyle
-dummy_lines.append(ax.plot([],[], c="black", linestyle ="-", linewidth=1.2)[0])
-dummy_lines.append(ax.plot([],[], c="black", linestyle ="--", linewidth=1.6)[0])
-legend = ax.legend(dummy_lines, ["Measurements", "Simulation"])
-ax.add_artist(legend2)
+legend = ax.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2, title='Some lines')#Legende
+lines = []#Legende nur mit Linestyle
+lines.append(ax.plot([],[], c="black", linestyle ="-", linewidth=1.2)[0])
+lines.append(ax.plot([],[], c="black", linestyle ="--", linewidth=1.6)[0])
+legend = ax.legend(lines, [l.get_label() for l in lines])
+ax.add_artist(legend)
 ```
 Multiple legends in one axes object
 ```python
@@ -678,7 +775,13 @@ ax.add_artist(leg1)
 ax.add_artist(leg2)
 ```
 
-#### linestyle cycle
+#### Lines and colors
+##### Specifiying colors
+https://matplotlib.org/stable/tutorials/colors/colors.html
+```python
+color="C0" #The default colors in the cycle can be set with C0, C1, ...
+```
+##### Linestyle cycle
 ```python
 from itertools import cycle
 lines = ["-","--","-.",":"]
@@ -751,11 +854,11 @@ circle1 = plt.Circle((1000, 1000), 30, color='r', fill=True)
 ax.add_artist(circle1)
 ```
 
-#### Save File Location default and default extension (pdf)
+#### Saving figures
 ```python
 plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#need to "import os"
 plt.rcParams["savefig.format"]="pdf"
-fig.savefig("Plot1.pdf")#save plot
+fig.savefig("Plot1.pdf", bbox_inches='tight', format='png')#save plot. bbox_inches is very useful to remove white area around (and even add area if some labels are not visible otherwise)
 ```
 #### Backend
 ```python
@@ -790,7 +893,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='axes fraction')#
 ##### Lines, points and bars
 ```python
 ax.plot(x,y,'.-', linewidth=0.4,label="label")
-ax.scatter(x,y,alpha=0.5, marker='.')#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
+ax.scatter(x,y,alpha=0.5, marker='.', markersize=4)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
@@ -998,8 +1101,8 @@ https://xarray.pydata.org/en/stable/indexing.html
 da[...,2]#based on coordinate index and dimension index
 da.loc[...,'z']#based on coordinate label and dimension index
 ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
-ds=ds.sel(temp=34.3)#34,3°C. Selection based on coordinate of the dimension
-ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30!
+ds=ds.sel(temp=34.3, time="2021-05-28") #Selection based on coordinate of the dimension. Strings or datetimes can be used for a time coordinate.
+ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
 ```
@@ -1080,19 +1183,8 @@ AcM=sig.convolve2d(A,M, mode='full', boundary='fill', fillvalue=0)
 boundary: How boundary conditions are treated: fill missing values on the rim with a value, use periodic boundary conditions ('wrap') or mirror the values directly at the rim to the outside ('symm')
 mode: Size of the resulting array, 'full', "valid", or "same"
 
-## CLI Arguments
-`argparse` is a useful package to parse command line arguments
-```python
-import argparse
-par=argparse.ArgumentParser()
-par.add_argument('flight', type=str)#Add command line arguments
-par.add_argument('mode', type=int)
-par.add_argument('-s',action='store_true')#Boolean flag
-args=par.parse_args()
-number=args.mode#Access argument values
-```
 
-## Create your own modules
+## Creating your own modules
 https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
 All about paths and importing from other directories:
 https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
@@ -1172,7 +1264,7 @@ Best to use the command line interface. Take the example from
 ```bash
 cd new_project
 python3 -m unittest discover #All tests in test directory. use -t testdir if not named test.
-python3 -m unittest test.test_antigravity #one specific test (python notation)
+python3 -m unittest test.test_antigravity #one specific test (python notation). Remember to have an __init__.py in your test and probably subfolders present.
 ```
 unittest introduces a few improved assertions:
 ```python
