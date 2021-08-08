@@ -160,10 +160,10 @@ qpdf --encrypt pwd_user pwd_owner 256 -- A.pdf A_encrypt.pdf #Encrypt a pdf with
 qpdf -decrypt pdffile_protected.pdf pdffile_notprotected.pdf #Remove read only e.g. to make annotations to the pdf
 ```
 ## ssh
-Usual directory: `~/.ssh`. There, you find your private key (`id_rsa`, keep it safe!) and your public key (`id_rsa.pub`). To use it for automatic login on a server, the public key must be added in the servers `.ssh/known_hosts` file. Therefore, you need to provide another method of authentification to the server, like a password or send an email to the admin, whatever. The usual way is to use ssh-copy-id, which automatically copies your public key in the servers known_hosts list (using e.g. password authentification). Now, the server trusts everyone who can prove to have the private key to the public one in known_hosts (Imagine the server encrypting a test message and sending it to the client. If the client can decrypt the message and send it back (encrypted with e.g. the servers public key, of course), the client can be trusted). 
+Usual directory: `~/.ssh`. There, you find your private key (`id_rsa`, keep it safe!) and your public key (`id_rsa.pub`). To use it for automatic login on a server, the public key must be added in the servers `.ssh/authorized_keys` file. Therefore, you need to provide another method of authentification to the server, like a password or send an email to the admin, whatever. The usual way is to use ssh-copy-id, which automatically copies your public key in the servers authorized_keys list (using e.g. password authentification). Now, the server trusts everyone who can prove to have the private key to the public one in known_hosts (Imagine the server encrypting a test message and sending it to the client. If the client can decrypt the message and send it back (encrypted with e.g. the servers public key, of course), the client can be trusted). 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "p-necko@t-online.de" #Generate a key public private key pair
-ssh-copy-id -i id_rsa.pub My.Loginname@some.server.de #Add public key to server known_hosts
+ssh-keygen -t rsa -b 4096 -C "Comment(Email address)" #Generate a key public private key pair
+ssh-copy-id -i id_rsa.pub My.Loginname@some.server.de #Add public key to server authorized_keys
 ssh -X User@ServerAddress #Now log in to server (use -X to enable X11 forwarding)
 ```
 Config file for ssh. Use it for configuration, abbreviation of long names, etc.
