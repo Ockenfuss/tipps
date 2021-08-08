@@ -33,6 +33,11 @@ Each block usually contains a condition before the brackets, which determines wh
 
 There are two special blocks `BEGIN {...}` and `END {...}`, which are executed only once before respectively after the main program (useful for e.g. variable declaration or creation of a file without input).
 
+```bash
+gawk -f code.awk file1.dat file2.dat ... #process multiple files
+```
+It is possible to process multiple files, in which case awk treats them like a single concatenated file. You can use NR==FNR to check whether you are in the first file. gawk implements the `ENDFILE{...}` block which is executed after each file is processed.
+
 
 ### Command line arguments
 ```bash
