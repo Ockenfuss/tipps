@@ -7,6 +7,7 @@
   - [Variables](#variables)
     - [Definition](#definition)
     - [Arrays](#arrays)
+    - [Parameter expansion](#parameter-expansion)
     - [Environment variables](#environment-variables)
     - [Aliases](#aliases)
   - [Program logic](#program-logic)
@@ -14,7 +15,7 @@
     - [Loops](#loops)
       - [For loops](#for-loops)
     - [Boolean operators](#boolean-operators)
-    - [Unary operators](#unary-operators)
+      - [test or [](#test-or)
     - [Comparison operators](#comparison-operators)
   - [Functions](#functions)
     - [Parameters](#parameters)
@@ -38,8 +39,11 @@
   - [Filepaths](#filepaths)
   - [Process Handling](#process-handling)
     - [Background jobs](#background-jobs)
-  - [Archiving](#archiving)
-  - [Networking](#networking)
+  - [Compressing and Archiving](#compressing-and-archiving)
+    - [Compressing](#compressing)
+    - [Archiving](#archiving)
+  - [Networks](#networks)
+    - [Downloading](#downloading)
   - [Automated Execution](#automated-execution)
     - [Systemd](#systemd)
   - [Mail](#mail)
@@ -71,9 +75,9 @@ source ./Test.sh #Execute a script in this shell
 ### Definition
 ```bash
 test=VAR1 #local variable. No spaces around =!
-echo $VAR1 #read variable
-echo '$VAR1' #within '', the string is not interpreted by the shell.
+echo $VAR1 #read variable. This is actually a special case of parameter expansion.
 echo "${VAR1}" #for security and clarity, it is better to add {} around the name
+echo '$VAR1' #within '', the string is not interpreted by the shell.
 c=$(($a+$b))#$((...)) provides an arithmetic environment. Inside, expressions are evaluated in c style
 test=$(ls) #store function output in variable There are no spaces allowed around the "="!
 test=`ls` #Alternative to $(). Note the difference between ` and '
@@ -99,12 +103,22 @@ arr=([key1]=val1 [key2]=val2)
 echo ${arr[key2]}
 ```
 
+### Parameter expansion
+```bash
+${var:-default} #use default here if var not set
+${var:=default} #set var to default if var not set
+${var:?message} #write message to stderr and exit if var is not set
+${var#prefix} #remove prefix from content of var. Use ## for the longest matching pattern.
+${var%suffix} #remove suffix from content of var. Use %% for the longest matching pattern.
+```
+
 ### Environment variables
 ```bash
 env #show environment variables
 $? #Contains the exit status of the last command
 $$ #Contains the process id of the shell
 $# #number of positional parameters
+$0 #contains the name of the script
 PS1; PS2 #the format of the bash prompt 1 and 2 (latter e.g. for multiline constructs)
 IFS=$'\n' #set independent field separator to newline. Used e.g. by for loop or in Array creation to separate fields.
 ```
@@ -144,10 +158,14 @@ for (( run=$STARTNUM; run<=$ENDNUM; run++ )); do #C style environment
 done
 ```
 ### Boolean operators
-They are lazy: ` [ -f file ] && delete ` deletes only if file exists
-!: Inversion. E.g., `[ ! -f file ]` checks for non-existence.
+They work on the exit codes of the command. E.g. `grep -sq word file && echo found` will print "found" only if grep exits successfully.
+Here, we also use that they are lazy and the second part is only executed if the first was successful.
+#### test or [
+"test" or equivalent "[" is a program to compare numbers or check filetypes. E.g.
+* ` [ -f file ] && delete ` deletes only if file exists
+* !: Inversion. E.g., `[ ! -f file ]` checks for non-existence.
 
-### Unary operators
+Test provides a list of unary operators which work on files:
 -d: exists and is directory
 -f: exists and is regular file
 -h: symbolic link
@@ -192,8 +210,8 @@ shift #shift parameters left, i.e. 3=>2, 2=>1, 1=>removed
 ```
 ## Math
 ````bash
-$[10*20] #Math environment. Only integers, zsh supports full float! :)
-$((10*20)) #also math environment
+var=$[10*20] #Math environment. Only integers, zsh supports full float! :)
+var=$((10*20)) #also math environment
 result=`echo "scale=3; 1/9" | bc` #Use the bash calculator. scale: floating point precision used. 
 ````
 
@@ -227,7 +245,7 @@ coproc sleep 10 #start command in background. Allows for communication.
 ## xargs
 Usefull to feed stdout from one command as arguments to another command
 ```bash
-command1 | xargs -p -i command2 -flag1 {} -flag2 #execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution.
+command1 | xargs -p -i -t command2 -flag1 {} -flag2 #execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution. -t: verbose (print command)
 ```
 
 ## User managment
@@ -267,6 +285,7 @@ mkdir -p /path/dir/ #create directory. -p: create if not existent, including int
 man 5 passwd #Show manpage for commands, files,... They are organized in levels, see man man.
 apropos keyword #Seach manpages short descriptions
 yes test #Repeat string until program ends
+: #or 'true': do nothing else than returning successful execution. Like the 'pass' statement in python. Useful e.g. to apply parameter expansion but do nothing else or define a vecho commant, which is echo or ':', dependent on the verbose status.
 wc -l file #Word/Line/Character count
 stat file #show file status and file attributes
 ```
@@ -274,14 +293,14 @@ stat file #show file status and file attributes
 ## Displaying text
 ```bash
 echo -ne "Hello\tWorld" #-n: no new line at end. -e: Interpret escape sequences
-printf "%20s%10i %3.2f" "Hello" 10 20.1234 #C Style formatting
+printf "%20s%.3d %3.2f" "Hello" 10 20.1234 #C Style formatting
 ```
 ### Files
 ```bash
 cat file #Concatenate concent of files and print to stdout. Often used to just print one file
 tac file #cat inverse
-head -1 file #show first lines
-tail -20 file #Use -f to have a live view. tail +20 to print line 20 and following.
+head -1 file #show first lines. head -n -1 to print all but the last line
+tail -20 file #Use -f to have a live view. tail -n +20 to print line 20 and following.
 more file #Display sequentially.
 less file #Similar to more. Interactive view.
 diff file1 file2 #compare files line by line
@@ -370,6 +389,7 @@ realpath file #absolute path. Use --relative-to=path to get path relative to oth
 ## Process Handling
 ```shell
 ps -fax #show snapshot of running processes
+pidof -q -o 1234 -x abc #Find pid of process. -x: also if abc is a shell script -o: omit the given PID (e.g. the calling program itself) -q: quiet, return only exit status true/false
 top -u User.Name #Show Interactive process overview
 kill -TERM <pid> #send TERM (15): friendly request to terminate
 kill -KILL <pid> #send SIGKILL (9): terminate immediately
@@ -386,16 +406,24 @@ jobs #list jobs
 kill %1 # '1' is the Job ID you get by calling jobs: "[1] + Running ..."
 ```
 
-## Archiving
+## Compressing and Archiving
+### Compressing
+Save a file more efficiently
 ```bash
 bzip2 out.zip file #compress file. Slower, but better than zip
+gzip -kdv file.gz #Another program to zip files. -d: unzip/decompress -k: keep original files -v: verbose
+unzip file.zip #Another tool. -l: show content of zip only without extracting
+```
+### Archiving
+Bundle a directory structure in one file. With tar, you can compress and archive in one step
+```bash
 tar -cjvf file.tar.bz2 dir/ #pack directory as archive file. -c: create -v: verbose -f: set name of archive -j: compress with bzip2
 tar -tf file.tar #look into tar
 tar -xf file.tar.bz2 #unpack. Be carful: It will be unpacked to the paths you see from tar -tf!
 ```
 
 
-## Networking
+## Networks
 ```bash
 ip a #ip address, mac address
 ip route show #routing table with default gateway
@@ -403,10 +431,15 @@ cat /etc/resolve.conf #file with name server. Different in Ubuntu
 cat /etc/services #show port numbers of services
 ping -c 2 192.168.0.1 -w 1 #send echo request. -c: repetitions, -w: timeout
 traceroute www.google.de #route of the package
+host google.com #show ip from hostname or vice versa
 ss -atp #active connections
 nmap <ip or domain> #show open ports
 systemctl start ssh #start (or stop, reload) services
 vnstat -i enp0s31f6 -h #show traffic on device. -i: specific device (default: all) -h: hourly statistic
+```
+### Downloading
+```bash
+wget -o logfile -O Outputname URL #download a file or webpage from the Internet
 ```
 
 ## Automated Execution
@@ -457,19 +490,26 @@ exiftool -all= file.jpg #remove all metadata
 ## Video
 For video editing, ffmpeg is the most versatile tool.
 ```bash
+ffmpeg -i A.mp4 B.mp3 #convert video to audio only
 ffmpeg -ss 00:04:32.200 -i vid.mp4 -vframes 1 -q:v 1 out.jpg #extract a single image from a video. -q:v control the quality from 1 to 31, with 1 meaning highest quality
+ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4 #trim video from 'ss' until 'to' (format hh:mm:ss)
 ```
 
 ## Conversion
 ```bash
+convert a.jpg b.jpg out.pdf #convert one or multiple images into one pdf
 convert -density 300 a.pdf a.png #convert pdf to image
 convert -transparent white a.png a2.png #make all white in image transparent
+convert -alpha remove -alpha off a.pdf a.png #opposite: avoid transparent areas when converting pdf
+convert a.png -trim out.png #crop white area from border
 ```
 
 ## Date and Time
 ```bash
-date +"%Y-%m-%d %H:%M:%S" #Display current date and time
+date +"%Y-%m-%d %H:%M:%S" #Format current date and time 
+date -d "2021-05-01 14:30:00" #Use the specified time instead of the current one.
 date --date='10 days ago' #Relative time strings are possible
+date +"%-m" #date allows several flags and a width specifier after '%', influencing the padding with zeros or similar of numeric fields.
 ```
 
 ## Backup
@@ -477,7 +517,7 @@ date --date='10 days ago' #Relative time strings are possible
 ```bash
 rsync -av from/ to/ #synchronize the content of from to 'to' -a: all subdirectories with attributes. -v: verbose.
 rsync from to/ #Without a trailing slash in the source, an additional folder 'to/from/' is created, i.e. not only the content, but the folder with content is copied.
-rsync -uavz user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data.
+rsync -uavzP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress.
 -c # use checksums instead of timestamps
 rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
 ```
