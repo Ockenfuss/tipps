@@ -33,10 +33,22 @@ git config --list #see all settings
 ```bash
 git branch -a #Show available branches
 git checkout -b newBranch #Create a new branch
+git switch -c newBranch #switch to a new branch (-c: create if not existent). Your unstaged changes will be taken with you to the new branch. Like git checkout <branchname>.
+git branch -d branchname #Delete a branch (only if its commits are merged in another branch before)
+```
+
+### Merging branches
+```bash
+git checkout main #First, checkout the merge-receiving branch, i.e. the branch you want to have a merge commit introducing the changes from the other branch.
+git fetch #Make sure you have the latest information from the remote repository
+git pull #Make sure main, the merge receiving branch, is updated.
+git merge <other-branch> #merge the other branch into main.
+git branch -d <other-branch> #Delete the other branch. With -d, git deletes only if everything is merged into main. (-D would delete in every case - dangerous!)
 ```
 
 ## Push/Pull
 ```bash
+git fetch #Download remote changes to see what has happened remotely, but do not touch the state of your local content.
 git push origin master #Push the current branch to the remote branch 'master' on the remote repository 'origin' ('origin' is just a name for the remote url and can be customized)
 git push -f origin master #Force push. Dangerous!
 ```
@@ -66,7 +78,7 @@ Set up the respository
 git clone https://github.com/Ockenfuss/dotfiles.git #Download repository from github, or alternatively:
 git remote add origin git@github.com:Ockenfuss/ComRun.git #Load existing repository to github (create an empty repository there first)
 git push -u origin master #After adding the link
-git remote set-url origin git@github.com:Ockenfuss/dotfiles.git #if we want to change e.g. from https to ssh
+git remote set-url origin yourname@github.com:Ockenfuss/dotfiles.git #if we want to change e.g. from https to ssh
 ```
 
 
@@ -81,4 +93,6 @@ svn checkout url #checkout repository
 svn status #get status of repo
 svn up #update repository
 svn switch --relocate OldURL NewURL
+svn add file #Add new file for version control in the next commit. Unlike in git, this has to be done only when adding the file for the first time.
+svn commit file.txt #commit changes. "-m logmessage" to specify the commit message
 ```
