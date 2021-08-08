@@ -8,6 +8,7 @@
   - [Navigation](#navigation)
   - [Editing](#editing)
   - [Visual mode](#visual-mode)
+    - [Block visual mode](#block-visual-mode)
     - [Text Objects](#text-objects)
   - [Searching](#searching)
   - [Copy-Paste](#copy-paste)
@@ -55,10 +56,17 @@ d + <move> #delete
 ## Visual mode
 ```
 v #start visual mode
-^v #start block visual mode. Useful for block comments
+^v #visual mode for full lines. Useful for block comments
 <shift>i #start insert for block
 ... #write
 ESC #changes are applied to complete block
+```
+
+### Block visual mode
+```
+CTRL+V #start block visual mode
+I #insert in front of block.
+A #insert at the end of the block
 ```
 
 ### Text Objects
