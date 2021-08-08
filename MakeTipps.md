@@ -10,6 +10,8 @@ Manual: https://www.gnu.org/software/make/manual/html_node/index.html#Top
     - [Internal macros](#internal-macros)
     - [Filters and wildcards](#filters-and-wildcards)
     - [Multiline](#multiline)
+  - [Deprecated stuff](#deprecated-stuff)
+    - [Suffix rules](#suffix-rules)
 
 <!-- /code_chunk_output -->
 
@@ -42,6 +44,14 @@ check:
     if [ condition ]; then \
         command; \
     fi
+```
+
+## Deprecated stuff
+### Suffix rules
+They are deprecated and nowadays expressed by the general pattern rules. Nevertheless, you encounter them in some old makefiles sometimes.
+```makefile
+.c.o:
+    rule #make .o files from .c files. As pattern rule, write '%.o : %.c'
 ```
 
 
