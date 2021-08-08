@@ -9,6 +9,7 @@
   - [Python General](#python-general)
     - [Installation](#installation)
     - [Virtual Environments](#virtual-environments)
+    - [Code Formatting](#code-formatting)
     - [General](#general)
       - [Loops and Conditions](#loops-and-conditions)
       - [Functions:](#functions)
@@ -21,6 +22,7 @@
       - [Arrays](#arrays)
       - [Lists](#lists)
       - [List comprehensions](#list-comprehensions)
+      - [Slices](#slices)
       - [Iterables](#iterables)
         - [Zip](#zip)
       - [Hashables](#hashables)
@@ -111,15 +113,19 @@
     - [Coordinates](#coordinates)
     - [combining/extending data](#combiningextending-data)
     - [Modifying data](#modifying-data)
+    - [Computation](#computation)
     - [apply_ufunc](#apply_ufunc)
     - [Plotting data](#plotting-data)
   - [Image processing](#image-processing)
       - [Convolution](#convolution)
   - [Creating your own modules](#creating-your-own-modules)
       - [Module Structure](#module-structure)
+        - [Special files](#special-files)
       - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
   - [Unittests](#unittests)
     - [Execute tests](#execute-tests)
+  - [Profiling](#profiling)
+    - [cProfile and pstats](#cprofile-and-pstats)
 
 <!-- /code_chunk_output -->
 
@@ -147,10 +153,18 @@ pip3 install package # install packages. Do not use sudo! Use pip install -r req
 deactivate #Deactivate virtual environment
 ```
 
-### General
+### Code Formatting
+Typically, you would use a linter or linter package like `flake8` (pip install flake8), which formats your code according to certain style guides. Project specific settings should usually be placed in the `setup.cfg` file.
+```python
+[flake8]
+ignore =
+    E402 # module level import not at top of file
+    E501 # line too long. VSCode will read setup.cfg automatically.
+```
 
-beendet ein Python Program 
-<!-- Stop Interrupt -->
+
+### General
+Beendet ein Python Program 
 ```python
 import sys
 sys.exit()
@@ -168,6 +182,8 @@ a=0 if condition else a=1 #ternary operator
 ```python
 for i in iterable:#for loop
   code
+while condition:#while loop. There is no do-while loop in python
+  code
 ```
 
 #### Functions: 
@@ -177,8 +193,9 @@ Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an
 https://realpython.com/python-type-checking/
 They have no effect during runtime, but help understanding the code and are often used by linters to detect errors and deliver better suggestions.
 ```python
-def myfunc(a : int, b : str) -> str:
-  ...
+def myfunc(a: str, b : int = 5) -> str:
+import typing as tp
+def myfunc(a : tp.Union[str, int]) -> str: #Specify multiple possible input types. From Python
 ```
 
 #### Variable reference in Python
@@ -256,16 +273,15 @@ np.atleast_2d(array)
 ```
 
 #### Lists
-Like Arrays, but can (1) contain different data types and (2) be extended dynamically
+Arrays, which can contain different data types and can be extended dynamically
 ```python
-liste=[]
-liste.append("Hallo")
-liste.append(liste2)#list of lists
+list=[]
+list.append("Hello")
+list.append(liste2)#list of lists
 a=[1]+[2,3]#List concatenation
 b=[1]*3#=[1]+[1]+[1]
 if a: #a returns false is len(a)=0 (list is empty). The same holds for most collections like dict, tuple, ...
-sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
-sl.start#slice objects have members start, step and stop
+a.pop() #return and remove last element from list. With pop(), you can use a list as a stack. Use pop(0) to remove front or any other index (simple queue)
 ```
 #### List comprehensions
 ```python
@@ -273,6 +289,13 @@ arr=[expr(i) for i in indices]
 arr=[expr(i) for i in indices if condition(i)]
 arr=[expr(i) if condition(i) else expression2(i) for i in indices]
 ```
+
+#### Slices
+```python
+sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
+sl.start#slice objects have members start, step and stop
+```
+
 #### Iterables
 Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
 ```python
@@ -312,7 +335,7 @@ https://realpython.com/python-sets/
 a=set(['foo', 'foo', 'bar']) #Create from iterable of immutables. Result: a={'foo', 'bar'}
 a={'foo','bar','baz'} #Alternative definition
 a | b #Union: elements in a or b
-a & b #Interection: elements in a and b
+a & b #Intersection: elements in a and b
 a - b #Difference: elements in a and not in b
 a <=b #a is subset of b
 a < b #a is real subset of b
@@ -370,7 +393,8 @@ sys.argv[1]#Command line arguments. argv[0] contains program name.
 ```python
 import argparse
 par=argparse.ArgumentParser(description="What this script does")
-par.add_argument('path', type=str, help="path to something", default="a/b")#Add command line arguments
+par.add_argument('path', type=str, help="path to something")#Add command line arguments
+par.add_argument('infile', nargs='?', default="abc")#consume zero or one argument (like Latex '?'!). Take default if zero arguments are present.
 par.add_argument('-i', type=int, default=1)
 par.add_argument('-s',action='store_true')#Boolean flag
 args=par.parse_args()
@@ -387,13 +411,14 @@ Try statement
 ```python
 try:
   somecode()
-except KeyError:
+except KeyError: #multiple exceptions: except (KeyError, ValueError, ...):
   someOtherCode #Can use 'pass' to jump out of this section
 else:
   code #if no exception was thrown
 finally:
   code #Always execute this code. Usually, you can also write it directly after without finally
 ```
+Never do this: `try ... except: pass`! Catching all exceptions, regardless of the type, makes debugging almost impossible!
 
 Custom Exceptions
 ```python
@@ -512,22 +537,16 @@ t2=t.replace(hour=8,month=8) #Create new datetime from existing
 
 
 #### Zeiten Plotten 
-"time" muss dabei wieder ein Array aus datetime-Objekten sein.
-Vergleiche: PlotJPLResults.py
+"time" muss dabei ein Array aus datetime-Objekten sein.
 ```python
 import matplotlib.dates as dates
-ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))
+ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))#Specify (major) label format. Use usual datetime formats like %b (Jan), %Y (2021), %m (1),...
+ax.xaxis.set_major_locator(dates.MinuteLocator(interval=2))#Plotting intervals. Similar: MonthLocator
 ```
 
 Wichtig: Wenn Daten außer einer Uhrzeit auch ein Datum enthalten, muss dieses in den Limits auch angegeben werden.
 ```python
 ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%Y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%Y %H:%M:%S"))
-```
-
-Abstände der Labels (hier 2 Minuten)
-```python
-ax.xaxis.set_major_locator(dates.MinuteLocator(interval=2))
-plt.plot(time,d)
 ```
 
 ### time Module
@@ -1100,6 +1119,7 @@ https://xarray.pydata.org/en/stable/indexing.html
 ```python
 da[...,2]#based on coordinate index and dimension index
 da.loc[...,'z']#based on coordinate label and dimension index
+ds[["var1","var2"]]#select variables in a dataset.
 ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
 ds=ds.sel(temp=34.3, time="2021-05-28") #Selection based on coordinate of the dimension. Strings or datetimes can be used for a time coordinate.
 ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30
@@ -1136,7 +1156,6 @@ xr.combine_nested([[a1, a2], [a3, a4]], concat_dim=['x', 'y'])#Combine with posi
 
 ### Modifying data
 ```python
-ds.mean(dim='time')#calculate mean/sum/...
 dist.where(condition,other=na, drop=False)#return where cond is true and fill in 'other' where it is false (default na). If drop, coordinates with only false are dropped.
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
 ds.drop_vars('a')#remove a variable
@@ -1145,7 +1164,16 @@ da.rename({'old':'new'})#Rename a var or coord in a DataArray
 da.transpose('y', 'z',..., 'x')#Reorder dimensions. Use ellipsis if further dimensions are present.
 da.sortby('time')#Also sortby(['time', 'lat'])
 da.dropna(dim='time', how='any')#Drop the label if any (alternative: all) value is nan
+ds.fillna({"a":2})#fill missing values. For datasets, use a dict to fill variables individually
 da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
+```
+
+### Computation
+```python
+ds.mean(dim='time')#calculate mean/sum/...
+ds.groupby("time.dayofyear").mean()#mean over the same days of multiple years
+da.rolling(x=3, center=True, min_periods=2).mean()#rolling mean/std/median/...
+da.resample(time='24H', base=6, label='right', loffset='1H').mean()#Special for temporal data. Take a 24h mean, starting at 06:00 every day and assign every resulting value the time of the right side + 1H of the 24H interval.
 ```
 
 ### apply_ufunc
@@ -1205,19 +1233,19 @@ import module
 Typical directory structure
 ```text
 new_project
-├── packagename
+├── mypackage
 │   ├── __init__.py         # make it a package
 │   └── antigravity.py
 └── test
     ├── __init__.py         # also make test a package
     └── test_antigravity.py
 ```
+How to use this package from another python script:
 ```python
-import packagename# import the functions provided in __init__.py
-from packagename import antigravity# import the antigravity module
-from antigravity.antigravity import my_object# or an object inside the antigravity module
+import mypackage# import the functions provided in __init__.py
+from mypackage import antigravity# import the antigravity module
+from mypackage.antigravity import my_object# or an object inside the antigravity module
 ```
-
 import from parent directory
 ```python
 def load_src(name, fpath):
@@ -1232,6 +1260,51 @@ Reload a module in the REPL
 ```python
 import importlib
 importlib.reload(module)
+```
+
+##### Special files
+**Init**
+In `packagename/__init__.py`, you would typically write which methods and objects the module exports to the user. By default, if the user imports everything with `from mypackage import *`, all functions not beginning with an underscore are imported. This can be changed by setting the `__all__` variable.
+```python
+from .antigravity import function1#Typically on bigger projects, you have the API functions sorted in seperate files
+__version__="1.0"
+__all__=(
+# Functions
+  "function1", 
+#Constants
+  "__version__",
+)
+```
+
+**Setup.cfg**
+Located at the top level of your module, `setup.cfg` is read by various python modules and contains setup e.g. for code formatting.
+
+**pre-commit**
+`.pre-commit-config.yaml` contains the configurations for the `pre-commit` module. Pre-commit help you to automatically set up git hooks, which are executed before every commit to format or test your code. Pre-commit automatically downloads the specified modules from github and executes them, if they follow certain criteria (e.g. python modules must define an entry point). Pre-commit is itself a python module, but could theoretically be used with any programming language.
+```bash
+cd your_package
+touch requirements_dev.txt #write 'pre-commit' in the development requirements.
+pip install -r requirements_dev.txt
+pre-commit install #install the hooks in .git/hooks/pre-commit. Now, they are executed on every commit.
+pre-commit run --all-files #if you setup pre-commit in an existing module, you may run it on all files.
+```
+.pre-commit-config.yaml:
+```yaml
+repos:
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.0.1
+    hooks:
+      - id: trailing-whitespace
+      - id: end-of-file-fixer
+      - id: check-yaml
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.8.0
+    hooks:
+      - id: isort
+  - repo: https://gitlab.com/pycqa/flake8
+    rev: 3.9.2
+    hooks:
+      - id: flake8
 ```
 
 
@@ -1269,4 +1342,17 @@ python3 -m unittest test.test_antigravity #one specific test (python notation). 
 unittest introduces a few improved assertions:
 ```python
 with self.assertRaises(SomeException): MyFunc(arguments)#Test for exception
+```
+
+
+## Profiling
+### cProfile and pstats
+In the standard library, there is `cProfile` as a profiler and `pstats` to analyze the results in the command line
+```python
+python3 -m cProfile -o output.prof Program.py #Run Program.py and save analytics in output.prof
+python3 -m pstats output.prof #start interactive session to browse output.prof
+pstats% help #Show help
+pstats% strip #Strip leading paths in report
+pstats% sort cumtime #sort according to cumulative time
+pstats% stats 10 #print the first 10 statistics
 ```
