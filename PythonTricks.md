@@ -48,9 +48,8 @@
       - [Numpy I/O](#numpy-io)
       - [Numpy Arrays](#numpy-arrays)
       - [Indexing](#indexing)
-      - [Basic Slicing](#basic-slicing)
       - [Numpy sortieren](#numpy-sortieren)
-    - [Numpy array transformations](#numpy-array-transformations)
+    - [Numpy Array Transformations](#numpy-array-transformations)
       - [Broadcasting](#broadcasting)
         - [Numpy Array reshape](#numpy-array-reshape)
       - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
@@ -117,7 +116,6 @@
     - [apply_ufunc](#apply_ufunc)
     - [Plotting data](#plotting-data)
   - [Image processing](#image-processing)
-      - [Convolution](#convolution)
   - [Creating your own modules](#creating-your-own-modules)
       - [Module Structure](#module-structure)
         - [Special files](#special-files)
@@ -360,6 +358,13 @@ func(**kwargs):
 
 ### IO
 #### File paths
+Modern way: pathlib
+```python
+import pathlib
+p=pathlib.Path("C:\a\b\c")
+```
+
+Old with os package:
 ```python
 import os.path
 os.path.join(str1, str2) #join to one filepath
@@ -588,10 +593,6 @@ b.shape#Tuple (10,20)
 b.size#Number of elements: 200
 b.ndim#NUmber of dimensions: 2
 ```
-make e.g. two 2D grids of two 1D arrays. With ij, every column of xgrid equals x, every row of ygrid equals y. This is the "matrix interpretation".
-```python
-xgrid, ygrid=np.meshgrid(x,y,indexing='ij')
-```
 
 #### Indexing
 Boolsche Indizes: auswählen eines bestimmten Teilarrays
@@ -635,7 +636,7 @@ np.amax(array)#maximum of array
 np.argmax(array)#index of maximum
 ```
 
-### Numpy array transformations
+### Numpy Array Transformations
 #### Broadcasting
 https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
 Whenever you are doing arithmetic with arrays, it is on an element-by-element basis. However, what happens if the arrays do not have the same shape? In this case, the dimensions are compared, starting from the last dimension. If their lengths are not the same, one of them has to be length one. This one will be repeated before applying the arithmetic.
@@ -659,8 +660,11 @@ new=old.reshape((3,400,50))
 ```python
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
-np.repeat(arr1[:, :, np.newaxis], n_repeat, axis=2)#repeat a given array into a new direction
+np.tile(arr,(3,1))#can also be used to repeat an array. Introduces new dimensions as neccessary. E.g., this will repeat a 1D array 3 times in a second dimension (and additionally 1 time in the existing dimension)
+np.repeat(arr1[:, :, np.newaxis], n_repeat, axis=2)#Alternative to repeat an array
 arr.transpose(1,0,2)#switch the order of axes. Similar to arr.T in two dimensions
+xgrid, ygrid=np.meshgrid(x,y,indexing='ij')#make e.g. two 2D grids of two 1D arrays. With ij, every column of xgrid equals x, every row of ygrid equals y. This is the "matrix interpretation".
+array=np.roll(array, shift=(1,2), axis=(0,1))#Make a cyclic shift of an array
 ```
 #### combine multidimensional arrays
 ```python
@@ -1108,6 +1112,7 @@ da.attrs['units']='km'#long_name and units is used by the .plot() routine
 #DataArrays:
 da.dims#The dimension names of the data
 list(da.coords.keys())#The names of the coordinates (also non-active ones which are squeezed)
+da.sizes #dictionary: coordname:size
 #Datasets:
 list(ds.data_vars)#The names of the Data variables in the set
 list(ds.variables)#Everything: names of the variables AND coordinates (also squeezed ones)
