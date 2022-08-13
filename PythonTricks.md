@@ -12,6 +12,7 @@
     - [Code Formatting](#code-formatting)
     - [General](#general)
       - [Loops and Conditions](#loops-and-conditions)
+      - [Boolean operators](#boolean-operators)
       - [Functions:](#functions)
         - [Type hints](#type-hints)
       - [Variable reference in Python](#variable-reference-in-python)
@@ -44,6 +45,7 @@
     - [time Module](#time-module)
     - [Serialization](#serialization)
   - [JSON](#json)
+  - [Pickle](#pickle)
   - [Numpy](#numpy)
       - [Numpy I/O](#numpy-io)
       - [Numpy Arrays](#numpy-arrays)
@@ -80,7 +82,6 @@
       - [Modify colormaps](#modify-colormaps)
       - [Zweite Axe rechts:](#zweite-axe-rechts)
       - [Figuren](#figuren)
-        - [Kreis plotten](#kreis-plotten)
       - [Saving figures](#saving-figures)
       - [Backend](#backend)
       - [Arange subplots](#arange-subplots)
@@ -90,6 +91,7 @@
         - [Histograms](#histograms)
         - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
       - [Animationen](#animationen)
+      - [Interaction](#interaction)
   - [Subprocess](#subprocess)
   - [Pandas](#pandas)
       - [Create Data Frame](#create-data-frame)
@@ -184,6 +186,11 @@ while condition:#while loop. There is no do-while loop in python
   code
 ```
 
+#### Boolean operators
+```python
+if a < b < c: #python supports chained comparison operators. This is equal to (a < b) and ( c < d)
+```
+
 #### Functions: 
 often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
 Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
@@ -209,12 +216,22 @@ chr(97) #convert to character 'a'
 str(97) #convert to string "97"
 ```
 
+##### Complex Numbers
+```python
+z=3 + 2j #define complex number
+complex(3,2) #alternative via factory function
+z.real # Real part
+z.imag #Imaginary part
+abs(z) #Amplitude
+cmath.phase(z) #Phase
+```
+
 #### Strings
 ```python
 test="Hallo"+"du" #Combination
 8*'hey' #Repetition
-if 'ocken' in 'ockenfuss' #Test for substrings (no need for regex here)
-
+if 'll' in 'Hallo' #Test for substrings (no need for regex here)
+"Hallo".startswith("Ha") #check for prefix (similar: endswith)
 ```
 Split and combine arrays
 ```python
@@ -235,9 +252,9 @@ Format specifiers: These are deprecated, better to use f=Strings!
 https://realpython.com/python-f-strings/
 A way to 'insert' python code into strings. Currently the recommended way to format strings (python 3.6 or newer).
 ```python
-name="Paul"
-print(f"Hallo{name}")
-print(f"This is {object!r}")#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
+f"Hello {name}"#Allow to directly evaluate python expressions within {}
+f"This is {object!r}"#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
+f"{number:.3f}"#You can use format specifiers in f strings
 ```
 ##### Regex
 https://realpython.com/regex-python/
@@ -347,9 +364,10 @@ Unordered storage vor key-values pairs.
 example={"key": value, "key2": value2}
 example["key2"]#Access elements by key
 d=dict(zip(keys, values))#use dict to create a dictionary from a list of key-value tupples (zip creates such a list from key and value lists)
-list(d.keys())#get keys as list
+list(d.keys())#get keys as a list. Similar: d.values()
 for k,v in d.items(): #items() provides a view on the dict keys and values, which is useful for iterations
-dict1.update(dict2)#update a dictionary with the values from another one (replace keys or create if not existing)
+dict1 | dict2 #Merge two dicts to have the union. In case of conflict, values from dict2 replace values of dict1
+dict1 |= dict2#update a dictionary in place with the values from another one (replace keys or create if not existing). TODO: requires Python >3.9
 d.get('key',default)#return default if key not existent
 d.pop('key', default)#return & remove key if existing and return default otherwise
 func(**kwargs):
@@ -358,13 +376,7 @@ func(**kwargs):
 
 ### IO
 #### File paths
-Modern way: pathlib
-```python
-import pathlib
-p=pathlib.Path("C:\a\b\c")
-```
-
-Old with os package:
+Old: the os module. For python 3.5+, use the object-oriented pathlib module!
 ```python
 import os.path
 os.path.join(str1, str2) #join to one filepath
@@ -373,6 +385,21 @@ os.path.abspath(path)#get the absolute filepath
 os.path.dirname(path)#directory name
 os.path.splitext(filename)#tuple with Path+Name and Extension
 os.path.isfile(filename)#check for type or existence
+```
+
+How to use Pathlib from the standard library:
+```python
+from pathlib import Path
+Path("a/b/c.txt") #create from string
+p=Path.cwd() #current working directory
+p / "a" / "file.txt" #you can use the '/' operator to join path objects (and strings)
+p.mkdir(parents=True, exist_ok=True) #Make directories
+p.resolve() #Get the absolute path
+p.parent #get the parent path (as path object).
+p.suffix #get the file extension as string
+p.name #get the filename
+p.stem #get the final path component without the suffix
+str(p) #the "traditional" string representation of a path
 ```
 For opening file streams:
 ```python
@@ -398,12 +425,13 @@ sys.argv[1]#Command line arguments. argv[0] contains program name.
 ```python
 import argparse
 par=argparse.ArgumentParser(description="What this script does")
-par.add_argument('path', type=str, help="path to something")#Add command line arguments
+par.add_argument('-f', type=str, help="filepath")#Add command line arguments
+par.add_argument('-f','--filename', type=str, help="filepath")#you can specify a short and long name
 par.add_argument('infile', nargs='?', default="abc")#consume zero or one argument (like Latex '?'!). Take default if zero arguments are present.
 par.add_argument('-i', type=int, default=1)
 par.add_argument('-s',action='store_true')#Boolean flag
 args=par.parse_args()
-number=args.mode#Access argument values
+args.filename#Access argument values
 ```
 ### Exceptions
 Rasising Exceptions
@@ -570,8 +598,27 @@ Idea: convert python objects to byte streams, which you can send or store. There
 Supports:   int, long, float, str, tuple, list, dict, True, False, None
 ```python
 import json
+with open('file.json' 'r') as f:
+  data=json.load(f) #read object from json
 with open('file.json', 'w') as f:
-  json.dump(data,f) #dump data to file
+  json.dump(data,f, indent=4) #dump data to file
+```
+Here you find an example including strings, ints, float, lists and dictionaries:
+```json
+{
+ "manufacturer": "Superrad",
+ "wheels": 2,
+ "users": ["Jim", "Tina"],
+ "location": {"lat": 52.3, "lon": 9.8}
+} 
+```
+
+## Pickle
+```python
+import pickle
+with open("file",'wb') as f:
+  pickle.dump(obj, f)#write object to file
+  pickle.load(f)#read object from file
 ```
 
 
@@ -869,10 +916,8 @@ ax2=ax.twinx()#twiny() for axis on top
 
 #### Figuren
 ```python
-ax.axvline(x=20)#axhline(y=20)
-```
-##### Kreis plotten
-```python
+ax.axvline(x=20)#axhline(y=20) create a vertical or horizontalline
+ax.axvspan(1,2,alpha=0.5, color='r') #Highlight an area. Similar: axhspan
 circle1 = plt.Circle((1000, 1000), 30, color='r', fill=True)
 ax.add_artist(circle1)
 ```
@@ -916,7 +961,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='axes fraction')#
 ##### Lines, points and bars
 ```python
 ax.plot(x,y,'.-', linewidth=0.4,label="label")
-ax.scatter(x,y,alpha=0.5, marker='.', markersize=4)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
+ax.scatter(x,y,c=z, alpha=0.5, marker='.', markersize=4)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
@@ -971,6 +1016,18 @@ def create_1d_animation(fig, ax, x, values, interval):
     print(x.shape[0])
     anim = FuncAnimation(fig, animate, frames=x.shape[0], interval=interval, blit=True)
     return anim
+```
+
+#### Interaction
+Matplotlib provides an API to allow users to interact with figures via key presses and mouse clicks. A good introduction can be found [here](https://matplotlib.org/stable/users/event_handling.html).
+```python
+ax.figure.canvas.mpl_connect("button_press_event", on_press) #connect a function to an event via figure.canvas (accessible via an ax object, if you want).
+def on_press(event): #The function must take an event as argument
+  if event.button==1: #button_press_event is a MouseEvent, which contains the mouse button clicked in the button property
+  event.xdata #Key and Mouse Event have additional properties like xadata and ydata, the location in data coordinates, where the event happened
+  event.inaxes #over which axes the event happened
+  event.x #pixel coordinates of the canvas
+  event.canvas.draw() #After you changed something, redraw the canvas to make changes visible
 ```
 
 ## Subprocess
@@ -1127,6 +1184,7 @@ da.loc[...,'z']#based on coordinate label and dimension index
 ds[["var1","var2"]]#select variables in a dataset.
 ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
 ds=ds.sel(temp=34.3, time="2021-05-28") #Selection based on coordinate of the dimension. Strings or datetimes can be used for a time coordinate.
+ds.isel(time=(ds.time.dt.dayofyear==100)) #Selection based on a datetime property
 ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
