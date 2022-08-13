@@ -7,10 +7,15 @@ Tipps and code snippets to format texts in Latex
 
 - [Latex](#latex)
   - [Installation](#installation)
+  - [Compilation](#compilation)
+  - [Font](#font)
+    - [Fontsizes](#fontsizes)
+    - [Styes](#styes)
   - [ToDo package](#todo-package)
   - [Subfiles](#subfiles)
 - [Biblatex](#biblatex)
 - [Tikz](#tikz)
+- [Animate](#animate)
 - [Science](#science)
   - [Units](#units)
 - [Math](#math)
@@ -45,6 +50,31 @@ Generally, use pdflatex. To abort the compilation, enter 'x', since Ctrl-C does 
 pdflatex 
 ```
 
+## Font
+
+### Fontsizes
+Available modifiers are:
+```latex
+\Huge
+\huge
+\LARGE
+\Large
+\large
+\normalsize (default)
+\small
+\footnotesize
+\scriptsize
+\tiny
+```
+### Styes
+```latex
+\textbf{bold}
+\textit{italic}
+\underline{underlined}
+\emph{emphasized} % The behaviour of this command changes with context
+```
+
+
 ## ToDo package
 ```latex
 \usepackage{todonotes}
@@ -74,6 +104,13 @@ Citation commands:
 
 # Tikz
 Extremly comprehensive package to create all kinds of graphics.
+
+# Animate
+Package to embed animations in pdfs, which you can view with okular/acrobat reader and some others.
+```latex
+%Create an animation out of consecutively numbered images "Image_0.png" from 0 to 20, with 2 frames per second.
+\animategraphics[loop, autoplay, controls, width=10cm, trim=2.5cm 2cm 0cm 0cm]{2}{/path/Image_}{0}{20};
+```
 
 # Science
 ## Units
