@@ -13,3 +13,17 @@ This is kind of recursive, isn`t it? :)
 * `[name]url`
 * `[name](#section)`
 
+## Images
+`![Text](Picture.png)`
+
+## Emojis
+`> :warning: This text will be in a warning box`
+
+## Flowcharts
+Native Markdown does not support flowcharts, but you can easily create them using ASCII art with this [webpage](https://asciiflow.com)!
+```txt
+┌────┐        ┌────┐
+│Box1├───────►│Box2│
+└────┘        └────┘
+```
+
