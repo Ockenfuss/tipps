@@ -12,10 +12,12 @@
     - [Text Objects](#text-objects)
   - [Searching](#searching)
   - [Copy-Paste](#copy-paste)
+    - [Registers](#registers)
   - [Commands](#commands)
   - [Marks](#marks)
 - [Neovim and Plugins](#neovim-and-plugins)
   - [Nerdtree](#nerdtree)
+  - [Easymotion](#easymotion)
 - [Pure vi](#pure-vi)
 
 <!-- /code_chunk_output -->
@@ -42,6 +44,8 @@ hjkl #Move around
 $ #Line ending
 ^ #Start of line
 fy #go to next y
+CTRL+O, CTRL+I #go to last or next cursor position
+'' or `` #similarly, go to last or next cursor position
 ```
 ## Editing
 ```
@@ -60,6 +64,9 @@ v #start visual mode
 <shift>i #start insert for block
 ... #write
 ESC #changes are applied to complete block
+o #while in visual mode, 'o' moves the cursor to the start/end of the selected block
+p #while in visual mode, 'p' replaced the selected text with the yanked text
+~ #while in visual mode, '~' will swap all casing in the selected block
 ```
 
 ### Block visual mode
@@ -95,6 +102,14 @@ p #Put (Paste)
 yy #Yank line
 ```
 
+### Registers
+```
+: reg #See the content of all registers
+"ayy #yank content of current line in register a
+"bP #Paste content of register b above current line
+"cc3w #Change three words, putting the previous content in register c
+```
+
 ## Commands
 ```
 . #Repeat command
@@ -110,6 +125,20 @@ d'a #delete until mark 'a'
 
 # Neovim and Plugins
 ## Nerdtree
+
+## Easymotion
+This plugin is contained automatically in vim for vscode.
+```
+<leader><leader>+f+character #highlight this character to jump to it.
+```
+
+## Surround
+This plugin is contained automatically in vim for vscode.
+```
+d s <existing> #delete surrounding
+c s <existing> <desired> #replace surrounding
+S <desired> #surround selection in visual mode
+```
 
 # Pure vi
 ```
