@@ -156,6 +156,7 @@ svn revert -R src/#Revert all changes in src/ (recursive, be aware that changes 
 ```bash
 pdfcrop in.pdf out.pdf #Crop all white space around the content in a pdf
 pdftk pdf1.pdf pdf2.pdf cat output out.pdf #combine pdfs. Alternative: 'pdfunite'
+pdftk in.pdf cat 1-3 output out.pdf #Extract pages from pdf
 qpdf --encrypt pwd_user pwd_owner 256 -- A.pdf A_encrypt.pdf #Encrypt a pdf with 256 bit
 qpdf -decrypt pdffile_protected.pdf pdffile_notprotected.pdf #Remove read only e.g. to make annotations to the pdf
 ```
@@ -186,6 +187,7 @@ ssh -L2002:111.111.111.111:443 user@222.222.222.222 #build a secure connection v
 
 ### sshfs
 ```bash
+sshfs -o reconnect,ServerAliveInterval=16,ServerAliveCountMax=3 #Options to reconnect and avoid stuck processes
 sshfs -o idmap=user -o uid=$(id -u) -o gid=$(id -g) My.Loginname@some.server.de:/folder/on/server ~/Work #Usermapping: Map Ownership from remote user to current user
 fusermount -uz ~/Mounts/Remote #Unmount directory "Remote"
 killall -9 sshfs #If stuck :)
@@ -240,6 +242,14 @@ cupsenaple newprinter
 cupsaccept newprinter
 ```
 
+To specify a cups server in general, you can edit the config file
+```bash
+cd /etc/cups/
+touch client.conf #Create if not existent
+vim client.conf #Add line: ServerName cups.mycompany.de
+sudo systemctl restart cups
+```
+
 # Network
 ## VPN
 ### Cisco Anyconnect
@@ -278,6 +288,7 @@ systemctl status systemd-timesyncd.service #check that the connection is working
 GnuPG, where pgp is 'pretty good privacy'. Use it to encrypt or decrypt files.
 Working principle: The basis is the usual principle of asymmetric encryption. Like e.g. ssh, I have a public key and a private key, which is ideally additionally protected with a password. When creating, it is useful to create an additional revocation certificate. This certificate can only be created with the private key available, but afterwards it can be used to designate the key as invalid on a key server, even if the private key is lost (or compromised). Therefore, try to keep it safe as well.
 ```bash
+gpg -c file #simply encrypt a file using a passphrase. No keys or anything involved here.
 gpg2 -k #list public keys in keyring
 gpg2 -full-gen-key #create key pair
 gpg2 -a -o key.asc --export Name #Export public key as ascii
