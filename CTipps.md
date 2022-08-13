@@ -112,9 +112,9 @@ rewind(fp);//set position to the beginning of the file
 ```
 
 ## Strings
-They are represented by character arrays. Usually, the last character must be a `\0`, which signals the end of the string. This is used by many function, e.g. `strlen`.
+They are represented by character arrays. The last character must be a `\0`, which signals the end of the string. This is used by many function, e.g. `strlen`.
 ```C
-char string[]={ "Hallo Welt" };
+char string[]="hello world";//the c compiler will append the \0 automatically
 ```
 ### Format specifiers: 
 https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.html
@@ -132,7 +132,7 @@ https://codeforwin.org/2015/05/list-of-all-format-specifiers-in-c-programming.ht
 ```C
 #include <string.h>
 strlen(str); // return length of string as integer, excluding terminating null-char.
-strcpy(dest, source); //copy source into destination. !Strings must be long enough!
+strcpy(dest, source); //copy source into destination. !Strings must be long enough and don't overlap! (use memmove in case of overlapping strings)
 strstr(haystack, needle);//find the string needle in the string haystack and return a pointer to the first occurrence (null if not found)
 int i = sscanf(string, "%s %d", strptr, &double); //try to read the values in the format string from the given string and put the results in the given variables. Returns the number of successfully read variables.
 ```

@@ -7,6 +7,7 @@
 - [General](#general)
   - [Setup](#setup)
   - [Branches](#branches)
+    - [Merging branches](#merging-branches)
   - [Push/Pull](#pushpull)
   - [Rebase](#rebase)
   - [Miscellaneous commands](#miscellaneous-commands)
@@ -14,6 +15,7 @@
 - [Web frontends](#web-frontends)
   - [Github](#github)
 - [SVN Tipps](#svn-tipps)
+  - [Checkout](#checkout)
 
 <!-- /code_chunk_output -->
 
@@ -87,12 +89,18 @@ https://help.github.com/en/articles/generating-a-new-ssh-key-and-adding-it-to-th
 
 
 # SVN Tipps
+## Checkout
+```bash
+svn checkout --username myname url #checkout repository
+svn checkout --force url #This allows you to checkout into an existing, unversioned folder structure. Any differences to the repo will be visible as "local changes" after the checkout, which you can either commit or revert to the version of the repo.
+```
 ```bash
 svn info #get info like upstream url
-svn checkout url #checkout repository
 svn status #get status of repo
 svn up #update repository
+svn up -r 123 file.txt #checkout a specific version of a file
 svn switch --relocate OldURL NewURL
 svn add file #Add new file for version control in the next commit. Unlike in git, this has to be done only when adding the file for the first time.
 svn commit file.txt #commit changes. "-m logmessage" to specify the commit message
+svn rm file.txt #remove a file and schedule it for deletion with the next commit
 ```
