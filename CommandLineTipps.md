@@ -45,6 +45,7 @@
   - [Networks](#networks)
     - [Downloading](#downloading)
   - [Automated Execution](#automated-execution)
+    - [System](#system)
     - [Systemd](#systemd)
   - [Mail](#mail)
   - [Images](#images)
@@ -57,6 +58,7 @@
   - [Settings](#settings)
   - [Bash](#bash)
   - [ZSH](#zsh)
+    - [Oh my zsh](#oh-my-zsh)
 - [Tmux](#tmux)
 
 <!-- /code_chunk_output -->
@@ -66,8 +68,7 @@ Shell: Program which processes text serially and interprets them as shell comman
 
 ## Execution
 ```bash
-./Test #Execute a binary
-./Test.sh #Execute a shell script in a subshell
+./Test #Execute a binary or shell script in a subhell
 source ./Test.sh #Execute a script in this shell
 . ./Test.sh #'.' is short for source
 ```
@@ -105,6 +106,7 @@ echo ${arr[key2]}
 
 ### Parameter expansion
 ```bash
+${var:offset:length} #get part of a string variable
 ${var:-default} #use default here if var not set
 ${var:=default} #set var to default if var not set
 ${var:?message} #write message to stderr and exit if var is not set
@@ -309,7 +311,7 @@ diff file1 file2 #compare files line by line
 ## User interaction
 ```bash
 read TEST #Stop execution and wait for input, which is saved in variable TEST
-read -p "Continue? (y/n)" CHOICE #ask the user for input with -p
+read -p "Continue? (y/n)" -i "y" CHOICE #ask the user for input with -p. Preselect y with -i
 case $CHOICE in
   [yY]) cmd;;
   [nN]) cmd;;
@@ -326,6 +328,53 @@ do
   esac
 done
 shift $[ $OPTIND - 1 ] #Now shift to have all non optional arguments in $1, $2, ...
+```
+Full example including help text and longoptions:
+```bash
+# Process input parameter
+#   Check and canonicalise input parameter
+Parameter=$(getopt --options d:hqv --longoptions date,help,quiet,verbose --name "${0##*/}" -- "$@")
+if [ $? != 0 ] ; then
+  echo "Try '${0##*/} --help' for for more information." >&2
+  exit 1
+fi
+eval set -- "$Parameter"
+#   Actual processing
+while (( $# > 0 )) ; do
+  case "$1" in
+    (-d | --date )
+      Date=$2
+      shift 2 ;;
+    (-q | --quiet )
+      vecho=:
+      shift 1 ;;
+    (-v | --verbose )
+      verbose=1
+      shift 1 ;;
+    ( -h | --help )
+      echo "Usage: $0 [OPTIONS]"
+      echo ""
+      echo "The following environment variables must be set:"
+      echo "MY_VARIABLE"
+      echo ""
+      echo "Options:"
+      echo "  -d, --date    Date in the form YYYYMMDD. Default ist today."
+      echo "  -q, --quiet   Suppress output."
+      echo "  -v, --verbose Show all output."
+      echo "  -h, --help    Show this help."
+      echo ""
+      echo "Examples:"
+      echo "  $0 -d 20210916"
+      exit ;;
+    ( -- ) 
+      if (( $# > 1 )) ; then
+        echo "${0##*/}: invalid parameter '$2'" >&2
+        echo "Try '${0##*/} --help' for for more information." >&2
+        exit 1
+      fi
+      shift ;;
+  esac
+done
 ```
 
 ## Modifying text
@@ -370,13 +419,23 @@ mkfs.vfat -n 'NAME' /dev/abc1 #create FAT filesystem on partition 1
 fsck -N /dev/sda1 #check filesystem. -N: do not execute checks, just show.
 ```
 ### Mounting
+Getting information about mountpoints, paritions, filesystems
+```bash
+lsblk #List all storage devices in a tree-like format (Name, mountpoint,...)
+blkid #Get UUID, label, type,... of all partitions
+findmnt -n -o TARGET /dev/sda1 #find the mount point of a device. -o: output columns, -n: do not print header
+```
 ```bash
 sudo mount /dev/sda1 /mnt/mountpoint #mount a device file 
 sudo mount -a #mount all filesystems listed in /etc/fstab
 sudo umount /dev/sda1 #unmount a device, either by specifying device file or mountpoint.
-findmnt -n -o TARGET /dev/sda1 #find the mount point of a device. -o: output columns, -n: do not print header
 udisksctl mount -b /dev/sda1 #Automount device in folder media. Works without root in Ubuntu.
 udisksctl power-off /dev/sda #Power off external hard drive to safely remove it.
+```
+
+### Formatting
+```bash
+sudo shred -vf /dev/sda #Erase all data beyond reconstruction by overwriting with random stuff
 ```
 
 ## Filepaths
@@ -439,7 +498,7 @@ vnstat -i enp0s31f6 -h #show traffic on device. -i: specific device (default: al
 ```
 ### Downloading
 ```bash
-wget -o logfile -O Outputname URL #download a file or webpage from the Internet
+wget -q -o logfile -O Outputname URL #download a file or webpage from the Internet. -q: quiet
 ```
 
 ## Automated Execution
@@ -451,6 +510,11 @@ Things to note:
 * be careful with time consuming jobs. Make sure they are not started multiple times in parallel
 ```bash
 crontab -e #edit the cron configuration via this command and not directly.
+```
+
+### System
+```bash
+uname #print system information such as kernel version
 ```
 
 ### Systemd
@@ -492,32 +556,37 @@ For video editing, ffmpeg is the most versatile tool.
 ```bash
 ffmpeg -i A.mp4 B.mp3 #convert video to audio only
 ffmpeg -ss 00:04:32.200 -i vid.mp4 -vframes 1 -q:v 1 out.jpg #extract a single image from a video. -q:v control the quality from 1 to 31, with 1 meaning highest quality
-ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4 #trim video from 'ss' until 'to' (format hh:mm:ss)
+ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4 #trim video from 'ss' until 'ss+to' (format hh:mm:ss). Here, the result would be 2min long from 01:00 to 03:00
+ffmpeg -i input.mkv -filter:v "setpts=PTS/60" output.mkv #Speed up video by factor 60. Use "-an" to remove audio
 ```
 
 ## Conversion
 ```bash
-convert a.jpg b.jpg out.pdf #convert one or multiple images into one pdf
-convert -density 300 a.pdf a.png #convert pdf to image
+convert a.jpg b.jpg -page a4 out.pdf #convert one or multiple images into one pdf. -page: make all pages a4 instead of image format
+convert -density 300 a.pdf png:filename #convert pdf to image. Use type:name if you want to specify the output type explicitly
 convert -transparent white a.png a2.png #make all white in image transparent
 convert -alpha remove -alpha off a.pdf a.png #opposite: avoid transparent areas when converting pdf
 convert a.png -trim out.png #crop white area from border
 ```
 
 ## Date and Time
+The different format to input a date are described [here](https://www.gnu.org/software/coreutils/manual/html_node/Date-input-formats.html#Date-input-formats).
 ```bash
 date +"%Y-%m-%d %H:%M:%S" #Format current date and time 
 date -d "2021-05-01 14:30:00" #Use the specified time instead of the current one.
 date --date='10 days ago' #Relative time strings are possible
+date -d "2021-05-01 1 day ago" #Date relative to a specified date
+date -d "today 0" #Current day, starting at midnight
 date +"%-m" #date allows several flags and a width specifier after '%', influencing the padding with zeros or similar of numeric fields.
 ```
 
 ## Backup
 `rsync` is a tool which is really powerful for backups. It copies directories based on file changes, which are detected using time stamp or changes in size. It is powerful for remote connections, but requires that rsync is available on both sides.
 ```bash
-rsync -av from/ to/ #synchronize the content of from to 'to' -a: all subdirectories with attributes. -v: verbose.
+rsync -av from to #copy folder 'from' to 'to', resulting in a folder to/from on the target. -a: all subdirectories with attributes. -v: verbose.
+rsync -av from/ to #For the source, it makes a difference if there is a trailing slash: With slash, the content of the folder `from` is copied into `to`, but not the folder itself.
 rsync from to/ #Without a trailing slash in the source, an additional folder 'to/from/' is created, i.e. not only the content, but the folder with content is copied.
-rsync -uavzP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress.
+rsync -uavznP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress. -n: dry-run without actually copying files
 -c # use checksums instead of timestamps
 rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
 ```
@@ -538,6 +607,8 @@ rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/
 
 ## ZSH
 'Z-Shell'
+### Oh my zsh
+For the zsh, there exists a framework of configurations and plugins called 'oh-my-zsh'. See [the Github page](https://github.com/ohmyzsh/ohmyzsh) for installation. This framework contains a lot of different themes. Plugins can add support for e.g. git or better vi-mode
 
 # Tmux
 Terminal multiplexer. Allows to keep your session alive after remote logout.
