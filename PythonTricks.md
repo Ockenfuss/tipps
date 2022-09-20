@@ -1,138 +1,148 @@
-# Python Tricks
 
 
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [Python Tricks](#python-tricks)
-  - [Python General](#python-general)
-    - [Installation](#installation)
-    - [Virtual Environments](#virtual-environments)
-    - [Code Formatting](#code-formatting)
-    - [General](#general)
-      - [Loops and Conditions](#loops-and-conditions)
-      - [Boolean operators](#boolean-operators)
-      - [Functions:](#functions)
-        - [Type hints](#type-hints)
-      - [Variable reference in Python](#variable-reference-in-python)
-      - [Datatypes](#datatypes)
-      - [Strings](#strings)
-        - [f-Strings](#f-strings)
-        - [Regex](#regex)
-      - [Arrays](#arrays)
-      - [Lists](#lists)
-      - [List comprehensions](#list-comprehensions)
-      - [Slices](#slices)
-      - [Iterables](#iterables)
-        - [Zip](#zip)
-      - [Hashables](#hashables)
-      - [Sets](#sets)
-      - [Dictionaries](#dictionaries)
-    - [IO](#io)
-      - [File paths](#file-paths)
-      - [Shell](#shell)
-      - [CLI Arguments](#cli-arguments)
-    - [Exceptions](#exceptions)
-    - [Object Orientation](#object-orientation)
-      - [Decorators](#decorators)
-      - [Get/Set](#getset)
-      - [Operator overloading](#operator-overloading)
-    - [Datetime module](#datetime-module)
-      - [Creation](#creation)
-      - [Operations](#operations)
-      - [Zeiten Plotten](#zeiten-plotten)
-    - [time Module](#time-module)
-    - [Serialization](#serialization)
-  - [JSON](#json)
-  - [Pickle](#pickle)
-  - [Numpy](#numpy)
-      - [Numpy I/O](#numpy-io)
-      - [Numpy Arrays](#numpy-arrays)
-      - [Indexing](#indexing)
-      - [Numpy sortieren](#numpy-sortieren)
-    - [Numpy Array Transformations](#numpy-array-transformations)
-      - [Broadcasting](#broadcasting)
-        - [Numpy Array reshape](#numpy-array-reshape)
-      - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
-      - [combine multidimensional arrays](#combine-multidimensional-arrays)
-      - [masked arrays](#masked-arrays)
-    - [Numpy Datentypen](#numpy-datentypen)
-    - [Numpy Funktionen](#numpy-funktionen)
-    - [Statistics](#statistics)
-    - [Fourier Transformations](#fourier-transformations)
-  - [Scipy](#scipy)
-    - [Statistics](#statistics-1)
-      - [Distribution functions](#distribution-functions)
-    - [Interpolation](#interpolation)
-      - [Onedimensional](#onedimensional)
-      - [Multidimensional](#multidimensional)
-  - [Pyplot/Matplotlib](#pyplotmatplotlib)
-      - [Create plot](#create-plot)
-      - [Axen und Ticks](#axen-und-ticks)
-      - [Beschriftung mit Latex](#beschriftung-mit-latex)
-      - [Legende](#legende)
-      - [Lines and colors](#lines-and-colors)
-        - [Specifiying colors](#specifiying-colors)
-        - [Linestyle cycle](#linestyle-cycle)
-      - [colorbar](#colorbar)
-        - [Create colorbar](#create-colorbar)
-        - [Colorbar limits and scale](#colorbar-limits-and-scale)
-        - [Color cycle setzen](#color-cycle-setzen)
-      - [Modify colormaps](#modify-colormaps)
-      - [Zweite Axe rechts:](#zweite-axe-rechts)
-      - [Figuren](#figuren)
-      - [Saving figures](#saving-figures)
-      - [Backend](#backend)
-      - [Arange subplots](#arange-subplots)
-      - [Text and annotations](#text-and-annotations)
-      - [Plot types](#plot-types)
-        - [Lines, points and bars](#lines-points-and-bars)
-        - [Histograms](#histograms)
-        - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
-      - [Animationen](#animationen)
-      - [Interaction](#interaction)
+- [Python General](#python-general)
+  - [Installation](#installation)
+  - [Virtual Environments](#virtual-environments)
+    - [Venv](#venv)
+    - [Conda](#conda)
+  - [Code Formatting](#code-formatting)
+  - [General](#general)
+    - [Loops and Conditions](#loops-and-conditions)
+    - [Boolean operators](#boolean-operators)
+    - [Functions:](#functions)
+      - [Type hints](#type-hints)
+    - [Variable reference in Python](#variable-reference-in-python)
+    - [Datatypes](#datatypes)
+      - [Complex Numbers](#complex-numbers)
+    - [Strings](#strings)
+      - [f-Strings](#f-strings)
+      - [Regex](#regex)
+    - [Arrays](#arrays)
+    - [Lists](#lists)
+    - [List comprehensions](#list-comprehensions)
+    - [Slices](#slices)
+    - [Iterables](#iterables)
+      - [Zip](#zip)
+    - [Hashables](#hashables)
+    - [Sets](#sets)
+    - [Dictionaries](#dictionaries)
+  - [IO](#io)
+    - [File paths](#file-paths)
+    - [Shell](#shell)
+    - [CLI Arguments](#cli-arguments)
+  - [Exceptions](#exceptions)
+  - [Object Orientation](#object-orientation)
+    - [Decorators](#decorators)
+    - [Get/Set](#getset)
+    - [Operator overloading](#operator-overloading)
+  - [Datetime module](#datetime-module)
+    - [Creation](#creation)
+    - [Operations](#operations)
+    - [Zeiten Plotten](#zeiten-plotten)
+  - [time Module](#time-module)
+  - [Serialization](#serialization)
+    - [JSON](#json)
+    - [Pickle](#pickle)
+- [Numpy](#numpy)
+    - [Numpy I/O](#numpy-io)
+    - [Numpy Arrays](#numpy-arrays)
+    - [Indexing](#indexing)
+    - [Numpy sortieren](#numpy-sortieren)
+  - [Numpy Array Transformations](#numpy-array-transformations)
+    - [Broadcasting](#broadcasting)
+      - [Numpy Array reshape](#numpy-array-reshape)
+    - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
+    - [combine multidimensional arrays](#combine-multidimensional-arrays)
+    - [masked arrays](#masked-arrays)
+  - [Numpy Datentypen](#numpy-datentypen)
+  - [Numpy Funktionen](#numpy-funktionen)
+  - [Statistics](#statistics)
+  - [Fourier Transformations](#fourier-transformations)
+- [Scipy](#scipy)
+  - [Statistics](#statistics-1)
+    - [Distribution functions](#distribution-functions)
+  - [Interpolation](#interpolation)
+    - [Onedimensional](#onedimensional)
+    - [Multidimensional](#multidimensional)
+- [Pyplot/Matplotlib](#pyplotmatplotlib)
+    - [Create plot](#create-plot)
+    - [Axen und Ticks](#axen-und-ticks)
+    - [Beschriftung mit Latex](#beschriftung-mit-latex)
+    - [Legende](#legende)
+    - [Lines and colors](#lines-and-colors)
+      - [Specifiying colors](#specifiying-colors)
+      - [Linestyle cycle](#linestyle-cycle)
+    - [colorbar](#colorbar)
+      - [Create colorbar](#create-colorbar)
+      - [Colorbar limits and scale](#colorbar-limits-and-scale)
+      - [Color cycle setzen](#color-cycle-setzen)
+    - [Modify colormaps](#modify-colormaps)
+    - [Zweite Axe rechts:](#zweite-axe-rechts)
+    - [Figuren](#figuren)
+    - [Saving figures](#saving-figures)
+    - [Backend](#backend)
+    - [Arange subplots](#arange-subplots)
+    - [Text and annotations](#text-and-annotations)
+    - [Plot types](#plot-types)
+      - [Lines, points and bars](#lines-points-and-bars)
+      - [Histograms](#histograms)
+      - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
+    - [Animationen](#animationen)
+    - [Interaction](#interaction)
   - [Subprocess](#subprocess)
-  - [Pandas](#pandas)
-      - [Create Data Frame](#create-data-frame)
-      - [read from file](#read-from-file)
-      - [acces element](#acces-element)
-      - [boolean indexing](#boolean-indexing)
-      - [get columns](#get-columns)
-      - [Categories in one column](#categories-in-one-column)
-      - [iterration over rows](#iterration-over-rows)
-      - [Groupby](#groupby)
-  - [Geopandas](#geopandas)
-    - [Maps (Contextily)](#maps-contextily)
-      - [Plot geopandas](#plot-geopandas)
-      - [Details](#details)
-  - [NETCDF](#netcdf)
-  - [Xarray](#xarray)
-    - [Inspecting data](#inspecting-data)
-    - [Selecting data](#selecting-data)
-    - [Asignments](#asignments)
-    - [Coordinates](#coordinates)
-    - [combining/extending data](#combiningextending-data)
-    - [Modifying data](#modifying-data)
-    - [Computation](#computation)
-    - [apply_ufunc](#apply_ufunc)
-    - [Plotting data](#plotting-data)
-  - [Image processing](#image-processing)
-  - [Creating your own modules](#creating-your-own-modules)
-      - [Module Structure](#module-structure)
-        - [Special files](#special-files)
-      - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
-  - [Unittests](#unittests)
-    - [Execute tests](#execute-tests)
-  - [Profiling](#profiling)
-    - [cProfile and pstats](#cprofile-and-pstats)
+- [Pandas](#pandas)
+    - [Create Data Frame](#create-data-frame)
+    - [read from file](#read-from-file)
+    - [acces element](#acces-element)
+    - [boolean indexing](#boolean-indexing)
+    - [get columns](#get-columns)
+    - [Categories in one column](#categories-in-one-column)
+    - [iterration over rows](#iterration-over-rows)
+    - [Groupby](#groupby)
+- [Geopandas](#geopandas)
+  - [Maps (Contextily)](#maps-contextily)
+    - [Plot geopandas](#plot-geopandas)
+    - [Details](#details)
+- [NETCDF](#netcdf)
+- [Xarray](#xarray)
+  - [Inspecting data](#inspecting-data)
+  - [Selecting data](#selecting-data)
+  - [Asignments](#asignments)
+  - [Coordinates](#coordinates)
+  - [combining/extending data](#combiningextending-data)
+  - [Modifying data](#modifying-data)
+  - [Computation](#computation)
+  - [Broadcasting](#broadcasting-1)
+  - [apply_ufunc](#apply_ufunc)
+  - [Plotting data](#plotting-data)
+  - [HVPlot](#hvplot)
+  - [Dask](#dask)
+- [Image processing](#image-processing)
+  - [Convolution](#convolution)
+- [Creating your own modules](#creating-your-own-modules)
+  - [Module Structure](#module-structure)
+  - [Special files](#special-files)
+    - [Init](#init)
+    - [Requirements.txt](#requirementstxt)
+    - [Setup.cfg & Setup.py](#setupcfg--setuppy)
+    - [pyproject.toml](#pyprojecttoml)
+    - [pre-commit](#pre-commit)
+  - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
+- [Unittests](#unittests)
+  - [Execute tests](#execute-tests)
+- [Profiling](#profiling)
+  - [cProfile and pstats](#cprofile-and-pstats)
 
 <!-- /code_chunk_output -->
 
 
-## Python General
+# Python General
 
-### Installation
+## Installation
 
 ```bash
 `sudo apt install python3`
@@ -144,7 +154,9 @@ pip3 freeze > requirements.txt #list installed and version, in the form for requ
 python3 -m pip install --upgrade pip #Upgrade pip. Here, it is necessary to call pip via `python3 -m`, since this loads the module into memory before execution. This is necessary, since pip will be uninstalled first and then the new version is installed.
 ```
 
-### Virtual Environments
+## Virtual Environments
+### Venv
+venv ships with python
 ```bash
 mkdir MyEnv; cd MyEnv #make a folder for the environment. Can be in your package folder, but does usually not belong to the project (put in .gitignore)
 python3 -m venv env #create virtual environment
@@ -152,8 +164,40 @@ source bin/activate #activate virtual environment
 pip3 install package # install packages. Do not use sudo! Use pip install -r requirements.txt to install version specifically for your package.
 deactivate #Deactivate virtual environment
 ```
+### Conda
+```bash
+conda init #Initialize conda in the beginnind. Will create a .conda folder in your home directory
+conda create --name py35 python=3.5 #Create virtual environment
+conda env create -f environment.yml #Create from file
+conda env update -f environment.yml --prune #update environment based on yml file, removing packages not in yml anymore
+conda env list #List virtual environments
+conda activate MyEnv #activate environment
+conda env remove --name MyEnv #remove environment
+conda rename -n old_name -d new_name #rename. Workaround, which internally clones environment and downloads all packages again.
+conda list #List all packages and versions in environment
+conda env export --from-history #List only explicitly installed packages
+conda install NAME #Install package
+conda update NAME #Update package
+```
+A conda environment can be configured in a .yml file. For an existing environment, this file can be created with:
+`conda env export --name testJupyter2 --from-history`
+```yml
+name: my-env
+channels:
+  - conda-forge
+  - anaconda
+  - defaults
+dependencies:
+  - python=3.8
+  - pip
+```
+In a conda environment, the PYTHONPATH variable is not respected. One way to activate local packages is to put a file like MyPackages.pth unter `.conda/envs/NAME/lib/python3.10/site-packages`. In it, just list the components of PYTHONPATH, separated by newline.
+```txt
+/full/path/to/packagecollection1
+/full/path/to/packagecollection2
+```
 
-### Code Formatting
+## Code Formatting
 Typically, you would use a linter or linter package like `flake8` (pip install flake8), which formats your code according to certain style guides. Project specific settings should usually be placed in the `setup.cfg` file.
 ```python
 [flake8]
@@ -163,13 +207,13 @@ ignore =
 ```
 
 
-### General
+## General
 Beendet ein Python Program 
 ```python
 import sys
 sys.exit()
 ```
-#### Loops and Conditions
+### Loops and Conditions
 ```python
 if condition: #if conditions
   code
@@ -186,15 +230,15 @@ while condition:#while loop. There is no do-while loop in python
   code
 ```
 
-#### Boolean operators
+### Boolean operators
 ```python
 if a < b < c: #python supports chained comparison operators. This is equal to (a < b) and ( c < d)
 ```
 
-#### Functions: 
+### Functions: 
 often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
 Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
-##### Type hints
+#### Type hints
 https://realpython.com/python-type-checking/
 They have no effect during runtime, but help understanding the code and are often used by linters to detect errors and deliver better suggestions.
 ```python
@@ -203,20 +247,20 @@ import typing as tp
 def myfunc(a : tp.Union[str, int]) -> str: #Specify multiple possible input types. From Python
 ```
 
-#### Variable reference in Python
+### Variable reference in Python
 in general, every object has an id (similar to pointer in C)
 Function arguments are in general by reference, i.e. inside the function, we are dealing with a new reference for the original object
 Generally, expressions are evaluated from the right
 Expressions like a=a+10 (a can be numpy array!): Create a new, deep copy and assign its reference to a
 
-#### Datatypes
+### Datatypes
 ```python
 int(x) #convert to integer
 chr(97) #convert to character 'a'
 str(97) #convert to string "97"
 ```
 
-##### Complex Numbers
+#### Complex Numbers
 ```python
 z=3 + 2j #define complex number
 complex(3,2) #alternative via factory function
@@ -226,7 +270,7 @@ abs(z) #Amplitude
 cmath.phase(z) #Phase
 ```
 
-#### Strings
+### Strings
 ```python
 test="Hallo"+"du" #Combination
 8*'hey' #Repetition
@@ -248,7 +292,7 @@ Format specifiers: These are deprecated, better to use f=Strings!
 ```python
 "%d %f %s"%(1, 0.314,"hallo")#the % operator applied to strings will insert the values from the tuple into the format string.
 ```
-##### f-Strings
+#### f-Strings
 https://realpython.com/python-f-strings/
 A way to 'insert' python code into strings. Currently the recommended way to format strings (python 3.6 or newer).
 ```python
@@ -256,7 +300,7 @@ f"Hello {name}"#Allow to directly evaluate python expressions within {}
 f"This is {object!r}"#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
 f"{number:.3f}"#You can use format specifiers in f strings
 ```
-##### Regex
+#### Regex
 https://realpython.com/regex-python/
 ```python
 import re
@@ -269,7 +313,7 @@ match.group(1)#Select a group. Index is one-based!
 ```
 
 
-#### Arrays
+### Arrays
 returns the position as well as the value of the array
 ```python
 for index, values in enumerate(array, start)
@@ -287,7 +331,7 @@ convert to 2d by "adding one pair of brackets": array2d=[array1d] or array2d=\[[
 np.atleast_2d(array)
 ```
 
-#### Lists
+### Lists
 Arrays, which can contain different data types and can be extended dynamically
 ```python
 list=[]
@@ -298,20 +342,20 @@ b=[1]*3#=[1]+[1]+[1]
 if a: #a returns false is len(a)=0 (list is empty). The same holds for most collections like dict, tuple, ...
 a.pop() #return and remove last element from list. With pop(), you can use a list as a stack. Use pop(0) to remove front or any other index (simple queue)
 ```
-#### List comprehensions
+### List comprehensions
 ```python
 arr=[expr(i) for i in indices]
 arr=[expr(i) for i in indices if condition(i)]
 arr=[expr(i) if condition(i) else expression2(i) for i in indices]
 ```
 
-#### Slices
+### Slices
 ```python
 sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
 sl.start#slice objects have members start, step and stop
 ```
 
-#### Iterables
+### Iterables
 Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
 ```python
 iterable=(obj.evalute() for obj in objlist)
@@ -331,7 +375,7 @@ def com(l, k):
             yield [l[0]]+com_without
 ```
 There are a lot of useful functions, which work with iterables.
-##### Zip
+#### Zip
 ```python
 zip_iter=zip(a,b,c)#zip takes multiple iterables and aggregates the first, second,... elements each in a tuple. It returns an iterator.
 transposed=list(map(list, zip(*l))) #With zip, you can "transpose" a list of lists
@@ -341,9 +385,9 @@ from itertools import zip_longest
 zip_longest(a,b,c, fillvalue=" ")#usually, zip stops after the shortest iterable reaches its end. Zip_longest will continue and insert fill values instead.
 ```
 
-#### Hashables
+### Hashables
 An object is hashable if it has a hash value which never changes during its lifetime (it needs a `__hash__()` method), and can be compared to other objects (it needs an `__eq__()` or `__cmp__()` method). Hashable objects which compare equal must have the same hash value. (from the Python glossary)
-#### Sets
+### Sets
 Unordered collections, where each element appears only once. Pretty much the same thing as you know from mathematics! Elements must be immutable
 https://realpython.com/python-sets/
 ```python
@@ -358,7 +402,7 @@ a == b #elements in a and b are equal
 a |=b #Update a to be a | b. Works with & and - as well
 ```
 
-#### Dictionaries
+### Dictionaries
 Unordered storage vor key-values pairs.
 ```python
 example={"key": value, "key2": value2}
@@ -374,8 +418,8 @@ func(**kwargs):
   key=kwargs.pop('key', default)#Very useful for function argument defaults
 ```
 
-### IO
-#### File paths
+## IO
+### File paths
 Old: the os module. For python 3.5+, use the object-oriented pathlib module!
 ```python
 import os.path
@@ -410,13 +454,13 @@ with open('file', 'w') as f:#w: writing, r: reading, a: append
   f.write(str)#write string
   f.writelines(seq)#NO line endings are added
 ```
-#### Shell
+### Shell
 ```python
 import os
 os.environ["HOME"] #Access environment variables
 expanded=os.path.expandvars(string) #expand environment variables in a string
 ``` 
-#### CLI Arguments
+### CLI Arguments
 ```python
 import sys
 sys.argv[1]#Command line arguments. argv[0] contains program name. 
@@ -433,7 +477,7 @@ par.add_argument('-s',action='store_true')#Boolean flag
 args=par.parse_args()
 args.filename#Access argument values
 ```
-### Exceptions
+## Exceptions
 Rasising Exceptions
 ```python
 raise Exception("Message")
@@ -464,10 +508,10 @@ class MyError(Exception): #Derived from Exception class
 
 
 
-### Object Orientation
+## Object Orientation
 General syntax:
 ```python
-class test(object):#Derived from 'object'
+class Test(object):#Derived from 'object'
   def __init__(self, var1, var2):#Konstruktor
     self._var1=var1
     self._var2=var2
@@ -475,7 +519,7 @@ class test(object):#Derived from 'object'
     super().__init__()#If derived from another class, we can access parent methods through super()
   
   @classmethod
-  def formString(cls, string):#The recommended way to create different Constructors are multiple classmethods
+  def from_string(cls, string):#The recommended way to create different Constructors are multiple classmethods
     v1,v2=parse(string)
     return cls(v1,v2)
 
@@ -505,7 +549,7 @@ dir(obj) #list attributes and methods
 import inspect #module to get detailed information about objects
 inspect.getmembers(obj) #list members
 ```
-#### Decorators
+### Decorators
 https://realpython.com/primer-on-python-decorators/
 Decorators: define two functions a:int->int, F:func->func. Now, you can do `a=F(a)` to get a new function a passed through F. Usually, F is a wrapper that does some pre and post processing. Shorthand for this is `@F`. Useful applications: Debugging: Print function arguments! Timers, Register function in dict, ...
 ```python
@@ -523,7 +567,7 @@ def a(var):
   ...
 ```
 
-#### Get/Set
+### Get/Set
 ```python
 class OurClass:
     def __init__(self, a):
@@ -539,17 +583,17 @@ class OurClass:
             self.__var = val
 ```
 
-#### Operator overloading
+### Operator overloading
 https://realpython.com/operator-function-overloading/#making-your-objects-capable-of-being-added-using
 Implement by use of special methods like `__add__`, `__mul__`,... By convenction, add and similar should return a new instance of the class!
 ```python
 
 ```
 
-### Datetime module
+## Datetime module
 Datum und Zeit
 Übersicht: https://www.programiz.com/python-programming/datetime
-#### Creation
+### Creation
 ```python
 from datetime import datetime
 from dateutil.parser import parse
@@ -560,7 +604,7 @@ time.strftime("%H:%M") #String from date
 datetime.date.today() #get current date
 ```
 
-#### Operations
+### Operations
 ```python
 from datetime import timedelta
 (a-b).total_seconds() #Difference in seconds
@@ -569,7 +613,7 @@ t2=t.replace(hour=8,month=8) #Create new datetime from existing
 ```
 
 
-#### Zeiten Plotten 
+### Zeiten Plotten 
 "time" muss dabei ein Array aus datetime-Objekten sein.
 ```python
 import matplotlib.dates as dates
@@ -582,19 +626,19 @@ Wichtig: Wenn Daten außer einer Uhrzeit auch ein Datum enthalten, muss dieses i
 ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%Y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%Y %H:%M:%S"))
 ```
 
-### time Module
+## time Module
 
 ```python
 import time
 time.sleep(5.5)#5.5 seconds pause
 ```
-### Serialization
+## Serialization
 Idea: convert python objects to byte streams, which you can send or store. There are three modules in the python standard library for this:
 * `marshal`: Do not use this one. Mainly for the python interpreter.
 * `pickle`: Serialize to binary, supports many types
 * `json`: Save as human-readable ascii file, only limited types.
 
-## JSON
+### JSON
 Supports:   int, long, float, str, tuple, list, dict, True, False, None
 ```python
 import json
@@ -613,7 +657,7 @@ Here you find an example including strings, ints, float, lists and dictionaries:
 } 
 ```
 
-## Pickle
+### Pickle
 ```python
 import pickle
 with open("file",'wb') as f:
@@ -623,8 +667,8 @@ with open("file",'wb') as f:
 
 
 
-## Numpy
-#### Numpy I/O
+# Numpy
+### Numpy I/O
 ```python
 np.save("folder/file",array)#save as binary numpy object
 array=np.load("folder/file.npy")#load binary object
@@ -632,7 +676,7 @@ array=np.genfromtxt("file")#load from asciifile
 A=np.genfromtxt('file_name',skip_header = N,max_rows =1)#read only specific line/range
 ```
 
-#### Numpy Arrays
+### Numpy Arrays
 ```python
 a=np.zeros(100)
 b=np.ones((10,20))#2d Array
@@ -641,7 +685,7 @@ b.size#Number of elements: 200
 b.ndim#NUmber of dimensions: 2
 ```
 
-#### Indexing
+### Indexing
 Boolsche Indizes: auswählen eines bestimmten Teilarrays
 <,>,== geht direkt, für Verknüpfung (Oder, Und) mehrerer Ausdrücke:
 ```python
@@ -651,13 +695,13 @@ Elementwise boolean operations: https://docs.scipy.org/doc/numpy-1.13.0/referenc
 ```python
 np.logical_and(a,b)#perform logical and elementwise
 ```
-####Basic Slicing
+###Basic Slicing
 ```python
 array[start:stop:step]#if start/stop<0, replace by start/stop+n with n the dimension of the axis
 ```
 
 
-#### Numpy sortieren
+### Numpy sortieren
 argsort: Liefert array mit den Indizes in der sortierten Reihenfolge => einsetzen liefert sortiertes Array
 ```python
 np.unique(a, return_counts=False)#Find unique elements or count elements
@@ -683,8 +727,8 @@ np.amax(array)#maximum of array
 np.argmax(array)#index of maximum
 ```
 
-### Numpy Array Transformations
-#### Broadcasting
+## Numpy Array Transformations
+### Broadcasting
 https://docs.scipy.org/doc/numpy/user/basics.broadcasting.html
 Whenever you are doing arithmetic with arrays, it is on an element-by-element basis. However, what happens if the arrays do not have the same shape? In this case, the dimensions are compared, starting from the last dimension. If their lengths are not the same, one of them has to be length one. This one will be repeated before applying the arithmetic.
 See the example:
@@ -696,14 +740,14 @@ Result (4d array):  8 x 7 x 6 x 5
 A      (2d array):      2 x 1
 B      (3d array):  8 x 4 x 3 # second from last dimensions mismatched
 ```
-##### Numpy Array reshape
+#### Numpy Array reshape
 Imagine the old array to be flattened first: First, the last dimension is counted up (0,1,2,3...), then the second last is raised +1 and the last counted up again and so on.
 Secondly, the resulting 1d array is filled into the new one by the same principle: the first (50) elements of the 1D array are put in the last dimension (0-50), then the second last dimension (0-400) is raised +1 and the next (50) elements are put into the last dimension (0-50) again, and so on.
 ```python
 new=old.reshape((3,400,50))
 ```
 
-#### stack/extend/combine/transpose numpy arrays
+### stack/extend/combine/transpose numpy arrays
 ```python
 np.column_stack((arr1, arr2, arr3))#combine 1D arrays to 2D
 np.row_stack((arr1, arr2, arr3))
@@ -713,22 +757,22 @@ arr.transpose(1,0,2)#switch the order of axes. Similar to arr.T in two dimension
 xgrid, ygrid=np.meshgrid(x,y,indexing='ij')#make e.g. two 2D grids of two 1D arrays. With ij, every column of xgrid equals x, every row of ygrid equals y. This is the "matrix interpretation".
 array=np.roll(array, shift=(1,2), axis=(0,1))#Make a cyclic shift of an array
 ```
-#### combine multidimensional arrays
+### combine multidimensional arrays
 ```python
 np.concatenate((arr1, arr2), axis=1)#must have same dimensions except on the concatenation axis
 ```
-#### masked arrays
+### masked arrays
 numpy support masked arrays with `numpy.ma` module. These are useful in combination with e.g. some plots
 ```python
 arr_mask = np.ma.masked_where(mask, arr)
 ax.imshow(arr_mask, cmap=mymap)#use mymap.set_bad('b') to set the masked values to blue!
 ```
-### Numpy Datentypen
+## Numpy Datentypen
 ```python
 arr2=arr1.astype(int)#Array conversion
 ```
 
-### Numpy Funktionen
+## Numpy Funktionen
 ```python
 np.mean(Array, Axis=0)#Numpy
 np.histogram2d(x,y,weights=z, bins=10)#1 or 2d histogram in numpy. See also binned_statistics in scipy
@@ -739,14 +783,14 @@ np.interp(x_new, x_old, y_old)#perform linear interpolation of the old values at
 np.trapz(y, x)#integral over y (sampling points located at x)
 ```
 
-### Statistics
+## Statistics
 ```python
 np.random.rand(*arr.shape)#produce random numbers between 0 and 1 in an array with the given dimensions
 np.random.normal(0,1,(2,2))#produce normal distributed values in an array with the given shape
 np.random.multivariate_normal(a,b)#produce a set of numbers (vector), such that these variables in the limit of many observations have the given covariance matrix b (around the mean vector a).
 ```
 
-### Fourier Transformations
+## Fourier Transformations
 ```python
 sig_f=np.fft.fft(sig)#Simple discrete Fourier transform
 sig2d_f=np.fft.fft2(sig2d)#For 2d arrays (images)
@@ -754,13 +798,13 @@ sig2d_f=np.fft.fft2(sig2d)#For 2d arrays (images)
 Sig_f contains the amplitudes corresponding to the frequencies given from `np.fft.fftfreq(N, d=1.0)`, with `N=len(sig)`. The general format is [k0, k1, ..., kN/2, k(-N/2), ... k(-1)], and the values are just kn=n/(N*d). Therefore, to get the real frequencies k we usually want in e^(ikx), we have to set d=dx/(2 * pi), with dx the spacing of the real space points in `sig`.
 
 
-## Scipy
-### Statistics
+# Scipy
+## Statistics
 ```python
 from scipy import stats
 stats.binned_statistic_2d(x, y, values, 'mean', bins=[binx,biny])#Extended version of histogram2d in numpy. Also allows to take the mean and more over all weights.
 ```
-#### Distribution functions
+### Distribution functions
 stats contains a lot of statistical distribution functions like gaussian, lognormal or poisson. You can easily create samples, plot the function and more
 ```python
 from scipy.stats import norm, lognorm
@@ -772,14 +816,14 @@ norm.ppf(values, loc, scale) #Percent point function (inverse of cdf)
 samples=norm.rvs(size=100) #Get gaussian samples
 ```
 
-### Interpolation
-#### Onedimensional
+## Interpolation
+### Onedimensional
 ```python
 from scipy.interplate import interp1d
 f=interp1d(x,y,kind='cubic') #linear or cubic (spline) interplation
 ynew=f(xnew) #returns a callable object
 ```
-#### Multidimensional
+### Multidimensional
 https://stackoverflow.com/questions/37872171/how-can-i-perform-two-dimensional-interpolation-using-scipy
 * Rbf: My recommendation for irregular points. Gives a reusable object after fitting to the input data.
 ```python
@@ -789,13 +833,13 @@ di = rbfi(xi, yi, zi)   # interpolated values
 ```
 * griddata: 
 
-## Pyplot/Matplotlib
+# Pyplot/Matplotlib
 https://matplotlib.org/faq/usage_faq.html#usage
 Basic structure: A Figure object is the empty window which contains the plots.
 In the figure is a certain number of Axes objects, the actual "plots".
 Each Axes object can have for example two or three Axis-objects, the actual "axes of the plots". Axes!=Axis!!!
 
-#### Create plot
+### Create plot
 ```python
 fig,ax=plt.subplots()
 fig2, ax2=plt.subplots(nrows=2, ncols=2)#ax2: either 1D or 2D array => use atleast2d().T if necessary
@@ -803,7 +847,7 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 ```
 
 
-#### Axen und Ticks
+### Axen und Ticks
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
 ax.invert_yaxis()#Invert axis
@@ -820,7 +864,7 @@ ax2.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter. Positions according to xticks major/minor
 ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
 ```
-#### Beschriftung mit Latex
+### Beschriftung mit Latex
 ```python
 plt.rc('text', usetex=True) #always necessary?
 ax1.set_xlabel(r'Irradiance [$\frac{mW}{m^{2}nm}]$', fontsize=18)
@@ -828,7 +872,7 @@ ax.plot(x,y, label=r'$\phi={0}\pi$'.format(i))#use variable in latex label
 ax.yaxis.set_label_position("right")#which side
 ax.yaxis.set_label_coords(-0.1, 0.5)#exakte position
 ```
-#### Legende
+### Legende
 ```python
 legend = ax.legend(loc='lower right', shadow=True, fontsize='medium', ncol=2, title='Some lines')#Legende
 lines = []#Legende nur mit Linestyle
@@ -845,13 +889,13 @@ ax.add_artist(leg1)
 ax.add_artist(leg2)
 ```
 
-#### Lines and colors
-##### Specifiying colors
+### Lines and colors
+#### Specifiying colors
 https://matplotlib.org/stable/tutorials/colors/colors.html
 ```python
 color="C0" #The default colors in the cycle can be set with C0, C1, ...
 ```
-##### Linestyle cycle
+#### Linestyle cycle
 ```python
 from itertools import cycle
 lines = ["-","--","-.",":"]
@@ -860,9 +904,9 @@ ax.plot(x,y, linestyle=next(linecycler))
 ```
 
 
-#### colorbar
+### colorbar
 
-##### Create colorbar
+#### Create colorbar
 They always live in their own axes object!
 All maps: https://matplotlib.org/3.1.1/gallery/color/colormap_reference.html
 ```python
@@ -876,7 +920,7 @@ def add_colorbar(fig, ax, image, **kwargs):
   cax = divider.append_axes('right', size='5%', pad=0.05)
   return fig.colorbar(image, cax=cax, **kwargs)
 ```
-##### Colorbar limits and scale
+#### Colorbar limits and scale
 https://matplotlib.org/users/colormapnorms.html
 ```python
 import matplotlib.colors as colors
@@ -891,12 +935,12 @@ formatter = plt.FuncFormatter(lambda val, loc: corelabels[val])
 cbar=add_colorbar(fig, ax[0,1], im,ticks=[0,1], format=formatter)
 ```
 
-##### Color cycle setzen
+#### Color cycle setzen
 ```python
 cm = plt.get_cmap('gist_rainbow')#Cmaps: https://matplotlib.org/examples/color/colormaps_reference.html
 ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
 ```
-#### Modify colormaps
+### Modify colormaps
 If you want to present the same information, but in an different style, vmin and vmax are not sufficient. You need to create you own colormap, e.g. as a cutout of a predefined colormap.
 ```python
 import matplotlib.colors as colors
@@ -909,12 +953,12 @@ cmap = plt.get_cmap('jet')
 new_cmap = truncate_colormap(cmap, 0.2, 0.8)
 ```
 
-#### Zweite Axe rechts:
+### Zweite Axe rechts:
 ```python
 ax2=ax.twinx()#twiny() for axis on top
 ```
 
-#### Figuren
+### Figuren
 ```python
 ax.axvline(x=20)#axhline(y=20) create a vertical or horizontalline
 ax.axvspan(1,2,alpha=0.5, color='r') #Highlight an area. Similar: axhspan
@@ -922,13 +966,13 @@ circle1 = plt.Circle((1000, 1000), 30, color='r', fill=True)
 ax.add_artist(circle1)
 ```
 
-#### Saving figures
+### Saving figures
 ```python
 plt.rcParams["savefig.directory"] =os.path.dirname(os.path.abspath(__file__))#need to "import os"
 plt.rcParams["savefig.format"]="pdf"
 fig.savefig("Plot1.pdf", bbox_inches='tight', format='png')#save plot. bbox_inches is very useful to remove white area around (and even add area if some labels are not visible otherwise)
 ```
-#### Backend
+### Backend
 ```python
 matplotlib.use("Agg")#specify backend, before importing pyplot! Important if Display variable is not set. Alternative: TkAgg
 matplotlib.get_backend()#get backend
@@ -936,7 +980,7 @@ print(matplotlib.matplotlib_fname()) #find matplotlibrc
 ```
 
 
-#### Arange subplots
+### Arange subplots
 ```python
 fig, ax=plt.subplots(2,2, figsize=(4,3))#Easiest way
 fig.subplots_adjust(hspace=0.1,wspace=0.1)#Adjust height and width spacing in units of mean axis length
@@ -950,15 +994,15 @@ gs = fig.add_gridspec(4, 2, width_ratios=[1, 1], height_ratios=[1, 10,10, 10])
 ax2 = fig.add_subplot(gs[-1, :])
 ```
 
-#### Text and annotations
+### Text and annotations
 Generally, font sizes can be given absolute in pt or relative to `font.size` from the rc parames. Relative measures are: `xx-small, x-small,small, medium, large, x-large, xx-large, larger, or smaller`
 ```python
 ax1.text(1,2,"Hallo", rotation=45,fontsize='large')#Annotation, Text
 ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='axes fraction')#more functions than simple text, e.g. make arrows and give coordinates in different formats
 ```
 
-#### Plot types
-##### Lines, points and bars
+### Plot types
+#### Lines, points and bars
 ```python
 ax.plot(x,y,'.-', linewidth=0.4,label="label")
 ax.scatter(x,y,c=z, alpha=0.5, marker='.', markersize=4)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
@@ -966,13 +1010,13 @@ ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard de
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
 ax.bar(xarr,height=yarr, width=1.5)#Barplot with vertical bars (columnplot). For horizontal, use barh and exchange height and width
 ```
-##### Histograms
+#### Histograms
 ```python
 n, bins, _ =ax2.hist(distance,bins=100, weights=values, range=(-60,60), density=True, cumulative=False)#histogramm. If density=True, the y axis values are in units of %/xaxis, i.e. np.sum(n[-1]*np.diff(bins))=1.0. (n[-1] in the case of multiple categories and stacked=True, for a plot with one category it is just n*np.diff) Cumulative allows for cumulative histograms
 im=ax2.hist2d(x,y,bins=100, weights=values, range=(-60,60), cmin=1)[3]#histogramm 2d, object for colorbar is the fourth returned object. Cmin: All values below are set to nan.
 ```
 
-##### Images (2D Verteilung) plotten
+#### Images (2D Verteilung) plotten
 Imshow is usually the fastest solution. It is for data on a regular grid. Use 'extent' to set the axes coordinates if they should be something else than pixels. Things become tricky together with 'aspect', which is like a scaling factor height=aspect*width. By default, aspect=1, i.e. the PIXELS are kept squares IN AXES COORDINATES. E.g. if your xaxis is 1000 (m) and your y axis 1 (m), the image will appear extremly elongated. In this case, set aspect to 1000 and the yaxis will be stretched, such that the RESULTING IMAGE looks like a square.
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
@@ -988,7 +1032,7 @@ ax.pcolormesh(x,y,c)#plot 2d with non-regular grid. x,y: 1D arr with length one 
 ```
 
 
-#### Animationen
+### Animationen
 Animation Artist:
 ```python
 import matplotlib.animation as animation
@@ -1018,7 +1062,7 @@ def create_1d_animation(fig, ax, x, values, interval):
     return anim
 ```
 
-#### Interaction
+### Interaction
 Matplotlib provides an API to allow users to interact with figures via key presses and mouse clicks. A good introduction can be found [here](https://matplotlib.org/stable/users/event_handling.html).
 ```python
 ax.figure.canvas.mpl_connect("button_press_event", on_press) #connect a function to an event via figure.canvas (accessible via an ax object, if you want).
@@ -1037,20 +1081,20 @@ import subprocess as sp
 sp.call("echo test", shell=True)#Simple execution of string
 ```
 
-## Pandas
+# Pandas
 My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
 
-#### Create Data Frame
+### Create Data Frame
 ```python
 test=[[4,5,6],[1,2,3]]
 testdf=pd.DataFrame(test,columns=['A','B','C'])
 ```
-#### read from file
+### read from file
 ```python
 data=pd.read_csv("FileName")
 ```
 
-#### acces element
+### acces element
 both work with boolean indexing
 ```python
 data.loc['A','B']#if you use column/row names
@@ -1058,27 +1102,27 @@ data.iloc[1:2,3:4]#if you use indices
 ```
 important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
 
-#### boolean indexing
+### boolean indexing
 ```python
  s[(s < -1) | (s > 0.5)]
 ```
 
-#### get columns
+### get columns
 ```python
 datadp.columns
 ```
 
-#### Categories in one column
+### Categories in one column
 ```python
 np.unique(testdf.A)
 ```
 
-#### iterration over rows
+### iterration over rows
 ```python
 for index, line in df.iterrows():
     print(line)
 ```
-#### Groupby
+### Groupby
 combine rows which have a common feature into subgroups
 (https://pandas.pydata.org/pandas-docs/stable/user_guide/groupby.html)
 ```python
@@ -1095,18 +1139,18 @@ for name, group in enumerate(datgroup):
     print(group)
 ```
 
-## Geopandas
+# Geopandas
 Library on top of pandas and shapely, which allows to plot maps. Basic idea: A pandas dataframe with a special column "geometry", which contains shapely objects (Points, LineStrings or Polygons), which can represent cities, streets or countries.
 ```python
 
 ```
 
-### Maps (Contextily)
+## Maps (Contextily)
 However, if you want to plot data on a map, you need more than geopandas, since geopandas is basically just shapely with coordinate transformations. Maps of the earth usually consist of tiles, which are provided by different providers like e.g. OSM. To download such tiles and add them to a matplotlib figure, `contextily` is made.
 Documentation: https://contextily.readthedocs.io/en/stable/index.html
 Generally, contextily works in Spheric Mercator projection (EPSG:3857), so you need to convert all your coordinates first! (Sometimes, lon/lat is also accepted)
 
-#### Plot geopandas
+### Plot geopandas
 ```python
 import contextily as ctx
 gdf=gdf.to_crs(epsg=3857) #Convert your geopandas dataframe to the projection used by contextily 
@@ -1114,7 +1158,7 @@ ax=gdf.plot()
 ctx.add_basemap(ax,zoom=6) #Add basemap to axes. Use the axes you get back from geopandasdf.plot()
 ```
 
-#### Details
+### Details
 ```python
 ctx.howmany(w, s, e, n, 6, ll=False) #How many tiles will be downloaded at zoom level 6. If ll, bounding box is given in lon/lat
 sources=[i for i in dir(ctx.tile_providers) if i[0]!='_'] #list all providers included in ctx
@@ -1122,7 +1166,7 @@ srcurl=getattr(ctx.sources, sources[2]) #select a provider
 img, ext=ctx.bounds2img(w, s, e, n, 6, url=srcurl, ll=False)#If you want the map as an array image
 plt.imshow(img, extent=ext)
 ```
-## NETCDF
+# NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
 Dimensions are essentially also variables itself ("coordinate variables")
 
@@ -1142,7 +1186,7 @@ print(pmom.units)#get units
 print(pmom[1,:,0,1])#data can be accessed like numpy arrays
 ncf.close()#close stream after use
 ```
-## Xarray
+# Xarray
 https://xarray.pydata.org/en/stable/index.html
 Generalization of pandas to work with higher dimensional data, basically a front-end for the netcdf format. Basic idea: The fundamental element is the DataArray. It describes values of one variable, which implements certain dimensions. A dimension can be seen as one axis in the higherdimensional space the variable exists in. Each dimension usually has a list of coordinates, these are labels which specify certain positions on the axis (think of the axis 'ticks'). Technically, dimensions are just DataArrays itself.
 Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset needs to implement all dimensions. Datasets are usefull because you can perform some operations on many DataArrays at once, e.g. slicing along one dimension, which will slice every DataArray which implements this dimension.
@@ -1164,7 +1208,7 @@ da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
 da.attrs['units']='km'#long_name and units is used by the .plot() routine
 ```
-### Inspecting data
+## Inspecting data
 ```python
 #DataArrays:
 da.dims#The dimension names of the data
@@ -1176,7 +1220,7 @@ list(ds.variables)#Everything: names of the variables AND coordinates (also sque
 npt.assert_equal(sorted(list(ds.data_vars)), ['a', 'b'])#Check the formatting
 ```
 
-### Selecting data
+## Selecting data
 https://xarray.pydata.org/en/stable/indexing.html
 ```python
 da[...,2]#based on coordinate index and dimension index
@@ -1189,13 +1233,13 @@ ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find 
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
 ```
-### Asignments
+## Asignments
 This is something a little counterintuitive in xarray: You can never assign values to isel() or sel()! Instead, it is possible with loc[] or xr.where(cond, returnTrue, returnFalse)
 ```python
 da.loc[db.coords]=db#Assign values of db to a subset of da
 ```
 
-### Coordinates
+## Coordinates
 Each dimension can have a coordinate array assigned. Imagine them as the tick labels of the dimension axis. Additionally, you can assign further coordinates to the dimension, which are then non-coordinate arrays! E.g., this is useful if you want to reference every "tick" on an dimension axis by two labels like weekday and monthday.
 Be aware: Dimensions have names. You see them in () when printing. Coordinates can have the same names as the dimension they label (e.g. 'space') or different names (e.g. 'weekday' for dimension 'time'). In the latter case, you must of course tell xarray that 'weekday' belongs to the dimension 'time'.
 ```python
@@ -1203,12 +1247,13 @@ locs = ['A','B','C']
 weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
 foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])#DataArray with two dimensions with coordinates
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
+foo.assign_coords(time=[1,2,3,4])#another way to assign coords. You can also provide a dict directly here
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 da.get_axis_num('y')#useful when using numpy with da.values
 da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
 ```
 
-### combining/extending data
+## combining/extending data
 ```python
 new=xr.concat([old1, old2], dim='time')
 data.expand_dims({'newdim':[1,2,3]})
@@ -1217,7 +1262,7 @@ data1=data1.combine_first(data2)#extend data1 by the values of data2 (introducin
 xr.combine_nested([[a1, a2], [a3, a4]], concat_dim=['x', 'y'])#Combine with position of subsets encoded in list of lists
 ```
 
-### Modifying data
+## Modifying data
 ```python
 dist.where(condition,other=na, drop=False)#return where cond is true and fill in 'other' where it is false (default na). If drop, coordinates with only false are dropped.
 ds.coarsen(photons=4).mean()#calculate mean over blocks of 4 along photons
@@ -1231,7 +1276,7 @@ ds.fillna({"a":2})#fill missing values. For datasets, use a dict to fill variabl
 da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
 ```
 
-### Computation
+## Computation
 ```python
 ds.mean(dim='time')#calculate mean/sum/...
 ds.groupby("time.dayofyear").mean()#mean over the same days of multiple years
@@ -1239,7 +1284,14 @@ da.rolling(x=3, center=True, min_periods=2).mean()#rolling mean/std/median/...
 da.resample(time='24H', base=6, label='right', loffset='1H').mean()#Special for temporal data. Take a 24h mean, starting at 06:00 every day and assign every resulting value the time of the right side + 1H of the 24H interval.
 ```
 
-### apply_ufunc
+## Broadcasting
+Like numpy, xarray has a set of broadcasting rules. The difference to numpy is that xarray includes dimension and coordinate information. This allows you to calculate many thing in a very short and elegant manner.
+```python
+#Matrix Multiplication: C_ik=A_ij*B_jk -> A and B need one common dimension j (second for A, first for B)
+C=(A*B).sum("j")
+```
+
+## apply_ufunc
 https://xarray.pydata.org/en/stable/examples/apply_ufunc_vectorize_1d.html#apply_ufunc
 Idea: Apply a function which works for numpy arrays to xarray. Super useful, because it cares about all the fiddling with dimensions, coordinates. Example: You have a function which takes scalar or 1D data and want to apply it for all dimensions in a dataarray and return the result as a new dataarray.
 ```python
@@ -1256,17 +1308,61 @@ interped = xr.apply_ufunc(
 result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_dims=[['theta'], ['theta']], output_core_dims=[['retresult']], exclude_dims=set(('theta',)), vectorize=True) #Another similar example
 ```
 
-### Plotting data
+## Plotting data
 ```python
 da.plot(x='a', ax=ax1) #1D. Data is automatically plotted in the 'open' dimension y. 'ax' allows to specify a matplotlib axes object.
 da.plot(x='a', hue='b') #2D
 da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
 da.plot(x='a', hue='b', col='c', row='d') #4D
+da.plot.pcolormesh(x='a', y='b',cmap='jet') #pcolormesh is the default for 2D
+da.plot.imshow() #Faster alternative in 2D
 ```
 
+## HVPlot
+Hvplot provides a way to create interactive plots, which are based on bokeh or plotly instead of matplotlib. This works for xarray as well as other common packages (pandas, etc)
+```python
+import hvplot.xarray
+da.hvplot() #Create a standard hv plot based (line, image, hist, based on the dimensions)
+da.hvplot.image(groupby="time") #Create an image with an interactive slider for the third dimension 'time'
+```
 
-## Image processing
-####Convolution
+## Dask
+Allows for parallel processing of big arrays in a chunked manner.
+
+Nomenclature:
+* Scheduler: Distributes work to the different workers
+* Workers: Are available to execute work. Each worker can create multiple threads.
+
+If you plan to call dask from a file with the standard interpreter, most of the code should be in `__main__`. Every worker will read the file when created, but only the main run should execute the heart of the code
+```python
+import Mylib
+def func1: pass #This stuff will be available to all workers
+if __name__=="__main__": #Main code here
+  from dask.distributed import Client
+  client=Client(n_workers=4, threads_per_worker=4, memory_limit='20GB') #It is convenient to set up a client.
+  print(client) #This will allow you to monitor the scheduler progress via a dashboard in your browser
+```
+Issues
+
+I found quite some issues when using dask.
+Without the generation of a client, things seem to work just fine, but you can`t limit the resources used on the server.
+
+When generating a client in vscode interactive:
+* With processes=False, I usually get a lock error somewhere in the computation
+* without arguments, the client is always restarting the workers. This seems to be an unresolved issue with vscode interactive.
+
+In a python script:
+* Creation of a client has to be included in the main file (see above)
+* All execution code has to be included in the main file (see above)
+* the HDF5_USE_FILE_LOCKING=FALSE variable has to be exported
+* I usually get an error at the end of the computation, when shutting down the workers
+
+In a juypter ipynb:
+* Everything works, even in vscode
+
+
+# Image processing
+## Convolution
 ```python
 from scipy import signal as sig
 AcM=sig.convolve2d(A,M, mode='full', boundary='fill', fillvalue=0)
@@ -1275,7 +1371,7 @@ boundary: How boundary conditions are treated: fill missing values on the rim wi
 mode: Size of the resulting array, 'full', "valid", or "same"
 
 
-## Creating your own modules
+# Creating your own modules
 https://www.digitalocean.com/community/tutorials/how-to-write-modules-in-python-3
 All about paths and importing from other directories:
 https://chrisyeh96.github.io/2017/08/08/definitive-guide-python-imports.html
@@ -1292,7 +1388,7 @@ import sys
 sys.path.append("path/to/new_project/")
 import module
 ```
-#### Module Structure
+## Module Structure
 Typical directory structure
 ```text
 new_project
@@ -1325,8 +1421,8 @@ import importlib
 importlib.reload(module)
 ```
 
-##### Special files
-**Init**
+## Special files
+### Init
 In `packagename/__init__.py`, you would typically write which methods and objects the module exports to the user. By default, if the user imports everything with `from mypackage import *`, all functions not beginning with an underscore are imported. This can be changed by setting the `__all__` variable.
 ```python
 from .antigravity import function1#Typically on bigger projects, you have the API functions sorted in seperate files
@@ -1339,10 +1435,50 @@ __all__=(
 )
 ```
 
-**Setup.cfg**
-Located at the top level of your module, `setup.cfg` is read by various python modules and contains setup e.g. for code formatting.
+### Requirements.txt
 
-**pre-commit**
+### Setup.cfg & Setup.py
+Located at the top level of your module, `setup.cfg` is read by various python modules and contains setup e.g. for code formatting. `setup.py` is a python script next to `setup.cfg`, usually calling `setup` from the `setuptools` package. Nowadays, for smaller projects a `pyproject.toml` file might be prefered.
+
+### pyproject.toml
+Dependencies can be installed via `pip install .` if a pyproject.toml file is present in the folder.
+To include optional dependencies, call `pip install ".[dev]"`
+```toml
+[build-system]
+requires      = ["setuptools>=61.0.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "realpython-reader"
+version = "1.0.0"
+description = "Read the latest Real Python tutorials"
+readme = "README.md"
+authors = [{ name = "Real Python", email = "info@realpython.com" }]
+license = { file = "LICENSE" }
+classifiers = [
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+]
+keywords = ["feed", "reader", "tutorial"]
+dependencies = [
+    "feedparser >= 5.2.0",
+    "html2text",
+    'tomli; python_version < "3.11"',
+]
+requires-python = ">=3.9"
+
+[project.optional-dependencies]
+dev = ["black", "bumpver", "isort", "pip-tools", "pytest"]
+
+[project.urls]
+Homepage = "https://github.com/realpython/reader"
+
+[project.scripts]
+realpython = "reader.__main__:main"
+```
+
+### pre-commit
 `.pre-commit-config.yaml` contains the configurations for the `pre-commit` module. Pre-commit help you to automatically set up git hooks, which are executed before every commit to format or test your code. Pre-commit automatically downloads the specified modules from github and executes them, if they follow certain criteria (e.g. python modules must define an entry point). Pre-commit is itself a python module, but could theoretically be used with any programming language.
 ```bash
 cd your_package
@@ -1371,7 +1507,7 @@ repos:
 ```
 
 
-#### How to write proper docstrings for functions/classes:
+## How to write proper docstrings for functions/classes:
 ```python
 https://www.python.org/dev/peps/pep-0257/
 def complex(real=0.0, imag=0.0):
@@ -1384,8 +1520,26 @@ def complex(real=0.0, imag=0.0):
     if imag == 0.0 and real == 0.0:
         return complex_zero
 ```
-## Unittests
+# Unittests
 https://realpython.com/python-testing/
+
+General folder structure
+```txt
+tests/
+|
+└── unit/
+|   ├── __init__.py
+|   └── test_sum.py
+|
+└── integration/
+    |
+    ├── fixtures/
+    |   ├── test_basic.json
+    |   └── test_complex.json
+    |
+    ├── __init__.py
+    └── test_integration.py
+```
 ```python
 import unittest as ut
 class SomeTests(ut.TestCase):
@@ -1394,7 +1548,7 @@ class SomeTests(ut.TestCase):
   def test_something(self):#Must start with test_
     #testing with asserts
 ```
-### Execute tests
+## Execute tests
 Best to use the command line interface. Take the example from 
 [the importing modules section](#module-structure)
 ```bash
@@ -1402,14 +1556,19 @@ cd new_project
 python3 -m unittest discover #All tests in test directory. use -t testdir if not named test.
 python3 -m unittest test.test_antigravity #one specific test (python notation). Remember to have an __init__.py in your test and probably subfolders present.
 ```
+```Makefile
+unittest:
+	python3 -m unittest discover -s test/unit
+.PHONY:unittest
+```
 unittest introduces a few improved assertions:
 ```python
 with self.assertRaises(SomeException): MyFunc(arguments)#Test for exception
 ```
 
 
-## Profiling
-### cProfile and pstats
+# Profiling
+## cProfile and pstats
 In the standard library, there is `cProfile` as a profiler and `pstats` to analyze the results in the command line
 ```python
 python3 -m cProfile -o output.prof Program.py #Run Program.py and save analytics in output.prof
