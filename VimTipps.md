@@ -93,6 +93,7 @@ da], di) #same for (), []
 n #next occurence
 1,$/search/replace/<g,i> #search and replace from first to last line. g: global, all occurences per line. i: case insensitive
 s,abc,def,g #The character that follows 's' is the delimiter character
+%s/a/b/g # with % , apply the replace to all lines (whole file)
 ```
 
 ## Copy-Paste
