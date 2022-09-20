@@ -1,13 +1,13 @@
-#Alle Arten von Notizen zu vscode
+# Alle Arten von Notizen zu vscode
 
 
-#################Allgemeine Einstelllungen########################################
+# Allgemeine Einstelllungen
 Datei->Einstelllungen->Einstelllungen
 -Links: Große Liste aller Default Einstelllungen
 =>Klick auf Kopieren: Kopiert den ausgewählten Block in entweder: Benutzereinstellungen (gelten immer) oder Arbeitseinstellungen (gelten im gewählten Verzeichnis) => Überschreiben Standardeinstellungen
 Ort: werden damit automatisch im settings.json file im Ordner .vscode gespeichert (Editieren auch hier direkt möglich)
 
-######Shortcuts######################################
+# Shortcuts
 einfach: File-preferences-keyboard Shortcuts
 allgemein: keybindings.json (link über obiges menü)
 
@@ -15,12 +15,12 @@ ctrl+J: wechsel zwischen panel (terminal) und editor (eintrag in .json file. Alt
 ctrl+W in Terminal: Close it (self defined)
 
 
-#########################Debugging########################################
+# Debugging
 tasks.json: File which defines how to compile the open editor file, e.g. gcc with -g and all further arguments for C.
 
 launch.json: File with recipe how to debug the program, after compiling with a task in tasks.json, e.g. use gdb for C debugging.
 
-###########Special variables for files############
+# Special variables for files
 * ${workspaceFolder} - the path of the folder opened in VS Code
 * ${workspaceFolderBasename} - the name of the folder opened in VS Code without any slashes (/)
 * ${file} - the current opened file
@@ -42,7 +42,9 @@ Logpoints: Advanced break points, which can e.g. depend on a condition
 In watch window:
 Show pointer as array: "*pointer@3"
 
-###################Latex#################################################
+# Language specific configurations
+
+## Latex
 Strg+Alt+B: Wählt automatisch das erste "Recipe" aus. die hier gelisteten Tools werden nacheinander ausgeführt
 Tools: Kurzformen für commandozeilenbefehle mit Argumenten
 Speicherort: in Standard- und Benutzereinstellungen
@@ -72,8 +74,9 @@ in "tasks.json":
 Latex subfile package:
 -Option: "Use sub file" to specify which file should be used for the autobuild (main file or the currently open editor subfile)
 -Option: "do not prompt" to specify whether you want to be asked each time
-##############################Python###############################
-#Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
+## Python
+Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
+Pytonpath: You can place a file `.env` in your workspace folder, which contains environment variables. Those are used by the Python extension e.g. to find packages.
 
 
 
