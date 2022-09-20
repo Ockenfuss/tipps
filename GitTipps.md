@@ -11,7 +11,6 @@
   - [Push/Pull](#pushpull)
   - [Rebase](#rebase)
   - [Miscellaneous commands](#miscellaneous-commands)
-- [Rename a file or folder](#rename-a-file-or-folder)
 - [Web frontends](#web-frontends)
   - [Github](#github)
 - [SVN Tipps](#svn-tipps)
@@ -26,6 +25,7 @@ Tutorial: https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
 ## Setup
 ```bash
 git config --global user.name 'Name'
+git config user.email 'user@users.noreply.github.com' #It is adivisable to use the provided noreply address, if you want to push to Github
 git config --global user.email 'a@b.com'
 git config --global core.editor vim # standard is $EDITOR evn. variable
 git config --list #see all settings

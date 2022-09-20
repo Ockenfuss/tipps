@@ -444,6 +444,14 @@ basename file #basename without path
 dirname file #pathname without base
 realpath file #absolute path. Use --relative-to=path to get path relative to other
 ```
+## Renaming
+Rename multiple files in current folder using Perl regex syntax. General pattern:
+`rename OPTIONS 'REGEX' FILES` with regex in the form `s/SEARCH/REPLACE/MODIFIER`
+```bash
+rename -n 's/Max Mustermann/Erika Mustermann/g' * #-n: dry-run
+rename 's/(\d{4})-(\d{2})-(\d{2})/$3.$2.$1/g' *.jpg #Change format of jpg from YYYY-MM-DD into DD.MM.YYYY using regex groups
+rename 's/\.html$/.xhtml/' *.html #Change file extension
+```
 
 ## Process Handling
 ```shell
@@ -589,6 +597,7 @@ rsync from to/ #Without a trailing slash in the source, an additional folder 'to
 rsync -uavznP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress. -n: dry-run without actually copying files
 -c # use checksums instead of timestamps
 rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
+rsync -vna --prune-empty-dirs --include "*/" --include "*ext" --exclude "*" from to #Copy all files with extension 'ext' and all folders, but omit the folders without any 'ext'-files
 ```
 
 # Examples

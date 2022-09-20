@@ -10,6 +10,7 @@ Manual: https://www.gnu.org/software/make/manual/html_node/index.html#Top
     - [Internal macros](#internal-macros)
     - [Filters and wildcards](#filters-and-wildcards)
     - [Multiline](#multiline)
+    - [Phony](#phony)
   - [Deprecated stuff](#deprecated-stuff)
     - [Suffix rules](#suffix-rules)
 
@@ -44,6 +45,14 @@ check:
     if [ condition ]; then \
         command; \
     fi
+```
+
+### Phony
+Phony targets are targets, whose name is not really the name of a file.
+```make
+.PHONY: clean
+clean:
+        rm *.o temp
 ```
 
 ## Deprecated stuff
