@@ -15,7 +15,7 @@
     - [Loops](#loops)
       - [For loops](#for-loops)
     - [Boolean operators](#boolean-operators)
-      - [test or [](#test-or)
+      - [test or [](#test-or-)
     - [Comparison operators](#comparison-operators)
   - [Functions](#functions)
     - [Parameters](#parameters)
@@ -34,9 +34,11 @@
   - [Searching](#searching)
   - [Stream Editing](#stream-editing)
   - [Filesystem](#filesystem)
-    - [Partitions & Creation](#partitions-creation)
+    - [Partitions & Creation](#partitions--creation)
     - [Mounting](#mounting)
+    - [Formatting](#formatting)
   - [Filepaths](#filepaths)
+  - [Renaming](#renaming)
   - [Process Handling](#process-handling)
     - [Background jobs](#background-jobs)
   - [Compressing and Archiving](#compressing-and-archiving)
@@ -389,7 +391,8 @@ cut -c1-10 #print only first to tenth character from line. Also useful to trim/r
 Search after files
 ```bash
 find /dir1 -name "*.sh" -maxdepth 3 -exec cp {} dir1/ \;#: for searching a file/folder
-find . -type f #file type: file, dir, block, char, ...
+find . -path "*/dir/*.jpg" #search full path
+find . -type f #file type: file, dir, block, char, link ...
 find . -size +5M -size -10M #between 5 and 10 MB
 find . -mtime -1 #modification time less than 1*24h 
 find . -newer file #files with modification time newer than file

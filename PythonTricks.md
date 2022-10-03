@@ -440,9 +440,10 @@ p / "a" / "file.txt" #you can use the '/' operator to join path objects (and str
 p.mkdir(parents=True, exist_ok=True) #Make directories
 p.resolve() #Get the absolute path
 p.parent #get the parent path (as path object).
-p.suffix #get the file extension as string
 p.name #get the filename
-p.stem #get the final path component without the suffix
+p.suffix #get the file extension as string
+p.stem #get the final path component without the suffix as string
+p.with_suffix('.jpg') #replace file extension. Use '' to remove file extension.
 str(p) #the "traditional" string representation of a path
 ```
 For opening file streams:
@@ -453,6 +454,12 @@ with open('file', 'w') as f:#w: writing, r: reading, a: append
   for line in f:#f is an iterable over the lines
   f.write(str)#write string
   f.writelines(seq)#NO line endings are added
+```
+
+Pattern expansion
+```python
+import glob
+glob.glob('unix/style/*pattern')#Get list of all matching filenames
 ```
 ### Shell
 ```python
@@ -1315,7 +1322,10 @@ da.plot(x='a', hue='b') #2D
 da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
 da.plot(x='a', hue='b', col='c', row='d') #4D
 da.plot.pcolormesh(x='a', y='b',cmap='jet') #pcolormesh is the default for 2D
-da.plot.imshow() #Faster alternative in 2D
+#Imshow is a faster alternative to pcolormesh. Allows 3D Data to be interpreted as rgb
+aspect=float(rgb.x.max()/rgb.y.max())
+ax=da.plot.imshow(size=10, aspect=aspect,x='x', y='y', rgb='rgb', interpolation='antialiased')
+fig=ax.get_figure()
 ```
 
 ## HVPlot
@@ -1324,6 +1334,7 @@ Hvplot provides a way to create interactive plots, which are based on bokeh or p
 import hvplot.xarray
 da.hvplot() #Create a standard hv plot based (line, image, hist, based on the dimensions)
 da.hvplot.image(groupby="time") #Create an image with an interactive slider for the third dimension 'time'
+da.hvplot.rgb(x='x', y='y', bands='rgb', rasterize=True) #rgb image
 ```
 
 ## Dask
