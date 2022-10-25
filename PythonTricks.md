@@ -32,7 +32,9 @@
     - [Dictionaries](#dictionaries)
   - [IO](#io)
     - [File paths](#file-paths)
-    - [Shell](#shell)
+      - [Glob](#glob)
+      - [Temporary Files](#temporary-files)
+      - [Shell](#shell)
     - [CLI Arguments](#cli-arguments)
   - [Exceptions](#exceptions)
   - [Object Orientation](#object-orientation)
@@ -51,6 +53,7 @@
     - [Numpy I/O](#numpy-io)
     - [Numpy Arrays](#numpy-arrays)
     - [Indexing](#indexing)
+    - [Basic Slicing](#basic-slicing)
     - [Numpy sortieren](#numpy-sortieren)
   - [Numpy Array Transformations](#numpy-array-transformations)
     - [Broadcasting](#broadcasting)
@@ -128,7 +131,7 @@
   - [Special files](#special-files)
     - [Init](#init)
     - [Requirements.txt](#requirementstxt)
-    - [Setup.cfg & Setup.py](#setupcfg--setuppy)
+    - [Setup.cfg & Setup.py](#setupcfg-setuppy)
     - [pyproject.toml](#pyprojecttoml)
     - [pre-commit](#pre-commit)
   - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
@@ -455,13 +458,18 @@ with open('file', 'w') as f:#w: writing, r: reading, a: append
   f.write(str)#write string
   f.writelines(seq)#NO line endings are added
 ```
-
-Pattern expansion
+#### Glob
+Unix style pathname expansion
 ```python
 import glob
-glob.glob('unix/style/*pattern')#Get list of all matching filenames
+glob.glob('*.py') #return list with all python files in current directory
 ```
-### Shell
+#### Temporary Files
+use `tempfile` from the standard library
+```python
+f, name=tempfile.mkstemp(".nc", "Gauss", "Directory")#Create a temporary file and return file handle and name
+```
+#### Shell
 ```python
 import os
 os.environ["HOME"] #Access environment variables

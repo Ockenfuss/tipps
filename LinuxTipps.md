@@ -14,6 +14,7 @@ Also includes a lot of useful snippets when working with the command line
     - [Filesystems](#filesystems)
     - [Typical directories](#typical-directories)
   - [Links](#links)
+  - [Installing Software](#installing-software)
   - [Boot process](#boot-process)
   - [Packages](#packages)
   - [SVN](#svn)
@@ -102,6 +103,10 @@ Some first level directories:
 * /var: logs, spools
 * /sbin: superuser binaries
 * /lib: drivers
+* /tmp: Temporary files. Typically get deleted after every reboot or 10 days
+
+Some deeper level directories:
+* /var/tmp: Temporary files. Last typically 30 days and don`t get deleted after reboot
 
 ## Links
 ```bash
@@ -109,6 +114,17 @@ ln source destination #create hard link: pointer to the same physical memory are
 ln -s Source Destination #create symbolic link: pointer to the original path. Invalid if original is removed.
 readlink [-f]#get destination of existing link
 ```
+
+## Installing Software
+Flatpak
+Alternative to 'snap' from Canonical. Compared to package managment with apt, flatpak puts everything in one special directory and should enable applications to run on any distribution
+```bash
+flatpak install --user --from URL #Install. --user does not require sudo
+flatpak list #list installed
+sudo flatpak update #Update all
+sudo flatpak update PACKAGE #Update package
+```
+
 
 ## Boot process
 two different boot processes are common today: systemV and systemd
@@ -163,7 +179,7 @@ qpdf -decrypt pdffile_protected.pdf pdffile_notprotected.pdf #Remove read only e
 ## ssh
 Usual directory: `~/.ssh`. There, you find your private key (`id_rsa`, keep it safe!) and your public key (`id_rsa.pub`). To use it for automatic login on a server, the public key must be added in the servers `.ssh/authorized_keys` file. Therefore, you need to provide another method of authentification to the server, like a password or send an email to the admin, whatever. The usual way is to use ssh-copy-id, which automatically copies your public key in the servers authorized_keys list (using e.g. password authentification). Now, the server trusts everyone who can prove to have the private key to the public one in known_hosts (Imagine the server encrypting a test message and sending it to the client. If the client can decrypt the message and send it back (encrypted with e.g. the servers public key, of course), the client can be trusted). 
 ```bash
-ssh-keygen -t rsa -b 4096 -C "Comment(Email address)" #Generate a key public private key pair
+ssh-keygen -t ed25519 -f ~/.ssh/key_for_xy -C "Comment(Email address)" #Generate a key public private key pair
 ssh-copy-id -i id_rsa.pub My.Loginname@some.server.de #Add public key to server authorized_keys
 ssh -X User@ServerAddress #Now log in to server (use -X to enable X11 forwarding)
 ```
@@ -172,6 +188,16 @@ Config file for ssh. Use it for configuration, abbreviation of long names, etc.
 Host MyNickname
   HostName ServerAddress
   User MyLoginNameOnTheServer
+  IdentityFile ~/.ssh/xy_ed25519.pub
+  # If there is a login/jump server in between, use this command
+  ProxyJump user@jumpserver
+	ProxyCommand ssh -X -q -W %h:%p jumpserver #Old, now use 'ProxyJump'
+  #Multiplexing: Open multiple ssh connections over a single TCP connection
+	controlmaster auto
+	ControlPath  ~/.ssh/sockets/%r@%h-%p #For this, you need a directory 'sockets' in .ssh, where the sockets are located in format name@host-port
+	ControlPersist  600
+
+
 ```
 Control Master: Allows you to use one tcp connection for multiple ssh sessions. Has the advantage that you need to login only once!
 ```shell

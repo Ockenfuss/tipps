@@ -9,11 +9,13 @@ Tipps concerning C
     - [Pointers](#pointers)
       - [NULL](#null)
     - [Arrays](#arrays)
-      - [Static Allocation](#static-allocation)
-      - [Dynamic allocation](#dynamic-allocation)
+      - [Fixed Length Arrays](#fixed-length-arrays)
+      - [Variable Length Arrays](#variable-length-arrays)
+      - [Dynamic sized Arrays](#dynamic-sized-arrays)
     - [Structures](#structures)
       - [Define](#define)
       - [Access members](#access-members)
+    - [Functions](#functions)
   - [IO](#io)
     - [Files](#files)
   - [Strings](#strings)
@@ -45,14 +47,23 @@ double b=0.0
 NULL is a special pointer that points nowhere. It cannot be dereferenced. Check for null pointer via: `if(ptr) printf("Pointer is null!");`
 
 ### Arrays
-C does not know special array types, but continuous blocks of memory can be allocated.
-#### Static Allocation
+C does not know special array types, but continuous blocks of memory can be allocated. There are different types of arrays created in this way.
+#### Fixed Length Arrays
+Their length is already determined at compiletime. They are freed automatically.
 ```C
 int array[5]; //Declaration of 5 elements space.
 int array[5] = {1,2,3,4,5}; //With initialization.
 int array[] = {1,2,3,4,5}; //Infer the number of elements from the initialization.
 ```
-#### Dynamic allocation
+
+#### Variable Length Arrays
+Their length is determined at runtime, but the size cannot be changed after initialization.
+They are freed automatically
+```C
+int array[n]; //here, n is not a compile-time constant, but can be e.g. user input.
+```
+
+#### Dynamic sized Arrays
 If you do not know the array size at compile time, you need to use dynamic memory allocation.
 ```C
 int *array = (int *) malloc(size * sizeof(int)); //allocate a fixed number of bytes in  memory without cleaning and return a pointer to it
@@ -68,12 +79,21 @@ typedef struct person{
     int b;
 }person;
 ```
-####Access members
+#### Access members
 ```C
 person paul;
 paul.a=5;
 person* philipp;
 philipp->a=4//equals (*paul).a=5, i.e. we follow the pointer
+```
+
+### Functions
+In C, functions are 'pass by values', i.e. the values passed to the function (actual parameters) are copied before being used inside the function (formal parameters).
+```C
+void fun(){} //simple function without return
+double fun(){} //returns a double
+void fun(int a){} //one parameter a
+void fun(int *a){}//pass an array by passing the pointer. Remember that the pointer is copied first. Nevertheless, you can call AND MODIFY the values of the array inside the function, since the referenced values are not copied.
 ```
 
 ## IO
