@@ -165,6 +165,7 @@ mkdir MyEnv; cd MyEnv #make a folder for the environment. Can be in your package
 python3 -m venv env #create virtual environment
 source bin/activate #activate virtual environment
 pip3 install package # install packages. Do not use sudo! Use pip install -r requirements.txt to install version specifically for your package.
+pip freeze > requirements.txt #Export current environment
 deactivate #Deactivate virtual environment
 ```
 ### Conda

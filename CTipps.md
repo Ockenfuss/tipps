@@ -25,11 +25,12 @@ Tipps concerning C
   - [Networking](#networking)
     - [Sockets](#sockets)
 - [Compile](#compile)
-  - [Header files](#header-files)
   - [gcc](#gcc)
     - [gcc flags](#gcc-flags)
   - [Debugging](#debugging)
   - [Profiling](#profiling)
+- [Structure](#structure)
+  - [Header files](#header-files)
 
 <!-- /code_chunk_output -->
 #Language
@@ -188,8 +189,6 @@ int Socket=socket(AF_INET, SOCK_STREAM, 0); //AF_INET: Use Internet (TCP/IP), SO
 ```
 
 # Compile
-## Header files
-Declare every function and type in a separate header file
 
 ## gcc
 ### gcc flags
@@ -205,3 +204,15 @@ perf: profiler for linux
 Eventually, you need to set the kernel parameter: `sudo sysctl -w kernel/perf_event_paranoid=0`
 `perf record --call-graph dwarf ./Main`
 hotspot: GUI to analyze perf output (alternatively, use `perf report`): `hotspot perf.data`
+
+# Structure
+To execute a C program, you always need a main() function:
+```C
+int main(){} //the most simple form without command line arguments
+int main(int argc, char **argv){
+//argc will contain the number of command line arguments
+//argv is the array containing the arguments. argv[0] will contain the name of the compiled program.
+}
+```
+## Header files
+Declare every function and type in a separate header file

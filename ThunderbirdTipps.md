@@ -10,6 +10,7 @@ Some options and tricks, as well as my personal workflow
   - [Shared Windows-Ubuntu usage](#shared-windows-ubuntu-usage)
   - [Thunderbird Folder structure](#thunderbird-folder-structure)
   - [Workflow](#workflow)
+  - [Passwords](#passwords)
 
 <!-- /code_chunk_output -->
 
@@ -42,3 +43,9 @@ So far, I do not use folders for topics or personnes. This would lead to the que
 If possible, I leave all recent (last two years) emails on the IMAP server in order to have them available anytime and anywhere. Emails which require an answer are left in the inbox, everything handled is put in an IMAP folder "Handled".
 Emails older than two years  can be archived in thunderbird to a local folder (Local/Empfangen/EmailAddress), which deletes them on the IMAP server. 
 This folder has to be listed in Settings->Kopien und Ordner->Nachrichtenarchiv for every Email account. Afterwards, just select all the emails to archive and click the archive button in thunderbird. Depending on the mail service, deleted messages are still in a trash folder on the server and count on the disk quota.
+
+## Passwords
+Thunderbird allows to store passwords using an integrated password manager.
+You can view these under Options->Privacy and Security->Passwords.
+To add a password, click the checkbox "remember password" when asked for it.
+If there is no checkbox, you might need to add/edit the option `user_pref("signon.rememberSignons", true);` in the file `prefs.js` (located in your profile folder, see above)

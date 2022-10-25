@@ -15,7 +15,7 @@
     - [Loops](#loops)
       - [For loops](#for-loops)
     - [Boolean operators](#boolean-operators)
-      - [test or [](#test-or-)
+      - [test or [](#test-or)
     - [Comparison operators](#comparison-operators)
   - [Functions](#functions)
     - [Parameters](#parameters)
@@ -34,7 +34,7 @@
   - [Searching](#searching)
   - [Stream Editing](#stream-editing)
   - [Filesystem](#filesystem)
-    - [Partitions & Creation](#partitions--creation)
+    - [Partitions & Creation](#partitions-creation)
     - [Mounting](#mounting)
     - [Formatting](#formatting)
   - [Filepaths](#filepaths)
@@ -55,6 +55,7 @@
   - [Conversion](#conversion)
   - [Date and Time](#date-and-time)
   - [Backup](#backup)
+  - [Slurm](#slurm)
 - [Examples](#examples)
 - [Shells](#shells)
   - [Settings](#settings)
@@ -602,6 +603,14 @@ rsync -uavznP user@server:dir/ local/ #uses ssh (standard) to copy from remote s
 -c # use checksums instead of timestamps
 rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
 rsync -vna --prune-empty-dirs --include "*/" --include "*ext" --exclude "*" from to #Copy all files with extension 'ext' and all folders, but omit the folders without any 'ext'-files
+```
+
+## Slurm
+Tool for job managment on clusters
+```bash
+sbatch myscript.sh #submit job
+squeue -u username #list all running jobs (-u: for a specific user)
+scancel jobid #kill a job
 ```
 
 # Examples
