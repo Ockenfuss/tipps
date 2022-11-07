@@ -112,6 +112,8 @@
     - [Details](#details)
 - [NETCDF](#netcdf)
 - [Xarray](#xarray)
+  - [Creating data](#creating-data)
+  - [Reading & Writing](#reading-writing)
   - [Inspecting data](#inspecting-data)
   - [Selecting data](#selecting-data)
   - [Asignments](#asignments)
@@ -119,6 +121,7 @@
   - [combining/extending data](#combiningextending-data)
   - [Modifying data](#modifying-data)
   - [Computation](#computation)
+  - [Time Series](#time-series)
   - [Broadcasting](#broadcasting-1)
   - [apply_ufunc](#apply_ufunc)
   - [Plotting data](#plotting-data)
@@ -126,6 +129,8 @@
   - [Dask](#dask)
 - [Image processing](#image-processing)
   - [Convolution](#convolution)
+- [IPython Jupyter](#ipython-jupyter)
+  - [Magic commands](#magic-commands)
 - [Creating your own modules](#creating-your-own-modules)
   - [Module Structure](#module-structure)
   - [Special files](#special-files)
@@ -134,6 +139,7 @@
     - [Setup.cfg & Setup.py](#setupcfg-setuppy)
     - [pyproject.toml](#pyprojecttoml)
     - [pre-commit](#pre-commit)
+  - [Resources](#resources)
   - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
 - [Unittests](#unittests)
   - [Execute tests](#execute-tests)
@@ -184,7 +190,7 @@ conda install NAME #Install package
 conda update NAME #Update package
 ```
 A conda environment can be configured in a .yml file. For an existing environment, this file can be created with:
-`conda env export --name testJupyter2 --from-history`
+`conda env export --name MyEnv --from-history`
 ```yml
 name: my-env
 channels:
@@ -448,6 +454,7 @@ p.name #get the filename
 p.suffix #get the file extension as string
 p.stem #get the final path component without the suffix as string
 p.with_suffix('.jpg') #replace file extension. Use '' to remove file extension.
+p.glob('*.py') #get list of paths matching glob in the given directory
 str(p) #the "traditional" string representation of a path
 ```
 For opening file streams:
@@ -941,6 +948,9 @@ https://matplotlib.org/users/colormapnorms.html
 ```python
 import matplotlib.colors as colors
 ax.matshow(Mat, norm=colors.SymLogNorm(linthresh=0.003, linscale=1.0, vmin=-2.0, vmax=2.0))#log scale with symmetric area around 0. linthresh: the value, where the linear range starts. linscale: if 1.0, the linear range has the width of one order of magnitude on the colorbar.
+cmap=im.get_cmap() #get cmap for a specific image/contour/...
+cmap.set_under('green') #set outlier color. Also: set_over()
+im.set_cmap(cmap) #set cmap
 ```
 Make a categorial colorbar with custom categories
 ```python
@@ -1037,7 +1047,6 @@ Imshow is usually the fastest solution. It is for data on a regular grid. Use 'e
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
 im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1))#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
-im.cmap.set_under('k',1.) 
 ```
 ```python
 contour=ax.contour(x,y,z, colors='k')#Contour plot: Draw height lines ('isobares')
@@ -1207,12 +1216,11 @@ https://xarray.pydata.org/en/stable/index.html
 Generalization of pandas to work with higher dimensional data, basically a front-end for the netcdf format. Basic idea: The fundamental element is the DataArray. It describes values of one variable, which implements certain dimensions. A dimension can be seen as one axis in the higherdimensional space the variable exists in. Each dimension usually has a list of coordinates, these are labels which specify certain positions on the axis (think of the axis 'ticks'). Technically, dimensions are just DataArrays itself.
 Multiple DataArrays can be contained in a Dataset. Not every array in a Dataset needs to implement all dimensions. Datasets are usefull because you can perform some operations on many DataArrays at once, e.g. slicing along one dimension, which will slice every DataArray which implements this dimension.
 
+## Creating data
 ```python
 import xarray as xr
 #Datasets
-ds=xr.open_dataset("filename")#open Dataset
 ds=xr.Dataset({'name':DataArray})#create Dataset
-ds.to_netcdf("filename")#save Dataset
 ds.temp#select a Data variable
 ds['temp']=ds.temp.astype(float)#convert a variable or dimension to another type. You have to use the [.] notation for assignments
 ds=ds.squeeze(drop=False)#Fix/Drop all dimensions with length one
@@ -1223,6 +1231,18 @@ da2=da1.copy(data=arr)#create a DataArray with new values based on an existing D
 da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
 da.attrs['units']='km'#long_name and units is used by the .plot() routine
+```
+## Reading & Writing
+```python
+ds=xr.open_dataset("filename.nc")#open Dataset
+ds.to_netcdf("filename.nc")#save Dataset
+```
+Open a single dataset from multiple files. To get this to work, ensure a few things:
+* Indexes of the coordinates should not overlap. E.g., make sure you don`t have daily files with hours [0,...,24]
+* Small differences (typos) in the attributes of variables can prevent the merge. Use combine_attrs here.
+* by default, after the merge with combine_by_coords, all variables will include all coordinates. To prevent this, use data_vars='minimal'
+```python
+ds=xr.open_mfdataset('filename.nc', combine_attrs='override', preprocess=myfunc, data_vars='minimal') 
 ```
 ## Inspecting data
 ```python
@@ -1243,8 +1263,7 @@ da[...,2]#based on coordinate index and dimension index
 da.loc[...,'z']#based on coordinate label and dimension index
 ds[["var1","var2"]]#select variables in a dataset.
 ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
-ds=ds.sel(temp=34.3, time="2021-05-28") #Selection based on coordinate of the dimension. Strings or datetimes can be used for a time coordinate.
-ds.isel(time=(ds.time.dt.dayofyear==100)) #Selection based on a datetime property
+ds=ds.sel(temp=34.3) #Selection based on coordinate of the dimension.
 ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
@@ -1297,7 +1316,14 @@ da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
 ds.mean(dim='time')#calculate mean/sum/...
 ds.groupby("time.dayofyear").mean()#mean over the same days of multiple years
 da.rolling(x=3, center=True, min_periods=2).mean()#rolling mean/std/median/...
+```
+## Time Series
+For the time axis, there exists a lot of special functionality
+```python
+ds.sel(time="2022-05-28", time2=slice("2022-05-28", "2022-05-30")) #selection based on strings
+ds.isel(time=(ds.time.dt.dayofyear==100)) #Selection based on a datetime property
 da.resample(time='24H', base=6, label='right', loffset='1H').mean()#Special for temporal data. Take a 24h mean, starting at 06:00 every day and assign every resulting value the time of the right side + 1H of the 24H interval.
+da.resample(time="10min").interpolate() #Upsample time data
 ```
 
 ## Broadcasting
@@ -1389,6 +1415,22 @@ AcM=sig.convolve2d(A,M, mode='full', boundary='fill', fillvalue=0)
 ```
 boundary: How boundary conditions are treated: fill missing values on the rim with a value, use periodic boundary conditions ('wrap') or mirror the values directly at the rim to the outside ('symm')
 mode: Size of the resulting array, 'full', "valid", or "same"
+
+# IPython Jupyter
+Allows interactive python programming using jupyter notebooks
+```bash
+pip install jupyter
+```
+## Magic commands
+To trigger additional features
+```python
+%prun command #performance profile the following python command
+%cd #change the current working directory of the kernel
+%matplotlib inline #trigger interactive matplotlib plots
+%load_ext autoreload #trigger autoloading packages
+%autoreload 1 #only autoload packages imported with '%aimport package'. 2: autoreload all, except '%aimport -package'
+%aimport package.module #import with autoloading. It seems like '%aimport package' will not autoload submodules
+```
 
 
 # Creating your own modules
@@ -1525,7 +1567,14 @@ repos:
     hooks:
       - id: flake8
 ```
-
+## Resources
+Sometimes, modules need to contain non-python files called "resources". To use them from inside the code, do not use filepaths directly.
+```python
+from importlib import resources
+  traversable=resources.files("module_name") #Module as object or string. Creates a 'traversable' object. Needs python >=3.9
+  with resources.as_file(traversable) as f: #Use as_file to get a context manager which provides a pathlib.Path
+    print(f/"data" / "my_resource.txt")
+```
 
 ## How to write proper docstrings for functions/classes:
 ```python
