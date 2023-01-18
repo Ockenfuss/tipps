@@ -967,13 +967,17 @@ cm = plt.get_cmap('gist_rainbow')#Cmaps: https://matplotlib.org/examples/color/c
 ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
 ```
 ### Modify colormaps
-If you want to present the same information, but in an different style, vmin and vmax are not sufficient. You need to create you own colormap, e.g. as a cutout of a predefined colormap.
 ```python
-import matplotlib.colors as colors
+from matplotlib.colors import ListedColormap
+cmap=ListedColormap(["orange", "green","black"]) #Use mpl colorlabels
+cmap=ListedColormap(np.arange(40).reshape((10,4))) #Use a numpy array specifying rgba colors (shape [N,4])
+```
+
+If you want a cutout of an existing colormap:
+```python
+from matplotlib.colors import LinearSegmentedColormap
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
-    new_cmap = colors.LinearSegmentedColormap.from_list(
-        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
-        cmap(np.linspace(minval, maxval, n)))
+    new_cmap = LinearSegmentedColormap.from_list('trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval), cmap(np.linspace(minval, maxval, n)))
     return new_cmap
 cmap = plt.get_cmap('jet')
 new_cmap = truncate_colormap(cmap, 0.2, 0.8)

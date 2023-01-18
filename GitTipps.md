@@ -48,6 +48,15 @@ git merge <other-branch> #merge the other branch into main.
 git branch -d <other-branch> #Delete the other branch. With -d, git deletes only if everything is merged into main. (-D would delete in every case - dangerous!)
 ```
 
+## Remotes
+```bash
+git remote -v #show remote destinations with urls
+git remote rename old new #rename remote
+git remote add name url #add remote
+git remote remove name #remove remote
+
+```
+
 ## Push/Pull
 ```bash
 git fetch #Download remote changes to see what has happened remotely, but do not touch the state of your local content.

@@ -62,6 +62,7 @@ Their length is determined at runtime, but the size cannot be changed after init
 They are freed automatically
 ```C
 int array[n]; //here, n is not a compile-time constant, but can be e.g. user input.
+int array [n][m]; //multidimensional VLA
 ```
 
 #### Dynamic sized Arrays
@@ -112,6 +113,7 @@ char c=getchar();//Read one char from stdin. If no character is present, wait un
 char string[10];
 gets(string); //Read until newline from stdin. Buffer overflow possible!
 fgets(string, 10, stdin);//Read until newline, but maximal 10 char (including \n and \0)
+getenv(char* name)//Get value of environment variable. Return NULL if not found
 ```
 ### Files
 Get file attributes

@@ -1,5 +1,23 @@
 # Alle Arten von Notizen zu vscode
 
+<!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
+
+<!-- code_chunk_output -->
+
+- [Alle Arten von Notizen zu vscode](#alle-arten-von-notizen-zu-vscode)
+- [Allgemeine Einstelllungen](#allgemeine-einstelllungen)
+- [Keyboard Shortcuts](#keyboard-shortcuts)
+- [Debugging](#debugging)
+- [Special variables for files](#special-variables-for-files)
+- [Language specific configurations](#language-specific-configurations)
+  - [Latex](#latex)
+  - [Python](#python)
+- [Plugins](#plugins)
+  - [VIM](#vim)
+
+<!-- /code_chunk_output -->
+
+
 
 # Allgemeine Einstelllungen
 Datei->Einstelllungen->Einstelllungen
@@ -7,7 +25,7 @@ Datei->Einstelllungen->Einstelllungen
 =>Klick auf Kopieren: Kopiert den ausgewählten Block in entweder: Benutzereinstellungen (gelten immer) oder Arbeitseinstellungen (gelten im gewählten Verzeichnis) => Überschreiben Standardeinstellungen
 Ort: werden damit automatisch im settings.json file im Ordner .vscode gespeichert (Editieren auch hier direkt möglich)
 
-# Shortcuts
+# Keyboard Shortcuts
 einfach: File-preferences-keyboard Shortcuts
 allgemein: keybindings.json (link über obiges menü)
 
@@ -77,6 +95,12 @@ Latex subfile package:
 ## Python
 Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
 Pytonpath: You can place a file `.env` in your workspace folder, which contains environment variables. Those are used by the Python extension e.g. to find packages.
+
+# Plugins
+## VIM
+```txt
+
+```
 
 
 
