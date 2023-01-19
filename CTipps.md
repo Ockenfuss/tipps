@@ -28,6 +28,7 @@ Tipps concerning C
   - [gcc](#gcc)
     - [gcc flags](#gcc-flags)
   - [Debugging](#debugging)
+  - [CMake](#cmake)
   - [Profiling](#profiling)
 - [Structure](#structure)
   - [Header files](#header-files)
@@ -200,6 +201,34 @@ int Socket=socket(AF_INET, SOCK_STREAM, 0); //AF_INET: Use Internet (TCP/IP), SO
 
 ## Debugging
 gdb: Debugger for Linux
+
+## CMake
+CMake is a tool to create makefiles, which compile and link your program.
+It is controlled by a `CMakeLists.txt` file, which can look like this:
+```t
+cmake_minimum_required(VERSION 3.16)
+project(testproj
+    VERSION 1.0
+    DESCRIPTION "A brief CMake experiment"
+    LANGUAGES C)
+# set(CMAKE_BUILD_TYPE Debug)
+
+add_subdirectory(libs)
+
+#Define target 'test'
+add_executable(test src/Test.c) #source file with main() function
+target_link_libraries(test mylibrary) #mylibrary defined in 'libs' folder included above
+target_include_directories(test PUBLIC "${PROJECT_BINARY_DIR}" "${PROJECT_SOURCE_DIR}/libs")
+target_compile_options(test PRIVATE -Wall)
+```
+
+To build using cmake, create a folder `release` (or `build`, `debug`).
+```bash
+mkdir release
+cd release
+cmake -DCMAKE_BUILD_TYPE=Release .. #Release will activate -O3 optimization
+make VERBOSE=1 test #now you can build 'test'. VERBOSE=1 will show you the actual compile commands
+```
 
 ## Profiling
 perf: profiler for linux

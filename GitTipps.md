@@ -1,22 +1,26 @@
 # Git Tipps
+
 <!-- @import "[TOC]" {cmd="toc" depthFrom=1 depthTo=6 orderedList=false} -->
 
 <!-- code_chunk_output -->
 
-- [Git Tipps](#git-tipps)
-- [General](#general)
-  - [Setup](#setup)
-  - [Branches](#branches)
-    - [Merging branches](#merging-branches)
-  - [Push/Pull](#pushpull)
-  - [Rebase](#rebase)
-  - [Miscellaneous commands](#miscellaneous-commands)
-- [Web frontends](#web-frontends)
-  - [Github](#github)
-- [SVN Tipps](#svn-tipps)
-  - [Checkout](#checkout)
+- [Git Tipps](#-git-tipps)
+- [General](#-general)
+  - [Setup](#-setup)
+  - [Branches](#-branches)
+    - [Merging branches](#-merging-branches)
+  - [Push/Pull](#-pushpull)
+  - [Rebase](#-rebase)
+  - [Submodules](#-submodules)
+  - [Miscellaneous commands](#-miscellaneous-commands)
+- [Web frontends](#-web-frontends)
+  - [Github](#-github)
+- [SVN Tipps](#-svn-tipps)
+  - [Checkout](#-checkout)
 
 <!-- /code_chunk_output -->
+
+
 
 Tutorial: https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
 
@@ -73,10 +77,15 @@ git fetch #fetch remote branches
 git rebase origin/master #Apply the commits of your current branch (master) on top of origin/master
 ```
 
-## Miscellaneous commands
-#Rename a file or folder
+## Submodules
 ```bash
-git mv Old/ New/
+git clone --recursive <url> #clone repo including submodules
+git submodule update --init -- <specific relative path to submodule> #clone only one specific submodule
+```
+
+## Miscellaneous commands
+```bash
+git mv Old/ New/ #Rename a file or folder
 ```
 
 

@@ -4,147 +4,147 @@
 
 <!-- code_chunk_output -->
 
-- [Python General](#python-general)
-  - [Installation](#installation)
-  - [Virtual Environments](#virtual-environments)
-    - [Venv](#venv)
-    - [Conda](#conda)
-  - [Code Formatting](#code-formatting)
-  - [General](#general)
-    - [Loops and Conditions](#loops-and-conditions)
-    - [Boolean operators](#boolean-operators)
-    - [Functions:](#functions)
-      - [Type hints](#type-hints)
-    - [Variable reference in Python](#variable-reference-in-python)
-    - [Datatypes](#datatypes)
-      - [Complex Numbers](#complex-numbers)
-    - [Strings](#strings)
-      - [f-Strings](#f-strings)
-      - [Regex](#regex)
-    - [Arrays](#arrays)
-    - [Lists](#lists)
-    - [List comprehensions](#list-comprehensions)
-    - [Slices](#slices)
-    - [Iterables](#iterables)
-      - [Zip](#zip)
-    - [Hashables](#hashables)
-    - [Sets](#sets)
-    - [Dictionaries](#dictionaries)
-  - [IO](#io)
-    - [File paths](#file-paths)
-      - [Glob](#glob)
-      - [Temporary Files](#temporary-files)
-      - [Shell](#shell)
-    - [CLI Arguments](#cli-arguments)
-  - [Exceptions](#exceptions)
-  - [Object Orientation](#object-orientation)
-    - [Decorators](#decorators)
-    - [Get/Set](#getset)
-    - [Operator overloading](#operator-overloading)
-  - [Datetime module](#datetime-module)
-    - [Creation](#creation)
-    - [Operations](#operations)
-    - [Zeiten Plotten](#zeiten-plotten)
-  - [time Module](#time-module)
-  - [Serialization](#serialization)
-    - [JSON](#json)
-    - [Pickle](#pickle)
-- [Numpy](#numpy)
-    - [Numpy I/O](#numpy-io)
-    - [Numpy Arrays](#numpy-arrays)
-    - [Indexing](#indexing)
+- [Python General](#-python-general)
+  - [Installation](#-installation)
+  - [Virtual Environments](#-virtual-environments)
+    - [Venv](#-venv)
+    - [Conda](#-conda)
+  - [Code Formatting](#-code-formatting)
+  - [General](#-general)
+    - [Loops and Conditions](#-loops-and-conditions)
+    - [Boolean operators](#-boolean-operators)
+    - [Functions:](#-functions-)
+      - [Type hints](#-type-hints)
+    - [Variable reference in Python](#-variable-reference-in-python)
+    - [Datatypes](#-datatypes)
+      - [Complex Numbers](#-complex-numbers)
+    - [Strings](#-strings)
+      - [f-Strings](#-f-strings)
+      - [Regex](#-regex)
+    - [Arrays](#-arrays)
+    - [Lists](#-lists)
+    - [List comprehensions](#-list-comprehensions)
+    - [Slices](#-slices)
+    - [Iterables](#-iterables)
+      - [Zip](#-zip)
+    - [Hashables](#-hashables)
+    - [Sets](#-sets)
+    - [Dictionaries](#-dictionaries)
+  - [IO](#-io)
+    - [File paths](#-file-paths)
+      - [Glob](#-glob)
+      - [Temporary Files](#-temporary-files)
+      - [Shell](#-shell)
+    - [CLI Arguments](#-cli-arguments)
+  - [Exceptions](#-exceptions)
+  - [Object Orientation](#-object-orientation)
+    - [Decorators](#-decorators)
+    - [Get/Set](#-getset)
+    - [Operator overloading](#-operator-overloading)
+  - [Datetime module](#-datetime-module)
+    - [Creation](#-creation)
+    - [Operations](#-operations)
+  - [time Module](#-time-module)
+  - [Serialization](#-serialization)
+    - [JSON](#-json)
+    - [Pickle](#-pickle)
+- [Numpy](#-numpy)
+    - [Numpy I/O](#-numpy-io)
+    - [Numpy Arrays](#-numpy-arrays)
+    - [Indexing](#-indexing)
     - [Basic Slicing](#basic-slicing)
-    - [Numpy sortieren](#numpy-sortieren)
-  - [Numpy Array Transformations](#numpy-array-transformations)
-    - [Broadcasting](#broadcasting)
-      - [Numpy Array reshape](#numpy-array-reshape)
-    - [stack/extend/combine/transpose numpy arrays](#stackextendcombinetranspose-numpy-arrays)
-    - [combine multidimensional arrays](#combine-multidimensional-arrays)
-    - [masked arrays](#masked-arrays)
-  - [Numpy Datentypen](#numpy-datentypen)
-  - [Numpy Funktionen](#numpy-funktionen)
-  - [Statistics](#statistics)
-  - [Fourier Transformations](#fourier-transformations)
-- [Scipy](#scipy)
-  - [Statistics](#statistics-1)
-    - [Distribution functions](#distribution-functions)
-  - [Interpolation](#interpolation)
-    - [Onedimensional](#onedimensional)
-    - [Multidimensional](#multidimensional)
-- [Pyplot/Matplotlib](#pyplotmatplotlib)
-    - [Create plot](#create-plot)
-    - [Axen und Ticks](#axen-und-ticks)
-    - [Beschriftung mit Latex](#beschriftung-mit-latex)
-    - [Legende](#legende)
-    - [Lines and colors](#lines-and-colors)
-      - [Specifiying colors](#specifiying-colors)
-      - [Linestyle cycle](#linestyle-cycle)
-    - [colorbar](#colorbar)
-      - [Create colorbar](#create-colorbar)
-      - [Colorbar limits and scale](#colorbar-limits-and-scale)
-      - [Color cycle setzen](#color-cycle-setzen)
-    - [Modify colormaps](#modify-colormaps)
-    - [Zweite Axe rechts:](#zweite-axe-rechts)
-    - [Figuren](#figuren)
-    - [Saving figures](#saving-figures)
-    - [Backend](#backend)
-    - [Arange subplots](#arange-subplots)
-    - [Text and annotations](#text-and-annotations)
-    - [Plot types](#plot-types)
-      - [Lines, points and bars](#lines-points-and-bars)
-      - [Histograms](#histograms)
-      - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
-    - [Animationen](#animationen)
-    - [Interaction](#interaction)
-  - [Subprocess](#subprocess)
-- [Pandas](#pandas)
-    - [Create Data Frame](#create-data-frame)
-    - [read from file](#read-from-file)
-    - [acces element](#acces-element)
-    - [boolean indexing](#boolean-indexing)
-    - [get columns](#get-columns)
-    - [Categories in one column](#categories-in-one-column)
-    - [iterration over rows](#iterration-over-rows)
-    - [Groupby](#groupby)
-- [Geopandas](#geopandas)
-  - [Maps (Contextily)](#maps-contextily)
-    - [Plot geopandas](#plot-geopandas)
-    - [Details](#details)
-- [NETCDF](#netcdf)
-- [Xarray](#xarray)
-  - [Creating data](#creating-data)
-  - [Reading & Writing](#reading-writing)
-  - [Inspecting data](#inspecting-data)
-  - [Selecting data](#selecting-data)
-  - [Asignments](#asignments)
-  - [Coordinates](#coordinates)
-  - [combining/extending data](#combiningextending-data)
-  - [Modifying data](#modifying-data)
-  - [Computation](#computation)
-  - [Time Series](#time-series)
-  - [Broadcasting](#broadcasting-1)
-  - [apply_ufunc](#apply_ufunc)
-  - [Plotting data](#plotting-data)
-  - [HVPlot](#hvplot)
-  - [Dask](#dask)
-- [Image processing](#image-processing)
-  - [Convolution](#convolution)
-- [IPython Jupyter](#ipython-jupyter)
-  - [Magic commands](#magic-commands)
-- [Creating your own modules](#creating-your-own-modules)
-  - [Module Structure](#module-structure)
-  - [Special files](#special-files)
-    - [Init](#init)
-    - [Requirements.txt](#requirementstxt)
-    - [Setup.cfg & Setup.py](#setupcfg-setuppy)
-    - [pyproject.toml](#pyprojecttoml)
-    - [pre-commit](#pre-commit)
-  - [Resources](#resources)
-  - [How to write proper docstrings for functions/classes:](#how-to-write-proper-docstrings-for-functionsclasses)
-- [Unittests](#unittests)
-  - [Execute tests](#execute-tests)
-- [Profiling](#profiling)
-  - [cProfile and pstats](#cprofile-and-pstats)
+    - [Numpy sortieren](#-numpy-sortieren)
+  - [Numpy Array Transformations](#-numpy-array-transformations)
+    - [Broadcasting](#-broadcasting)
+      - [Numpy Array reshape](#-numpy-array-reshape)
+    - [stack/extend/combine/transpose numpy arrays](#-stackextendcombinetranspose-numpy-arrays)
+    - [combine multidimensional arrays](#-combine-multidimensional-arrays)
+    - [masked arrays](#-masked-arrays)
+  - [Numpy Datentypen](#-numpy-datentypen)
+  - [Numpy Funktionen](#-numpy-funktionen)
+  - [Statistics](#-statistics)
+  - [Fourier Transformations](#-fourier-transformations)
+- [Scipy](#-scipy)
+  - [Statistics](#-statistics-1)
+    - [Distribution functions](#-distribution-functions)
+  - [Interpolation](#-interpolation)
+    - [Onedimensional](#-onedimensional)
+    - [Multidimensional](#-multidimensional)
+- [Pyplot/Matplotlib](#-pyplotmatplotlib)
+    - [Create plot](#-create-plot)
+    - [Axes and Ticks](#-axes-and-ticks)
+    - [Beschriftung mit Latex](#-beschriftung-mit-latex)
+    - [Legende](#-legende)
+    - [Dates](#-dates)
+    - [Lines and colors](#-lines-and-colors)
+      - [Specifiying colors](#-specifiying-colors)
+      - [Linestyle cycle](#-linestyle-cycle)
+    - [colorbar](#-colorbar)
+      - [Create colorbar](#-create-colorbar)
+      - [Colorbar limits and scale](#-colorbar-limits-and-scale)
+      - [Color cycle setzen](#-color-cycle-setzen)
+    - [Modify colormaps](#-modify-colormaps)
+    - [Zweite Axe rechts:](#-zweite-axe-rechts)
+    - [Lines and Shapes](#-lines-and-shapes)
+    - [Saving figures](#-saving-figures)
+    - [Backend](#-backend)
+    - [Arange subplots](#-arange-subplots)
+    - [Text and annotations](#-text-and-annotations)
+    - [Plot types](#-plot-types)
+      - [Lines, points and bars](#-lines-points-and-bars)
+      - [Histograms](#-histograms)
+      - [Images (2D Verteilung) plotten](#-images-2d-verteilung-plotten)
+    - [Animationen](#-animationen)
+    - [Interaction](#-interaction)
+  - [Subprocess](#-subprocess)
+- [Pandas](#-pandas)
+    - [Create Data Frame](#-create-data-frame)
+    - [read from file](#-read-from-file)
+    - [Acces elements](#-acces-elements)
+    - [get columns](#-get-columns)
+    - [Categories in one column](#-categories-in-one-column)
+    - [iterration over rows](#-iterration-over-rows)
+    - [Groupby](#-groupby)
+- [Geopandas](#-geopandas)
+  - [Maps (Contextily)](#-maps-contextily)
+    - [Plot geopandas](#-plot-geopandas)
+    - [Details](#-details)
+- [MetPy](#-metpy)
+- [NETCDF](#-netcdf)
+- [Xarray](#-xarray)
+  - [Creating data](#-creating-data)
+  - [Reading & Writing](#-reading--writing)
+  - [Inspecting data](#-inspecting-data)
+  - [Selecting data](#-selecting-data)
+  - [Asignments](#-asignments)
+  - [Coordinates](#-coordinates)
+  - [combining/extending data](#-combiningextending-data)
+  - [Modifying data](#-modifying-data)
+  - [Computation](#-computation)
+  - [Time Series](#-time-series)
+  - [Broadcasting](#-broadcasting-1)
+  - [apply_ufunc](#-apply_ufunc)
+  - [Plotting data](#-plotting-data)
+  - [HVPlot](#-hvplot)
+  - [Dask](#-dask)
+- [Image processing](#-image-processing)
+  - [Convolution](#-convolution)
+- [IPython Jupyter](#-ipython-jupyter)
+  - [Magic commands](#-magic-commands)
+- [Creating your own modules](#-creating-your-own-modules)
+  - [Module Structure](#-module-structure)
+  - [Special files](#-special-files)
+    - [Init](#-init)
+    - [Requirements.txt](#-requirementstxt)
+    - [Setup.cfg & Setup.py](#-setupcfg--setuppy)
+    - [pyproject.toml](#-pyprojecttoml)
+    - [pre-commit](#-pre-commit)
+  - [Resources](#-resources)
+  - [How to write proper docstrings for functions/classes:](#-how-to-write-proper-docstrings-for-functionsclasses)
+- [Unittests](#-unittests)
+  - [Execute tests](#-execute-tests)
+- [Profiling](#-profiling)
+  - [cProfile and pstats](#-cprofile-and-pstats)
 
 <!-- /code_chunk_output -->
 
@@ -158,6 +158,7 @@
 Pip: `sudo apt install python3-Pip`
 install package with pip: use `--user` flag if you have problems
 python3 -m pip install package #install packages. Use package==1.0.1 to install a specific version
+pip uninstall package #remove package
 pip3 list #list installed packages
 pip3 freeze > requirements.txt #list installed and version, in the form for requirements.txt
 python3 -m pip install --upgrade pip #Upgrade pip. Here, it is necessary to call pip via `python3 -m`, since this loads the module into memory before execution. This is necessary, since pip will be uninstalled first and then the new version is installed.
@@ -636,18 +637,6 @@ t2=t.replace(hour=8,month=8) #Create new datetime from existing
 ```
 
 
-### Zeiten Plotten 
-"time" muss dabei ein Array aus datetime-Objekten sein.
-```python
-import matplotlib.dates as dates
-ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))#Specify (major) label format. Use usual datetime formats like %b (Jan), %Y (2021), %m (1),...
-ax.xaxis.set_major_locator(dates.MinuteLocator(interval=2))#Plotting intervals. Similar: MonthLocator
-```
-
-Wichtig: Wenn Daten außer einer Uhrzeit auch ein Datum enthalten, muss dieses in den Limits auch angegeben werden.
-```python
-ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%Y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%Y %H:%M:%S"))
-```
 
 ## time Module
 
@@ -870,22 +859,26 @@ fig.suptitle('This is a somewhat long figure title', fontsize=16)
 ```
 
 
-### Axen und Ticks
+### Axes and Ticks
 ```python
 ax.set_ylim(1e-7,5e1)#Limits
 ax.invert_yaxis()#Invert axis
 ax.set_xticks([1,2,3], minor=False)#Ticks setzen. ax.get_xticks() liefert ticks
 ax.set_xticklabels(["A12", "B12", "C12"], rotation=90, minor=False)#use [] to turn off labels
-ax.set_major_formatter("{x} km") # strings can be used as formatter
 ax.tick_params(labelsize=16)
 ax.yaxis.tick_right()#Ticks rechts setzen
 a.xaxis.tick_top()#Ticks oben setzen
 a.xaxis.set_label_position('top')#Label open setzen
 ax.get_yaxis().set_visible(False)#hide ticks/axis
-
-ax2.set(ylabel="ratio", title="Titel")#Beschriftung
+ax.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter. Positions according to xticks major/minor
 ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
+#Tick formatters
+ax.set_major_formatter("{x} km") # strings can be used as formatter
+import matplotlib.ticker as ticker #Define a custom formatter
+def myfmt(x, pos): #x: value, pos: position
+  return x.to_string()
+ax.set_major_formatter(ticker.FuncFormatter(fmt))
 ```
 ### Beschriftung mit Latex
 ```python
@@ -910,6 +903,17 @@ leg1=ax.legend()
 leg2=ax.legend()
 ax.add_artist(leg1)
 ax.add_artist(leg2)
+```
+### Dates
+```python
+import matplotlib.dates as dates
+ax.xaxis.set_major_formatter(dates.DateFormatter('%H:%M'))#Specify (major) label format. Use usual datetime formats like %b (Jan), %Y (2021), %m (1),...
+ax.xaxis.set_major_locator(dates.MinuteLocator(interval=2))#Plotting intervals. Similar: MonthLocator
+```
+
+You can specify limits & Co in datetimes now.
+```python
+ax.set_xlim(datetime.datetime.strptime("8.21.2017 15:00","%m.%d.%Y %H:%M:%S"),datetime.datetime.strptime("8.21.2017 16:00","%m.%d.%Y %H:%M:%S")) #Important: you have to specify date and time, if the data contains both!
 ```
 
 ### Lines and colors
@@ -937,6 +941,7 @@ cbar=fig.colorbar(im, ax=ax, orientation='vertical')#In this case, the colorbar 
 #Manual way: If there are multiple axes and we want to assign a colorbar to one, we can create a small axes next to the axes with the image:
 cbar.set_label("Label")
 cbar.ax.tick_params(labelsize=10)
+cbar=fig.colorbar(format=formatter(), ticks=[0,1,2]) #custom tick labels. See Axes and Ticks for information on formatters
 from mpl_toolkits.axes_grid1 import make_axes_locatable
 def add_colorbar(fig, ax, image, **kwargs):
   divider = make_axes_locatable(ax)#If there are multiple axes 0,1,2,3...
@@ -988,7 +993,7 @@ new_cmap = truncate_colormap(cmap, 0.2, 0.8)
 ax2=ax.twinx()#twiny() for axis on top
 ```
 
-### Figuren
+### Lines and Shapes
 ```python
 ax.axvline(x=20)#axhline(y=20) create a vertical or horizontalline
 ax.axvspan(1,2,alpha=0.5, color='r') #Highlight an area. Similar: axhspan
@@ -1111,8 +1116,6 @@ sp.call("echo test", shell=True)#Simple execution of string
 ```
 
 # Pandas
-My personal style guide: Stick to numpy arrays. If necessary (for comfort), make up columnnames like A=0, B=1 so you can call array[4,A].
-
 ### Create Data Frame
 ```python
 test=[[4,5,6],[1,2,3]]
@@ -1123,19 +1126,13 @@ testdf=pd.DataFrame(test,columns=['A','B','C'])
 data=pd.read_csv("FileName")
 ```
 
-### acces element
-both work with boolean indexing
+### Acces elements
 ```python
-data.loc['A','B']#if you use column/row names
-data.iloc[1:2,3:4]#if you use indices
+df.loc['A','B']#if you use column/row names
+df.iloc[1:2,3:4]#if you use indices
+df[(s < -1) | (s > 0.5)] #boolean indexing
 ```
 important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
-
-### boolean indexing
-```python
- s[(s < -1) | (s > 0.5)]
-```
-
 ### get columns
 ```python
 datadp.columns
@@ -1170,9 +1167,6 @@ for name, group in enumerate(datgroup):
 
 # Geopandas
 Library on top of pandas and shapely, which allows to plot maps. Basic idea: A pandas dataframe with a special column "geometry", which contains shapely objects (Points, LineStrings or Polygons), which can represent cities, streets or countries.
-```python
-
-```
 
 ## Maps (Contextily)
 However, if you want to plot data on a map, you need more than geopandas, since geopandas is basically just shapely with coordinate transformations. Maps of the earth usually consist of tiles, which are provided by different providers like e.g. OSM. To download such tiles and add them to a matplotlib figure, `contextily` is made.
@@ -1194,6 +1188,13 @@ sources=[i for i in dir(ctx.tile_providers) if i[0]!='_'] #list all providers in
 srcurl=getattr(ctx.sources, sources[2]) #select a provider
 img, ext=ctx.bounds2img(w, s, e, n, 6, url=srcurl, ll=False)#If you want the map as an array image
 plt.imshow(img, extent=ext)
+```
+
+# MetPy
+```python
+from metpy.calc import relative_humidity_from_specific_humidity
+from metpy.units import units
+relative_humidity=relative_humidity_from_specific_humidity(da.pressure*units.Pa,da.temperature*units.degK,da.humidity).metpy.convert_units('percent') #metpy can operate on xarray DataArrays. It provides the .metpy accessor.
 ```
 # NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
@@ -1319,6 +1320,7 @@ da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
 ```python
 ds.mean(dim='time')#calculate mean/sum/...
 ds.groupby("time.dayofyear").mean()#mean over the same days of multiple years
+ds.groupby_bins('height', bins=[0,10,23], labels=[0,10]).mean() #aggregate using custom bins along an axis.
 da.rolling(x=3, center=True, min_periods=2).mean()#rolling mean/std/median/...
 ```
 ## Time Series

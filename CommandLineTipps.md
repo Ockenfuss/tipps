@@ -56,6 +56,7 @@
   - [Date and Time](#date-and-time)
   - [Backup](#backup)
   - [Slurm](#slurm)
+  - [Netcdf](#netcdf)
 - [Examples](#examples)
 - [Shells](#shells)
   - [Settings](#settings)
@@ -251,6 +252,7 @@ coproc sleep 10 #start command in background. Allows for communication.
 Usefull to feed stdout from one command as arguments to another command
 ```bash
 command1 | xargs -p -i -t command2 -flag1 {} -flag2 #execute command2 with each output line from command1. With -i, "{}" is replaced by the output from command1. With -p, you get asked before execution. -t: verbose (print command)
+command1 | xargs -t -i sh -c "command2 {} | grep word" #you can execute more complex commands like pipes using sh -c
 ```
 
 ## User managment
@@ -405,7 +407,8 @@ Search within files
 grep abc file #search for abc within file
 grep '^[abc]' file #grep accepts simple regex
 egrep 'ab|cd' -o file #egrep necessary for extended regular expressions. -o: Show only the regex match
-grep -v 'abc' file # -v: invert
+grep -v -l 'abc' file*.txt # -v: invert -l: print only filename of matching file
+grep -L 'abc' file.txt #print only non-matching files
 grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive -n: line number -i: ignore case --include: search only within if GLOB matches
 ```
 ## Stream Editing
@@ -611,6 +614,12 @@ Tool for job managment on clusters
 sbatch myscript.sh #submit job
 squeue -u username #list all running jobs (-u: for a specific user)
 scancel jobid #kill a job
+```
+
+## Netcdf
+```bash
+ncdump -h file.nc  #show variables, attributes and dimensions
+ncatted -O -a attribute,variable,o,c,"Text" file.nc #Change attributes. Syntax: attribute,variable,mode,type,value. Mode can be a:append, o:overwrite,... type can be c:char,... Option -O: overwrite original file or -o new.nc
 ```
 
 # Examples

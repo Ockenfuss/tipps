@@ -18,6 +18,7 @@
 - [Neovim and Plugins](#neovim-and-plugins)
   - [Nerdtree](#nerdtree)
   - [Easymotion](#easymotion)
+  - [Surround](#surround)
 - [Pure vi](#pure-vi)
 
 <!-- /code_chunk_output -->
@@ -115,6 +116,8 @@ yy #Yank line
 ```
 . #Repeat command
 q #Start recording
+<c-a> #increment number under cursor or first number in line
+g <c-a> #create a sequence out of numbers in visual selection
 ```
 
 ## Marks
