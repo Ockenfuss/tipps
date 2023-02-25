@@ -512,7 +512,9 @@ Try statement
 ```python
 try:
   somecode()
-except KeyError: #multiple exceptions: except (KeyError, ValueError, ...):
+except KeyError:
+except (KeyError, ValueError):  #multiple exceptions
+except KeyError as e: #you can catch the exception which was thrown
   someOtherCode #Can use 'pass' to jump out of this section
 else:
   code #if no exception was thrown
@@ -1629,7 +1631,7 @@ Best to use the command line interface. Take the example from
 ```bash
 cd new_project
 python3 -m unittest discover #All tests in test directory. use -t testdir if not named test.
-python3 -m unittest test.test_antigravity #one specific test (python notation). Remember to have an __init__.py in your test and probably subfolders present.
+python3 -m unittest test.test_antigravity #one specific test (python notation). Remember to have an __init__.py in your test and probably subfolders present. The __init__.py can be empty
 ```
 ```Makefile
 unittest:
