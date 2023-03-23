@@ -363,6 +363,8 @@ arr=[expr(i) if condition(i) else expression2(i) for i in indices]
 ### Slices
 ```python
 sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
+sl=slice(2) #Specifies only 'stop'
+sl=slice(1,None) #you can create arbitrary open slices by inserting None
 sl.start#slice objects have members start, step and stop
 ```
 
@@ -856,8 +858,8 @@ Each Axes object can have for example two or three Axis-objects, the actual "axe
 ### Create plot
 ```python
 fig,ax=plt.subplots()
-fig2, ax2=plt.subplots(nrows=2, ncols=2)#ax2: either 1D or 2D array => use atleast2d().T if necessary
-fig.suptitle('This is a somewhat long figure title', fontsize=16)
+fig, ax=plt.subplots(nrows=2, ncols=2, layout='tight', figsize=(8,4), dpi=150)#ax: 1D or 2D array numpy array of axes
+fig.suptitle('Figure title', fontsize=16)
 ```
 
 
@@ -1057,7 +1059,7 @@ im=ax2.hist2d(x,y,bins=100, weights=values, range=(-60,60), cmin=1)[3]#histogram
 Imshow is usually the fastest solution. It is for data on a regular grid. Use 'extent' to set the axes coordinates if they should be something else than pixels. Things become tricky together with 'aspect', which is like a scaling factor height=aspect*width. By default, aspect=1, i.e. the PIXELS are kept squares IN AXES COORDINATES. E.g. if your xaxis is 1000 (m) and your y axis 1 (m), the image will appear extremly elongated. In this case, set aspect to 1000 and the yaxis will be stretched, such that the RESULTING IMAGE looks like a square.
 ```python
 from matplotlib.colors import LogNorm#falls mit LogNorm
-im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1))#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
+im=ax.imshow(b, cmap='gray', interpolation='none', norm=LogNorm(), extent=(0,1,0,1), origin='upper')#b: 2D Array mit Pixelwerten. Use "extent" to give the image a coordinate measure other than just pixels.
 ```
 ```python
 contour=ax.contour(x,y,z, colors='k')#Contour plot: Draw height lines ('isobares')
@@ -1133,6 +1135,7 @@ data=pd.read_csv("FileName")
 df.loc['A','B']#if you use column/row names
 df.iloc[1:2,3:4]#if you use indices
 df[(s < -1) | (s > 0.5)] #boolean indexing
+for i,r in df.iterrows(): #iterate over rows
 ```
 important: iloc chooses based on the POSITION, loc is based on the LABEL! Can be confusing because, e.g. for rows, integers can be labels as well.
 ### get columns
@@ -1238,6 +1241,12 @@ da2=da1.copy(data=arr)#create a DataArray with new values based on an existing D
 da.name='radiance'#DataArrays can have names to identify them in Datasets
 da.attrs['long_name']='lorem ipsum'#DataArrays can store attributes
 da.attrs['units']='km'#long_name and units is used by the .plot() routine
+
+#New data array similar to an existing one
+new=xr.zeros_like(old)
+new=xr.ones_like(old)
+new=full_like(old, fill_value=1.23)
+new=old.copy(data=new_values) #nice trick to make a new array from given values with the same attributes, coordinates, etc. as an existing one
 ```
 ## Reading & Writing
 ```python
@@ -1367,8 +1376,8 @@ da.plot(x='a', hue='b', col='c', row='d') #4D
 da.plot.pcolormesh(x='a', y='b',cmap='jet') #pcolormesh is the default for 2D
 #Imshow is a faster alternative to pcolormesh. Allows 3D Data to be interpreted as rgb
 aspect=float(rgb.x.max()/rgb.y.max())
-ax=da.plot.imshow(size=10, aspect=aspect,x='x', y='y', rgb='rgb', interpolation='antialiased')
-fig=ax.get_figure()
+ax=da.plot.imshow(size=10, aspect=aspect,x='x', y='y', rgb='rgb', interpolation='antialiased') #will create a new figure + axis
+fig=ax.get_figure() #get figure
 ```
 
 ## HVPlot
@@ -1434,7 +1443,8 @@ To trigger additional features
 ```python
 %prun command #performance profile the following python command
 %cd #change the current working directory of the kernel
-%matplotlib inline #trigger interactive matplotlib plots
+%matplotlib widget #trigger interactive matplotlib plots
+%matplotlib inline #plots will be inlined. Without inline, new plot calls below will just update the plot above
 %load_ext autoreload #trigger autoloading packages
 %autoreload 1 #only autoload packages imported with '%aimport package'. 2: autoreload all, except '%aimport -package'
 %aimport package.module #import with autoloading. It seems like '%aimport package' will not autoload submodules
@@ -1549,7 +1559,7 @@ realpython = "reader.__main__:main"
 ```
 
 ### pre-commit
-`.pre-commit-config.yaml` contains the configurations for the `pre-commit` module. Pre-commit help you to automatically set up git hooks, which are executed before every commit to format or test your code. Pre-commit automatically downloads the specified modules from github and executes them, if they follow certain criteria (e.g. python modules must define an entry point). Pre-commit is itself a python module, but could theoretically be used with any programming language.
+`.pre-commit-config.yaml` contains the configurations for the `pre-commit` module. Pre-commit helps you to automatically set up git hooks, which are executed before every commit to format or test your code. Pre-commit automatically downloads the specified modules from github and executes them, if they follow certain criteria (e.g. python modules must define an entry point). Pre-commit is itself a python module, but could theoretically be used with any programming language.
 ```bash
 cd your_package
 touch requirements_dev.txt #write 'pre-commit' in the development requirements.
@@ -1597,8 +1607,10 @@ def complex(real=0.0, imag=0.0):
     if imag == 0.0 and real == 0.0:
         return complex_zero
 ```
-# Unittests
-https://realpython.com/python-testing/
+
+# Testing
+## Unittest
+Unittest is part of the python standard library. See this [realpython article](https://realpython.com/python-testing/).
 
 General folder structure
 ```txt
@@ -1625,7 +1637,7 @@ class SomeTests(ut.TestCase):
   def test_something(self):#Must start with test_
     #testing with asserts
 ```
-## Execute tests
+### Execute tests
 Best to use the command line interface. Take the example from 
 [the importing modules section](#module-structure)
 ```bash
@@ -1642,6 +1654,28 @@ unittest introduces a few improved assertions:
 ```python
 with self.assertRaises(SomeException): MyFunc(arguments)#Test for exception
 ```
+
+## Pytest
+Alternative to unittest. Claims to need less boilerplate code and allows to use normal assertions (instead of self.assert).
+```python
+import pytest
+@pytest.fixture
+def my_fixture(): #define fixtures with the fixture decorator
+  return 1
+
+def my_test(my_fixture): #you use fixtures by passing the function reference
+  assert my_fixture==1 #You do NOT call the fixture function to use the return value! This is special with pytest
+```
+### Parameters
+Parameters can be used to execute a test multiple times with different input parameters
+```python
+pytest.param(my_input_parameter, marks=pytest.mark.xfail()) #create a parameter with a mark, in this case 'xfail'
+```
+### Marks
+```python
+pytest.mark.xfail() #indicate that this test/parameter/... is expected to fail. Use this for a feature, which should work in the future, but is currently not implemented.
+```
+
 
 
 # Profiling

@@ -27,3 +27,6 @@ Native Markdown does not support flowcharts, but you can easily create them usin
 └────┘        └────┘
 ```
 
+## Github flavoured Markdown
+Github allows for some special syntax, e.g. for references
+* `user/repo#number` reference an issue in another project. This will create a notification in the referenced issue.

@@ -20,6 +20,7 @@
   - [Easymotion](#easymotion)
   - [Surround](#surround)
 - [Pure vi](#pure-vi)
+- [Helpful tricks](#helpful-tricks)
 
 <!-- /code_chunk_output -->
 
@@ -96,6 +97,13 @@ n #next occurence
 s,abc,def,g #The character that follows 's' is the delimiter character
 %s/a/b/g # with % , apply the replace to all lines (whole file)
 ```
+A useful pattern for replacement is 'cgn'
+```
+/test #search for your word
+cgn #this will put you in replace mode on the searched pattern. Type your new word
+n #select the next occurence
+. #replace it with the same word
+```
 
 ## Copy-Paste
 ```
@@ -150,3 +158,7 @@ S <desired> #surround selection in visual mode
 :syntax on #syntax highlighting
 ```
 
+# Helpful tricks
+```
+:%s/\n\n/\n/g #delete blank lines
+```
