@@ -72,6 +72,12 @@ If you do not know the array size at compile time, you need to use dynamic memor
 int *array = (int *) malloc(size * sizeof(int)); //allocate a fixed number of bytes in  memory without cleaning and return a pointer to it
 double *array= (double *)calloc(length, sizeof(double)); //initialize with 0
 free(array); //free memory after usage. 
+//Multidimensional
+int **a;
+a = malloc(10 * sizeof(*a));
+for (int i = 0; i < 10; i++) {
+  a[i] = malloc(20 * sizeof(a[0]));
+}
 ```
 
 ### Structures
