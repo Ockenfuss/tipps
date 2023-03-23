@@ -602,10 +602,11 @@ date +"%-m" #date allows several flags and a width specifier after '%', influenc
 rsync -av from to #copy folder 'from' to 'to', resulting in a folder to/from on the target. -a: all subdirectories with attributes. -v: verbose.
 rsync -av from/ to #For the source, it makes a difference if there is a trailing slash: With slash, the content of the folder `from` is copied into `to`, but not the folder itself.
 rsync from to/ #Without a trailing slash in the source, an additional folder 'to/from/' is created, i.e. not only the content, but the folder with content is copied.
-rsync -uavznP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress. -n: dry-run without actually copying files
+rsync -uavznP user@server:dir/ local/ #uses ssh (standard) to copy from remote server. -z: Use compression to reduce amount of data. -P: keep partially transferred files to resume if connection is broken and show progress. -n: dry-run without actually copying files -u: skip files that are newer on the receiver
 -c # use checksums instead of timestamps
 rsync -avzR /dir1/./dir2/dir3/ dest/ #-R: this will create the directories dest/dir2 and dest/dir2/dir3.
 rsync -vna --prune-empty-dirs --include "*/" --include "*ext" --exclude "*" from to #Copy all files with extension 'ext' and all folders, but omit the folders without any 'ext'-files
+rsync --files-from Filename dest #read sourcefiles from file
 ```
 
 ## Slurm
@@ -651,4 +652,13 @@ tmux new -s SessionName #Create new session
 <Leader> d #Detach from session
 <Leader> : #start mode to enter commands (like in vim)
 <Leader> : kill-session #close all panes and quit session
+tmux source-file ~/.tmux.conf #reload tmux conf
+```
+Tmux is controlled via a `.tmux.conf` file.
+
+How to set format options, e.g. for the status bar. See `man tmux`, search FORMATS
+```bash
+setw -g automatic-rename-format '#{?condition,optionA, optionB}' #ternary operator
+setw -g automatic-rename-format '#{m:regex,#{pane_current_path}}' #return 1 if regex matches current pane path
+setw -g automatic-rename-format '#{?condition,#[bg=colour40],}' #conditional styling
 ```
