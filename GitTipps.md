@@ -37,10 +37,12 @@ git config --list #see all settings
 
 ## Branches
 ```bash
+git branch #show all local branches with active one marked by '*'
 git branch -a #Show available branches
 git checkout -b newBranch #Create a new branch
 git switch -c newBranch #switch to a new branch (-c: create if not existent). Your unstaged changes will be taken with you to the new branch. Like git checkout <branchname>.
 git branch -d branchname #Delete a branch (only if its commits are merged in another branch before)
+git branch --set-upstream-to=origin/<branchname> <local_branchname> #set the local branch to track a remote branch. This way, you don't have to type 'git pull <remote> <local> everytime'
 ```
 
 ### Merging branches
