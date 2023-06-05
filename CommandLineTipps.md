@@ -393,7 +393,8 @@ cut -c1-10 #print only first to tenth character from line. Also useful to trim/r
 ## Searching
 Search after files
 ```bash
-find /dir1 -name "*.sh" -maxdepth 3 -exec cp {} dir1/ \;#: for searching a file/folder
+find dirname -name "*.sh" #search specific files below a directory
+find . -maxdepth 3 #limit search depth
 find . -path "*/dir/*.jpg" #search full path
 find . -type f #file type: file, dir, block, char, link ...
 find . -size +5M -size -10M #between 5 and 10 MB
@@ -401,6 +402,10 @@ find . -mtime -1 #modification time less than 1*24h
 find . -newer file #files with modification time newer than file
 find . -user 1000 #Owner uid. Call 'id' or see /etc/passwd to find yours
 find . -perm 0755 #permissions
+find . -not -name "abc" #boolean negation: invert match with 'not'
+#do something with files:
+find . -name 'abc*' -delete #delete matches
+find . -name 'abc*' -exec cp {} dir1/ \;  #execute a command on every file
 ```
 Search within files
 ```bash
@@ -643,6 +648,18 @@ ncatted -O -a attribute,variable,o,c,"Text" file.nc #Change attributes. Syntax: 
 'Z-Shell'
 ### Oh my zsh
 For the zsh, there exists a framework of configurations and plugins called 'oh-my-zsh'. See [the Github page](https://github.com/ohmyzsh/ohmyzsh) for installation. This framework contains a lot of different themes. Plugins can add support for e.g. git or better vi-mode
+
+#### History
+When configuring the zsh history, you have to answer the following question: Should the history file be a true history, listing all commands in order of execution, or a more complete, but non-chronological collection of all commands ever used?
+```shell
+setopt extended_history       # record timestamp of command in HISTFILE
+setopt hist_expire_dups_first # delete duplicates first when HISTFILE size exceeds HISTSIZE
+setopt hist_ignore_all_dups       #if a command is already present in the history file, append it and remove the older one
+setopt hist_find_no_dups      # even if the history file contains duplicates, show only once when using the command line history feature
+setopt hist_ignore_space      # ignore commands that start with space
+setopt hist_verify            # show command with history expansion to user before running it
+setopt share_history          # share command history data
+```
 
 # Tmux
 Terminal multiplexer. Allows to keep your session alive after remote logout.

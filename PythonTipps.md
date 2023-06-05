@@ -70,7 +70,7 @@
   - [Interpolation](#interpolation)
     - [Onedimensional](#onedimensional)
     - [Multidimensional](#multidimensional)
-- [Pyplot/Matplotlib](#pyplotmatplotlib)
+- [Matplotlib](#matplotlib)
     - [Create plot](#create-plot)
     - [Axes and Ticks](#axes-and-ticks)
     - [Beschriftung mit Latex](#beschriftung-mit-latex)
@@ -96,7 +96,8 @@
       - [Images (2D Verteilung) plotten](#images-2d-verteilung-plotten)
     - [Animationen](#animationen)
     - [Interaction](#interaction)
-  - [Subprocess](#subprocess)
+- [PyVista](#pyvista)
+- [Subprocess](#subprocess)
 - [Pandas](#pandas)
     - [Create Data Frame](#create-data-frame)
     - [read from file](#read-from-file)
@@ -418,9 +419,11 @@ a={'foo','bar','baz'} #Alternative definition
 a | b #Union: elements in a or b
 a & b #Intersection: elements in a and b
 a - b #Difference: elements in a and not in b
+#Boolean
 a <=b #a is subset of b
 a < b #a is real subset of b
 a == b #elements in a and b are equal
+a.isdisjoint(b) #True if a and b have no common elements
 a |=b #Update a to be a | b. Works with & and - as well
 ```
 
@@ -583,6 +586,8 @@ Object introspection
 Get information about an object and its members.
 ```python
 dir(obj) #list attributes and methods
+getattr(obj, attrname) #get object attribute by string name
+setattr(obj, attrname, value) #
 import inspect #module to get detailed information about objects
 inspect.getmembers(obj) #list members
 ```
@@ -858,7 +863,7 @@ di = rbfi(xi, yi, zi)   # interpolated values
 ```
 * griddata: 
 
-# Pyplot/Matplotlib
+# Matplotlib
 https://matplotlib.org/faq/usage_faq.html#usage
 Basic structure: A Figure object is the empty window which contains the plots.
 In the figure is a certain number of Axes objects, the actual "plots".
@@ -1006,9 +1011,10 @@ cmap = plt.get_cmap('jet')
 new_cmap = truncate_colormap(cmap, 0.2, 0.8)
 ```
 
-### Zweite Axe rechts:
+### Multiple Axis
 ```python
-ax2=ax.twinx()#twiny() for axis on top
+ax2=ax.twinx()#Create an independent axis to plot another curve in the same axes object. twiny() for axis on top
+axsec=ax.secondary_yaxis('right', functions=(forward, reverse)) #create a dependent axis with scaled/transformed units
 ```
 
 ### Lines and Shapes
@@ -1126,7 +1132,45 @@ def on_press(event): #The function must take an event as argument
   event.canvas.draw() #After you changed something, redraw the canvas to make changes visible
 ```
 
-## Subprocess
+# PyVista
+Library to visualize in 3D.
+```python
+import pyvista as pv
+```
+2D surfaces or images can be plottet as a structured grid, if they have a regular structure.
+```python
+grid=pv.StructuredGrid()
+grid.points=points #np array with x,y,z coordinates in shape [n, 3]
+grid.dimensions=n1, n2, 1 #for an image of size n1xn2. The order here is tricky, I think n1 must be the fast changing index when flattening the image to dimension [n]
+grid["values"]=values #np array with shape [n], containing the colors
+```
+# Plotting
+```python
+pv.set_plot_theme("document") #set plotting theme. 'default' has a grey background, 'dark' is a nightmode theme.
+p = pv.Plotter()
+p.add_mesh(grid, cmap="jet", clim=[-3,0], nan_opacity=0.0, opacity=0.8, lighting=False) #lighting False is very useful for images or color plots, since visible colors can be affected by light position and temperature otherwise
+p.show_axes() #show axes
+p.show_bounds() #show bounds of grids/objects
+p.show()
+```
+## Subplots
+```python
+p = pv.Plotter(shape=(1,2)) #create multiple subplots with shape=(rows, columns)
+p.subplot(0,0) #select subplot (row, column)
+p.add_arrows(centers, direction, mag=100) #plot
+p.link_views() #link several/all subplots
+```
+
+Custom lights can be useful to see more details, e.g. surface topography
+```python
+light = pv.Light(light_type='headlight', intensity=0.5) #headlight: Always shining from our camera
+p.add_light(light)
+light = pv.Light(position=(1, 0, 0), light_type='camera light') #camera light: Turns with the camera, shining e.g. always from the right
+p.add_light(light)
+p.enable_shadows() #show shadows
+```
+
+# Subprocess
 Library to execute commands on commandline (bash)
 ```python
 import subprocess as sp
@@ -1210,6 +1254,8 @@ plt.imshow(img, extent=ext)
 from metpy.calc import relative_humidity_from_specific_humidity
 from metpy.units import units
 relative_humidity=relative_humidity_from_specific_humidity(da.pressure*units.Pa,da.temperature*units.degK,da.humidity).metpy.convert_units('percent') #metpy can operate on xarray DataArrays. It provides the .metpy accessor.
+da*units('m/s') #you can use strings to specify units
+metpy.calc.first_derivative(da, axis='x') #this is a very convenient function to calculate derivatives on DataArrays, using a centered scheme and treating boundaries properly. Be careful: specifying x=da.height, the function becomes extremely slow
 ```
 # NETCDF
 Idea: A NETCDF File consits of variables. Each variable can implement a certain number of dimensions (like time, lat, lon).
@@ -1384,8 +1430,9 @@ result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_
 ```python
 da.plot(x='a', ax=ax1) #1D. Data is automatically plotted in the 'open' dimension y. 'ax' allows to specify a matplotlib axes object.
 da.plot(x='a', hue='b', add_legend=True) #2D
-da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
-da.plot(x='a', hue='b', col='c', row='d') #4D
+grid=da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots. Will return a FacetGrid
+grid=da.plot(x='a', hue='b', col='c', row='d') #4D
+grid.fig #access the figure of the grid
 da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm()) #pcolormesh is the default for 2D.
 #Imshow is a faster alternative to pcolormesh. Allows 3D Data to be interpreted as rgb
 aspect=float(rgb.x.max()/rgb.y.max())
