@@ -569,6 +569,7 @@ jpegoptim file.jpg #lossless jpeg compression, overwrite original
 jpegoptim -S20% -d dir/ file.jpg #reduce quality to 20% filesize and save in dir/
 exiftool file.jpg #show metadata
 exiftool -all= file.jpg #remove all metadata
+identify -format '%w %h %f\n' *.jpg #get width and height in pixels for a list of images
 ```
 
 ## Video

@@ -8,3 +8,27 @@ To draw straight lines or Bezier curves, select the corresponding tool (shortcut
 
 # Snapping
 Clicking the magnet symbol in the upper right, you can activate snapping of objects.
+
+# Color
+Click on colors at the bottom to set Fill, `Shift+Click` to set stroke color.
+
+# Groups
+To enter a group:
+* Double click
+* Right click: Enter group
+* Select and `Ctrl+Enter`
+
+To leave a group:
+* Double click outside
+* Right click: Go to parent
+* Select: `Ctrl+Back`
+
+# Object operations
+
+## Clip
+Useful to crop an image. Select two objects (like image and a shape on top) and select Object->Clip to keep only the overlapping area.
+
+
+# Tools
+## Text
+Click to write text or drag to define an area where you can write (with linewrap).

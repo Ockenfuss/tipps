@@ -25,6 +25,8 @@ Also includes a lot of useful snippets when working with the command line
     - [scp](#scp)
     - [rsync](#rsync)
     - [unison](#unison)
+  - [Desktop](#desktop)
+    - [Icons](#icons)
   - [Everyday commands](#everyday-commands)
   - [Appearance](#appearance)
     - [Fonts](#fonts)
@@ -233,6 +235,28 @@ Ergebnisse zurückholen: rsync -a -v My.Loginname@UniversityLogin.de:SimulationG
 ### unison
 progam to synchronize directories via ssh. `apt install unison-all-gtk` for graphical program.
 
+
+## Desktop
+
+To start programs from the launcher, they need a corresponding .desktop file. Personal files can be located in `~/.local/share/applications`. 
+```txt
+[Desktop Entry]
+Version = 1.5
+Type =		Application
+Name =		Linphone
+GenericName =	Telephony client
+Comment =	A libre SIP client
+Icon =linphone-logo.png
+Categories =	Office;Telephony;
+MimeType =	x-scheme-handler/sip-linphone;x-scheme-handler/sip;x-scheme-handler/sips-linphone;x-scheme-handler/sips;x-scheme-handler/tel;x-scheme-handler/callto;
+OnlyShowIn =	GNOME;XFCE;
+
+Terminal =	false
+Exec =		linphone %F
+StartupNotify =	true
+```
+### Icons
+Icons can be located in `~/.local/share/icons` (personal) or `/usr/share/pixmaps` (system).
 
 ## Everyday commands
 Rename

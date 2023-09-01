@@ -475,6 +475,7 @@ str(p) #the "traditional" string representation of a path
 For opening file streams:
 ```python
 with open('file', 'w') as f:#w: writing, r: reading, a: append
+  f.read() #read whole file
   f.readline(size=-1)#Read line or at most size char.
   f.readlines()#Read all remaining lines and give a list
   for line in f:#f is an iterable over the lines
@@ -890,6 +891,7 @@ ax.yaxis.tick_right()#Ticks rechts setzen
 a.xaxis.tick_top()#Ticks oben setzen
 a.xaxis.set_label_position('top')#Label open setzen
 ax.get_yaxis().set_visible(False)#hide ticks/axis
+ax.set_axis_off() #turn x/y axis completely off, including all ticks, labels, etc
 ax.set(ylabel="ratio", title="Titel")#Beschriftung
 ax.grid(True, which='major')#Gitter. Positions according to xticks major/minor
 ax.set_yscale("log")#set axis to logscale (also linear, symlog, ...)
@@ -982,17 +984,18 @@ im.set_cmap(cmap) #set cmap
 ```
 Make a categorial colorbar with custom categories
 ```python
-cmap=plt.cm.get_cmap('binary', 2), vmin=-0.5, vmax=1.5)
+cmap=matplotlib.colormaps.get_cmap('binary', 2), vmin=-0.5, vmax=1.5)
 # This function formatter will replace integers with target names
 corelabels={0:'no core', 1:'core'}
 formatter = plt.FuncFormatter(lambda val, loc: corelabels[val])
 cbar=add_colorbar(fig, ax[0,1], im,ticks=[0,1], format=formatter)
 ```
 
-#### Color cycle setzen
+#### Set color cycle
 ```python
-cm = plt.get_cmap('gist_rainbow')#Cmaps: https://matplotlib.org/examples/color/colormaps_reference.html
-ax.set_prop_cycle(plt.cycler('color', [cm(1.*i/15) for i in range(15)]))
+ax.set_prop_cycle(color=['red', 'green', 'blue'], marker=['o', '+', 'x'])
+cm = plt.get_cmap('gist_rainbow' )
+ax.set_prop_cycle(color=[cm(1.*i/15) for i in range(15)])#Use cmap colors for cycling
 ```
 ### Modify colormaps
 ```python
@@ -1389,9 +1392,15 @@ da.stack(z=('x', 'y'))#create a single multiindex from multiple existing indices
 ## Computation
 ```python
 ds.mean(dim='time')#calculate mean/sum/...
-ds.groupby("time.dayofyear").mean()#mean over the same days of multiple years
-ds.groupby_bins('height', bins=[0,10,23], labels=[0,10]).mean() #aggregate using custom bins along an axis.
 da.rolling(x=3, center=True, min_periods=2).mean()#rolling mean/std/median/...
+```
+
+## Groupby
+```python
+group_obj=ds.groupby("time.dayofyear") #groupby day of year
+list(goup_obj.groups.keys()) #groups is a dictionary label:indexes. Use keys() if you just want the labels
+group_obj[group_label] #get a particular group
+ds.groupby_bins('height', bins=[0,10,23], labels=[0,10]).mean() #aggregate using custom bins along an axis.
 ```
 ## Time Series
 For the time axis, there exists a lot of special functionality
