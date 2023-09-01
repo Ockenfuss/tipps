@@ -615,6 +615,8 @@ Tool for job managment on clusters
 sbatch myscript.sh #submit job
 squeue -u username #list all running jobs (-u: for a specific user)
 scancel jobid #kill a job
+srun job.sh #run a job in your command line on the cluster
+srun --pty bash #open a terminal on the cluster. Useful to check environments and stuff
 ```
 
 ## Netcdf

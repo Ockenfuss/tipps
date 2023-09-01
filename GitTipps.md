@@ -57,8 +57,9 @@ git branch -d <other-branch> #Delete the other branch. With -d, git deletes only
 ## Remotes
 ```bash
 git remote -v #show remote destinations with urls
-git remote rename old new #rename remote
 git remote add name url #add remote
+git remote set-url name url #change url of existing remote
+git remote rename old new #rename remote
 git remote remove name #remove remote
 
 ```

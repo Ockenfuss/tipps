@@ -26,6 +26,8 @@ Also includes a lot of useful snippets when working with the command line
     - [rsync](#rsync)
     - [unison](#unison)
   - [Everyday commands](#everyday-commands)
+  - [Appearance](#appearance)
+    - [Fonts](#fonts)
 - [Printing](#printing)
 - [Network](#network)
   - [VPN](#vpn)
@@ -40,7 +42,8 @@ Also includes a lot of useful snippets when working with the command line
   - [Bluetooth](#bluetooth)
 - [Useful Tools](#useful-tools)
   - [Webmin](#webmin)
-- [Change colors of command prompt:](#change-colors-of-command-prompt)
+- [Zsh Configuration](#zsh-configuration)
+  - [Change colors of command prompt:](#change-colors-of-command-prompt)
 
 <!-- /code_chunk_output -->
 
@@ -250,6 +253,14 @@ wc # counts words (-w), lines (-l) or characters (-m)
 ```
 .zshrc
 `source ~/.zshrc #reload configurations`
+
+## Appearance
+### Fonts
+Fonts are located in `/usr/share/fonts` or `~/.local/share/fonts`. You can just add fonts to this locations.
+```bash
+fc-cache -f -v #rebuild font cache
+fc-list #list installed fonts
+```
 # Printing
 All options: https://www.cups.org/doc/options.html
 Usually, printing is handled by CUPS (common unix printing system). It is preinstalled on all Ubuntu distributions. It has a client/server structure and can handle many printers and also provide them in network. Usually, you have a local cups server running which handles the printers for your local system. It can be reached in browser via 'http://localhost:631/'
@@ -397,13 +408,15 @@ Starts a server, where you can log in and control most of your system as root.
 
 
 
-######################################################zsh configurations############################
+# Zsh Configuration
 source ~/.zshrc #reload zshrc
-#Change colors of command prompt:
+## Change colors of command prompt:
+```txt
 host_color="%F{green}"
 username_color="%F{blue}"
 path_color="%F{blue}"
 PROMPT="${username_color}$USERNAME%f@${host_color}%B%m%b%f ${path_color}%B%~%b%f > "
+```
 
 
 

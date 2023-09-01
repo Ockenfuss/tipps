@@ -292,9 +292,9 @@ cmath.phase(z) #Phase
 
 ### Strings
 ```python
-test="Hallo"+"du" #Combination
+test="Hello"+"world" #Combination
 8*'hey' #Repetition
-if 'll' in 'Hallo' #Test for substrings (no need for regex here)
+if 'll' in 'Hello' #Test for substrings (no need for regex here)
 "Hallo".startswith("Ha") #check for prefix (similar: endswith)
 ```
 Split and combine arrays
@@ -1172,6 +1172,14 @@ for name, group in enumerate(datgroup): #iteration over groups
 ```
 if groupby by two labels: multindices occur: https://www.datacamp.com/community/tutorials/pandas-multi-index
 
+## MultiIndex
+```python
+da=xr.DataArray(np.arange(9).reshape(3,3),dims=['x', 'y'])
+da.name='data'
+df=da.to_dataframe() #column 'data' with multi rows x,y
+df.unstack() #multi columns 'data' and 'y' with rows 'x'
+```
+
 # Geopandas
 Library on top of pandas and shapely, which allows to plot maps. Basic idea: A pandas dataframe with a special column "geometry", which contains shapely objects (Points, LineStrings or Polygons), which can represent cities, streets or countries.
 
@@ -1375,7 +1383,7 @@ result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_
 ## Plotting data
 ```python
 da.plot(x='a', ax=ax1) #1D. Data is automatically plotted in the 'open' dimension y. 'ax' allows to specify a matplotlib axes object.
-da.plot(x='a', hue='b') #2D
+da.plot(x='a', hue='b', add_legend=True) #2D
 da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots
 da.plot(x='a', hue='b', col='c', row='d') #4D
 da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm()) #pcolormesh is the default for 2D.

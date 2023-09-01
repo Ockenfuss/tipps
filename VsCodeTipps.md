@@ -94,7 +94,11 @@ Latex subfile package:
 -Option: "do not prompt" to specify whether you want to be asked each time
 ## Python
 Formatting code: independently of vscode, install autopep8: python3 -m pip install autopep8
-Pytonpath: You can place a file `.env` in your workspace folder, which contains environment variables. Those are used by the Python extension e.g. to find packages.
+Pytonpath: You can place a file `.env` in your workspace folder, which contains environment variables. Those are used by the Python extension e.g. to find packages. This is also the way to set the path for jupyter kernels, e.g. when working remotely
+```txt
+PYTHONPATH=/path/to/additional/modules
+```
+
 
 # Plugins
 ## VIM
