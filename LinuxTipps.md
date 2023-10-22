@@ -7,6 +7,8 @@ Also includes a lot of useful snippets when working with the command line
 
 - [Tipps for daily Linux work](#tipps-for-daily-linux-work)
 - [Linux General](#linux-general)
+  - [Linux Installation](#linux-installation)
+  - [Kernel](#kernel)
   - [Permissions in Linux](#permissions-in-linux)
   - [User Handling](#user-handling)
   - [Files](#files)
@@ -53,6 +55,12 @@ bash in general: there are various types of shells: login, interactive, non-inte
 if a bash script is executed, this is usually done in a non-interactive shell. Therefore, custom commands from the .bashrc or .zshrc are not available there!
 
 # Linux General
+## Linux Installation
+You can create a bootable linux on a stick or CD.
+- Download an iso image e.g. from Ubuntu
+- If 'startup disk creator' is not installed, use: `sudo apt install usb-creator-gtk`
+- On ubuntu, use 'startup disk creator' to turn a stick into a boot medium
+## Kernel
 * What is a kernel? C't Articles: https://www.heise.de/select/ct/2019/16/softlinks/yzpg?wt_mc=pred.red.ct.ct162019.174.softlink.softlink
 ```bash
 #Change kernel parameters at runtime
@@ -132,6 +140,23 @@ sudo flatpak update PACKAGE #Update package
 
 
 ## Boot process
+When booting usig UEFI, each operating system (-> dual boot) needs an entry in the Efi boot table.
+```bash
+efibootmgr #list boot table
+```
+Reinstalling grub usually creates an EFI entry. You can do this from a live system, if you are not able to boot your main system anymore. In this case, you need to mount the EFI partition and the root partition of your system. Usually, the EFI partition is at the beginning of the disk and around 250MB in size.
+```bash
+mount /dev/nvme0n1p1 /efi_mount #mount efi partition in the live system
+mount /dev/nvme0n1p7 /linux_home_mount #mount your normal root in the live system
+grub-install --efi-directory /efi_mount --boot-directory /linux_home_mount/boot/grub #if on a live system
+```
+
+A broken boot setup can also be fixed using boot-repair. I think, this also attempts to reinstall grub, but be careful which grub is actually reinstalled if on a live system!
+```bash
+sudo add-apt-repository ppa:yannubuntu/boot-repair && sudo apt update
+sudo apt install -y boot-repair && boot-repair
+```
+
 two different boot processes are common today: systemV and systemd
 
 SystemV:Starts scripts sequentially. In /etc/rc#.d/ collection of links to scripts. If `S...`: call this command with `start` option

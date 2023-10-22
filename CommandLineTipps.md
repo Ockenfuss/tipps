@@ -15,7 +15,7 @@
     - [Loops](#loops)
       - [For loops](#for-loops)
     - [Boolean operators](#boolean-operators)
-      - [test or [](#test-or)
+      - [test or [](#test-or-)
     - [Comparison operators](#comparison-operators)
   - [Functions](#functions)
     - [Parameters](#parameters)
@@ -34,7 +34,7 @@
   - [Searching](#searching)
   - [Stream Editing](#stream-editing)
   - [Filesystem](#filesystem)
-    - [Partitions & Creation](#partitions-creation)
+    - [Partitions & Creation](#partitions--creation)
     - [Mounting](#mounting)
     - [Formatting](#formatting)
   - [Filepaths](#filepaths)
@@ -63,6 +63,7 @@
   - [Bash](#bash)
   - [ZSH](#zsh)
     - [Oh my zsh](#oh-my-zsh)
+      - [History](#history)
 - [Tmux](#tmux)
 
 <!-- /code_chunk_output -->
@@ -421,6 +422,7 @@ grep -rni --include \*.py 'word' ./ #: For searches within files. -r: recursive 
 ## Filesystem
 ### Partitions & Creation
 A physical storage device is usually divided in partitions to create logical disks for the OS. The partition table contains the information about the partitions. On each partition, a different filesystem can be implemented.
+To edit partitions, the graphical frontend **gparted** is highly recommended!
 ```bash
 fdisk -l #List partition tables. Also lists the physical device names
 fdisk /dev/sda #start interactive mode on disk /dev/sda. E.g. 'p' will list information about the partitions on this disk.

@@ -96,6 +96,20 @@ git mv Old/ New/ #Rename a file or folder
 
 # Web frontends
 ## Github
+### General
+It is advisable not to use your private email address for commits pushed to Github! Github provides you with a special email address, which you can use with you git. Look it up in your account.
+```bash
+git config --global user.email "123456+username@users.noreply.github.com"
+```
+If you need to rewrite some comments, use:
+```bash
+git rebase -i HEAD~3 #do an interactive rebase of the last 3 comments
+#chose 'edit' for all comments you want to change in the editor, that opens
+git commit --ammend --reset-author #use the new default author for the first comment
+git rebase --continue #continue to next comment
+#...
+```
+
 Set up the respository
 ```bash
 git clone https://github.com/Ockenfuss/dotfiles.git #Download repository from github, or alternatively:
