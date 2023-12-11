@@ -82,9 +82,9 @@
     - [colorbar](#colorbar)
       - [Create colorbar](#create-colorbar)
       - [Colorbar limits and scale](#colorbar-limits-and-scale)
-      - [Color cycle setzen](#color-cycle-setzen)
+      - [Set color cycle](#set-color-cycle)
     - [Modify colormaps](#modify-colormaps)
-    - [Zweite Axe rechts:](#zweite-axe-rechts)
+    - [Multiple Axis](#multiple-axis)
     - [Lines and Shapes](#lines-and-shapes)
     - [Saving figures](#saving-figures)
     - [Backend](#backend)
@@ -97,31 +97,40 @@
     - [Animationen](#animationen)
     - [Interaction](#interaction)
 - [PyVista](#pyvista)
+- [Plotting](#plotting)
+  - [Volumes](#volumes)
+  - [Subplots](#subplots)
 - [Subprocess](#subprocess)
 - [Pandas](#pandas)
-    - [Create Data Frame](#create-data-frame)
-    - [read from file](#read-from-file)
-    - [Acces elements](#acces-elements)
-    - [get columns](#get-columns)
-    - [Categories in one column](#categories-in-one-column)
-    - [iterration over rows](#iterration-over-rows)
-    - [Groupby](#groupby)
+  - [Creation](#creation-1)
+  - [Reading/Writing](#readingwriting)
+  - [Acces Elements](#acces-elements)
+  - [Analysis](#analysis)
+  - [Iterration](#iterration)
+  - [Groupby](#groupby)
+  - [MultiIndex](#multiindex)
 - [Geopandas](#geopandas)
   - [Maps (Contextily)](#maps-contextily)
     - [Plot geopandas](#plot-geopandas)
     - [Details](#details)
 - [MetPy](#metpy)
 - [NETCDF](#netcdf)
+- [Zarr](#zarr)
 - [Xarray](#xarray)
   - [Creating data](#creating-data)
   - [Reading & Writing](#reading--writing)
+    - [Netcdf](#netcdf-1)
+    - [Zarr](#zarr-1)
+    - [Encoding](#encoding)
   - [Inspecting data](#inspecting-data)
   - [Selecting data](#selecting-data)
   - [Asignments](#asignments)
   - [Coordinates](#coordinates)
+    - [Index](#index)
   - [combining/extending data](#combiningextending-data)
   - [Modifying data](#modifying-data)
   - [Computation](#computation)
+  - [Groupby](#groupby-1)
   - [Time Series](#time-series)
   - [Broadcasting](#broadcasting-1)
   - [apply_ufunc](#apply_ufunc)
@@ -1066,7 +1075,7 @@ ax1.annotate("Hallo", xy=(0.5,0.5), xytext=(0.6,0.6), xycoords='axes fraction')#
 ### Plot types
 #### Lines, points and bars
 ```python
-ax.plot(x,y,'.-', linewidth=0.4,label="label")
+ax.plot(x,y,'.-', linewidth=0.4,label="label", drawstyle="steps-mid")
 ax.scatter(x,y,c=z, alpha=0.5, marker='.', markersize=4)#scatter plot. alpha sets transparency of points, which is useful to visualize the density as well. useful markers: 'o', '.', ',', 'x'
 ax.errorbar(x,y,xerr, yerr)#like ax.plot, but with errorbars to show standard deviation
 ax.fill_between(x,y-yerr, y+yerr)#draw the error as shaded region between two curves
@@ -1129,7 +1138,7 @@ Matplotlib provides an API to allow users to interact with figures via key press
 ax.figure.canvas.mpl_connect("button_press_event", on_press) #connect a function to an event via figure.canvas (accessible via an ax object, if you want).
 def on_press(event): #The function must take an event as argument
   if event.button==1: #button_press_event is a MouseEvent, which contains the mouse button clicked in the button property
-  event.xdata #Key and Mouse Event have additional properties like xadata and ydata, the location in data coordinates, where the event happened
+  event.xdata #Key and Mouse Event have additional properties like xadata and ydata, the location in data coordinates, where the event happene
   event.inaxes #over which axes the event happened
   event.x #pixel coordinates of the canvas
   event.canvas.draw() #After you changed something, redraw the canvas to make changes visible
@@ -1166,6 +1175,11 @@ p.add_mesh(grid, cmap="jet", clim=[-3,0], nan_opacity=0.0, opacity=0.8, lighting
 p.show_axes() #show axes
 p.show_bounds() #show bounds of grids/objects
 p.show()
+```
+### Volumes
+add_mesh is only for meshes, for volumes like a 3D array, only the outside surfaces are plotted. To plot volumes, use add_volume()
+```python
+pv.add_volume(grid) #grid must be e.g. a pv.ImageData object
 ```
 ### Subplots
 ```python
@@ -1291,6 +1305,18 @@ print(pmom.units)#get units
 print(pmom[1,:,0,1])#data can be accessed like numpy arrays
 ncf.close()#close stream after use
 ```
+
+# Zarr
+```python
+import zarr
+za=zarr.open('/path/to/store') #make sure to use the full path. For some reasons, I had problems with '~' paths here (with xarray, they worked fine)
+za.info #print an overview of the store
+za.tree() #print a tree representation of the contents
+za['Tair'] #select a subgroup or array
+za['Tair'].fill_value #some things, which in xarray are inside encoding, are first-class members in zarr arrays
+za['T'].fill_value=5 #modify fill value. I think, those changes are also reflected on disk!
+zarr.consolidate_metadata('path') #consolidate metadata into the .zmetadata (json) file
+```
 # Xarray
 https://xarray.pydata.org/en/stable/index.html
 Generalization of pandas to work with higher dimensional data, basically a front-end for the netcdf format. Basic idea: The fundamental element is the DataArray. It describes values of one variable, which implements certain dimensions. A dimension can be seen as one axis in the higherdimensional space the variable exists in. Each dimension usually has a list of coordinates, these are labels which specify certain positions on the axis (think of the axis 'ticks'). Technically, dimensions are just DataArrays itself.
@@ -1319,6 +1345,7 @@ new=full_like(old, fill_value=1.23)
 new=old.copy(data=new_values) #nice trick to make a new array from given values with the same attributes, coordinates, etc. as an existing one
 ```
 ## Reading & Writing
+### Netcdf
 ```python
 ds=xr.open_dataset("filename.nc")#open Dataset
 ds.to_netcdf("filename.nc")#save Dataset
@@ -1330,6 +1357,47 @@ Open a single dataset from multiple files. To get this to work, ensure a few thi
 ```python
 ds=xr.open_mfdataset('filename.nc', combine_attrs='override', preprocess=myfunc, data_vars='minimal') 
 ```
+
+### Zarr
+Compressed, multidimensional arrays. In comparison to netcdf, not a single file on disk. Can be appended!
+See also the [Zarr chapter](#zarr)
+```python
+ds=xr.open_zarr('zarrstore_dir') #Zarr stores live in a directory
+ds.to_zarr('zarrstore_dir', mode='w') #with w, existing stores will be overwritten!
+ds.to_zarr('zarrstore_dir', region='auto') #replace an already existingsubregion. You cannot extend existing axes like this.
+ds.to_zarr('zarrstore_dir', append_dim='time') #extend along one axes. No coordinate checking, i.e. the result can have the same coord. multiple times.
+```
+
+#### Zarr Chunking
+See docs. Most important, the encoding information has priority over the dask chunks.
+There is an external package for efficient rechunking: [Rechunker](https://rechunker.readthedocs.io/en/latest/index.html)
+```python
+ds['a']=da.a.chunk({'x':100, 'y':100}) #this changes only the dask chunking.
+ds.a.encoding.pop('chunks') #drop encoding chunk information, such that the dask chunking is used
+ds.a.encoding.pop('preferred_chunks')
+ds.to_zarr('path')
+```
+
+### Encoding
+The encoding is basically a mapping between the format on disk and the format loaded into RAM. My personal view on this:
+- on disk, encoding information is stored in the attrs of the data
+- when loading, the data is decoded using the relevant `attrs` keys. Those keys are moved into `encoding`.
+- If some keys are not used (e.g. due to `decode_cf=False`), they remain in `attrs`.
+- When saving data to disk, the keys in `encoding` are used. The keys are saved in `attrs`.
+- If, for some reason, the same key is present in `attrs` and `encoding` at the same time, an error is raised.
+```python
+ds=xr.open_dataset('file.nc', decode_cf=False) #no decoding, keys remain in attrs
+ds=xr.decode_cf(ds) #decode, using the keys in attrs and moving them into encoding in the result
+ds.to_netcdf('file.nc') #encode, using the keys in encoding and saving into attrs on disk
+```
+
+Some specific encodings:
+```python
+_FillValue=123 #This value (on disk) will be replaced by NaN (in RAM).
+units="days since 1900-01-01" #times are often stored as int64. In this case, 'days' must be the smallest possible increment (can also be 'minutes', 'seconds', ...)
+calendar='proleptic gregorian' #standard calendar. See also netcdf4-python
+```
+
 ## Inspecting data
 ```python
 #DataArrays:
@@ -1353,7 +1421,8 @@ da.loc[...,'z']#based on coordinate label and dimension index
 ds[["var1","var2"]]#select variables in a dataset.
 ds=ds.isel(temp=0, drop=False, missing_dims='raise')#selection based on index along the dimension. Alternatively, you can provide: {'temp':0} as indexer.
 ds=ds.sel(temp=34.3) #Selection based on coordinate of the dimension.
-ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30
+ds.sel(temp=30, method='nearest', tolerance=5)#Nearest neighbour lookup to find a value close to 30. The result will have the coordinate close to 30
+ds.reindex(temp=30, method='nearest')# Nearest neighbour lookup. The result will have exactly 30 as coordinate
 da.sel(x=da.x[da.x<-0.1])#Boolean indexing works only positional with []!
 da.drop_sel(x=...)#like sel, but return everything except the selected part
 ```
@@ -1372,9 +1441,15 @@ weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
 foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])#DataArray with two dimensions with coordinates
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
 foo.assign_coords(time=[1,2,3,4])#another way to assign coords. You can also provide a dict directly here
+bar=xr.DataArray(np.linspace(0,1,10), dims="x")
+bar.assign_coords(x=bar) #set coordinates similar to values. Useful for 1D arrays
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 da.get_axis_num('y')#useful when using numpy with da.values
 da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
+```
+### Index
+```python
+foo.set_xindex('month') #if you want to to selections, you need an index with your coordinate. With xindex, you can create such an index without making 'month' the main coordinate
 ```
 
 ## combining/extending data
@@ -1453,7 +1528,7 @@ da.plot(x='a', hue='b', add_legend=True) #2D
 grid=da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots. Will return a FacetGrid
 grid=da.plot(x='a', hue='b', col='c', row='d') #4D
 grid.fig #access the figure of the grid
-da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm()) #pcolormesh is the default for 2D.
+da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm(), add_colorbar=True, cbar_ax=ax1) #pcolormesh is the default for 2D.
 #Imshow is a faster alternative to pcolormesh. Allows 3D Data to be interpreted as rgb
 aspect=float(rgb.x.max()/rgb.y.max())
 ax=da.plot.imshow(size=10, aspect=aspect,x='x', y='y', rgb='rgb', interpolation='antialiased') #will create a new figure + axis
@@ -1554,6 +1629,7 @@ Typical directory structure
 new_project
 ├── mypackage
 │   ├── __init__.py         # make it a package
+|   |-- __main__.py         # if the package should be executable
 │   └── antigravity.py
 └── test
     ├── __init__.py         # also make test a package
@@ -1715,7 +1791,8 @@ class SomeTests(ut.TestCase):
   def setUp(self):
     #come code if necessary
   def test_something(self):#Must start with test_
-    #testing with asserts
+    #testing with self.asserts
+    self.assertEqual(a,b)
 ```
 ### Execute tests
 Best to use the command line interface. Take the example from 

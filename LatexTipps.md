@@ -158,6 +158,7 @@ Typical alterations of variable names
 ```latex
 $\hat{\alpha}$ %Small hat over a letter
 $\tilde{\alpha}$ %Small tilde over a letter
+$\overline{\frac{}{}}$ %Longer overline over expression
 ```
 Mathematical symbols
 ```latex
