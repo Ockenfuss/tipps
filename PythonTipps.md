@@ -1142,12 +1142,23 @@ import pyvista as pv
 ```
 2D surfaces or images can be plottet as a structured grid, if they have a regular structure.
 ```python
-grid=pv.StructuredGrid()
+grid=pv.StructuredGrid(x,y,z) #three 2D (surface) or 3D (volume) arrays with the same shape
 grid.points=points #np array with x,y,z coordinates in shape [n, 3]
 grid.dimensions=n1, n2, 1 #for an image of size n1xn2. The order here is tricky, I think n1 must be the fast changing index when flattening the image to dimension [n]
 grid["values"]=values #np array with shape [n], containing the colors
 ```
-# Plotting
+## Conversion
+```python
+polydata=vol.extract_surface() #from volume grid to surface as polydata object
+trimesh=polydata.triangulate() #Create triangle mesh
+```
+
+## Export
+```python
+pv.save_meshio('test.stl', trimesh, binary=True) #create stl. Requires 'meshio' package
+```
+## Plotting
+[keyboard shortcuts webpage](https://docs.pyvista.org/version/stable/api/plotting/plotting.html)
 ```python
 pv.set_plot_theme("document") #set plotting theme. 'default' has a grey background, 'dark' is a nightmode theme.
 p = pv.Plotter()
@@ -1156,7 +1167,7 @@ p.show_axes() #show axes
 p.show_bounds() #show bounds of grids/objects
 p.show()
 ```
-## Subplots
+### Subplots
 ```python
 p = pv.Plotter(shape=(1,2)) #create multiple subplots with shape=(rows, columns)
 p.subplot(0,0) #select subplot (row, column)
