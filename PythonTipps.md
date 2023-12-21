@@ -10,41 +10,44 @@
     - [Venv](#venv)
     - [Conda](#conda)
   - [Code Formatting](#code-formatting)
-  - [General](#general)
+- [Python Language](#python-language)
+  - [Functions:](#functions)
+    - [Closures](#closures)
+    - [Decorators](#decorators)
+    - [Type hints](#type-hints)
     - [Loops and Conditions](#loops-and-conditions)
-    - [Boolean operators](#boolean-operators)
-    - [Functions:](#functions)
-      - [Type hints](#type-hints)
-    - [Variable reference in Python](#variable-reference-in-python)
-    - [Datatypes](#datatypes)
-      - [Complex Numbers](#complex-numbers)
-    - [Strings](#strings)
+  - [Boolean operators](#boolean-operators)
+  - [Variable reference in Python](#variable-reference-in-python)
+  - [Datatypes](#datatypes)
+    - [Complex Numbers](#complex-numbers)
+      - [Strings](#strings)
       - [f-Strings](#f-strings)
-      - [Regex](#regex)
     - [Arrays](#arrays)
     - [Lists](#lists)
-    - [List comprehensions](#list-comprehensions)
-    - [Slices](#slices)
-    - [Iterables](#iterables)
-      - [Zip](#zip)
-    - [Hashables](#hashables)
     - [Sets](#sets)
     - [Dictionaries](#dictionaries)
-  - [IO](#io)
-    - [File paths](#file-paths)
-      - [Glob](#glob)
-      - [Temporary Files](#temporary-files)
-      - [Shell](#shell)
-    - [CLI Arguments](#cli-arguments)
+    - [Slices](#slices)
+  - [Comprehensions](#comprehensions)
+  - [Iterables](#iterables)
+  - [Hashables](#hashables)
+  - [Zip](#zip)
   - [Exceptions](#exceptions)
   - [Object Orientation](#object-orientation)
-    - [Decorators](#decorators)
     - [Get/Set](#getset)
     - [Operator overloading](#operator-overloading)
-  - [Datetime module](#datetime-module)
+- [Python Standard Library](#python-standard-library)
+  - [OS](#os)
+    - [Paths](#paths)
+    - [Shell Environment](#shell-environment)
+  - [Pathlib](#pathlib)
+  - [Glob](#glob)
+  - [Temporary Files](#temporary-files)
+  - [CLI Arguments](#cli-arguments)
+  - [Datetime](#datetime)
     - [Creation](#creation)
     - [Operations](#operations)
-  - [time Module](#time-module)
+  - [Time](#time)
+  - [Regex](#regex)
   - [Serialization](#serialization)
     - [JSON](#json)
     - [Pickle](#pickle)
@@ -97,9 +100,11 @@
     - [Animationen](#animationen)
     - [Interaction](#interaction)
 - [PyVista](#pyvista)
-- [Plotting](#plotting)
-  - [Volumes](#volumes)
-  - [Subplots](#subplots)
+  - [Conversion](#conversion)
+  - [Export](#export)
+  - [Plotting](#plotting)
+    - [Volumes](#volumes)
+    - [Subplots](#subplots)
 - [Subprocess](#subprocess)
 - [Pandas](#pandas)
   - [Creation](#creation-1)
@@ -121,6 +126,7 @@
   - [Reading & Writing](#reading--writing)
     - [Netcdf](#netcdf-1)
     - [Zarr](#zarr-1)
+      - [Zarr Chunking](#zarr-chunking)
     - [Encoding](#encoding)
   - [Inspecting data](#inspecting-data)
   - [Selecting data](#selecting-data)
@@ -137,6 +143,7 @@
   - [Plotting data](#plotting-data)
   - [HVPlot](#hvplot)
   - [Dask](#dask)
+- [JAX](#jax)
 - [Image processing](#image-processing)
   - [Convolution](#convolution)
 - [IPython Jupyter](#ipython-jupyter)
@@ -232,11 +239,82 @@ ignore =
 ```
 
 
-## General
+# Python Language
 Beendet ein Python Program 
 ```python
 import sys
 sys.exit()
+```
+## Functions: 
+often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
+Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
+```python
+def f():
+  return 1,2,3,4
+a,b,*c=f() #unpack return values. Partial unpacking is possible
+```
+Since functions are objects, you can assign function attributes to them. Those attributes can itself be functions!
+```python
+def a():
+  return 1
+def b():
+  return 2
+a.b=b
+a.b() #2
+```
+### Closures
+If nesting and returning functions, the environment of the inner function is retained, even if the outer function terminated. This is called a closure. You even modify closure states, which is useful to store data between function calls.
+```python
+def get_counter(start):
+    count=[start]
+    def innter_counter():
+        count[0]+=1
+        return count[0]
+    return innter_counter
+
+counter=get_counter(10)
+print(counter()) #11
+print(counter()) #12
+```
+This only works because count is a mutable object (list). If count is an integer, we would need to declare it 'nonlocal', otherwise the inner definition masks the outer one.
+```python
+def get_counter(start):
+    count=start
+    def innter_counter():
+        nonlocal count
+        count+=1
+        return count
+    return innter_counter
+
+counter=get_counter(10)
+print(counter()) #11
+print(counter()) #12
+```
+
+### Decorators
+https://realpython.com/primer-on-python-decorators/
+Decorators: define two functions a:int->int, F:func->func. Now, you can do `a=F(a)` to get a new function a passed through F. Usually, F is a wrapper that does some pre and post processing. Shorthand for this is `@F`. Useful applications: Debugging: Print function arguments! Timers, Register function in dict, ...
+```python
+import functools
+def F(func):
+  @functools.wraps(func) #this line ensures that the wrapped function returns the original .__name__ attribute
+  def wrapper(*args, **kwargs):
+    #do something before
+    val=func(*args, **kwargs)
+    #do something after
+    return val
+  return wrapper
+@F
+def a(var):
+  ...
+```
+### Type hints
+https://realpython.com/python-type-checking/
+They have no effect during runtime, but help understanding the code and are often used by linters to detect errors and deliver better suggestions.
+```python
+def myfunc(a: str, b : int = 5) -> str:
+import typing as tp
+def myfunc(a : tp.Union[str, int]) -> str: #Specify multiple possible input types. From Python
 ```
 ### Loops and Conditions
 ```python
@@ -255,42 +333,26 @@ while condition:#while loop. There is no do-while loop in python
   code
 ```
 
-### Boolean operators
+## Boolean operators
 ```python
 if a < b < c: #python supports chained comparison operators. This is equal to (a < b) and ( c < d)
 ```
 
-### Functions: 
-often use "args" and "kwargs" (=keyword arguments) to pass additional arguments to new function.
-Syntax: *args or **kwargs This is part of a more general behaviour: * unpacks an array or list so its elements can be function arguments, ** does the same with a dictionary (creating named arguments)
-```python
-def f():
-  return 1,2,3,4
-a,b,*c=f() #unpack return values. Partial unpacking is possible
-```
-#### Type hints
-https://realpython.com/python-type-checking/
-They have no effect during runtime, but help understanding the code and are often used by linters to detect errors and deliver better suggestions.
-```python
-def myfunc(a: str, b : int = 5) -> str:
-import typing as tp
-def myfunc(a : tp.Union[str, int]) -> str: #Specify multiple possible input types. From Python
-```
 
-### Variable reference in Python
+## Variable reference in Python
 in general, every object has an id (similar to pointer in C)
 Function arguments are in general by reference, i.e. inside the function, we are dealing with a new reference for the original object
 Generally, expressions are evaluated from the right
 Expressions like a=a+10 (a can be numpy array!): Create a new, deep copy and assign its reference to a
 
-### Datatypes
+## Datatypes
 ```python
 int(x) #convert to integer
 chr(97) #convert to character 'a'
 str(97) #convert to string "97"
 ```
 
-#### Complex Numbers
+### Complex Numbers
 ```python
 z=3 + 2j #define complex number
 complex(3,2) #alternative via factory function
@@ -300,7 +362,7 @@ abs(z) #Amplitude
 cmath.phase(z) #Phase
 ```
 
-### Strings
+#### Strings
 ```python
 test="Hello"+"world" #Combination
 8*'hey' #Repetition
@@ -329,17 +391,6 @@ A way to 'insert' python code into strings. Currently the recommended way to for
 f"Hello {name}"#Allow to directly evaluate python expressions within {}
 f"This is {object!r}"#By default, __str__ of an object is used, but with '!r' we can switch to __repr__
 f"{number:.3f}"#You can use format specifiers in f strings
-```
-#### Regex
-https://realpython.com/regex-python/
-```python
-import re
-re.findall('ABC', 'ABCD')#Return match
-match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like:
-if re.search... :
-match.groups()#Tuple with all groups. () needs to be defined!
-match.group(1)#Select a group. Index is one-based!
-
 ```
 
 
@@ -372,53 +423,6 @@ b=[1]*3#=[1]+[1]+[1]
 if a: #a returns false is len(a)=0 (list is empty). The same holds for most collections like dict, tuple, ...
 a.pop() #return and remove last element from list. With pop(), you can use a list as a stack. Use pop(0) to remove front or any other index (simple queue)
 ```
-### List comprehensions
-```python
-arr=[expr(i) for i in indices]
-arr=[expr(i) for i in indices if condition(i)]
-arr=[expr(i) if condition(i) else expression2(i) for i in indices]
-```
-
-### Slices
-```python
-sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
-sl=slice(2) #Specifies only 'stop'
-sl=slice(1,None) #you can create arbitrary open slices by inserting None
-sl.start#slice objects have members start, step and stop
-```
-
-### Iterables
-Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
-```python
-iterable=(obj.evalute() for obj in objlist)
-```
-Generators can be created with the `yield` operator. It is similar to `return`, but keeps the function state in memory and continues execution when the next element is requested.
-```python
-def com(l, k):
-  """Example: Generates an iterator over all possible k-size subsets of l"""
-    if k==0:
-        yield []
-    elif k>=len(l):
-        yield l
-    else:
-        for com_without in com(l[1:], k):
-            yield com_without
-        for com_without in com(l[1:],k-1):
-            yield [l[0]]+com_without
-```
-There are a lot of useful functions, which work with iterables.
-#### Zip
-```python
-zip_iter=zip(a,b,c)#zip takes multiple iterables and aggregates the first, second,... elements each in a tuple. It returns an iterator.
-transposed=list(map(list, zip(*l))) #With zip, you can "transpose" a list of lists
-list1, list2=zip(*sorted(zip(list1, list2)))#Sort multiple lists according to the first one
-for i,j in zip(l1,l2) #iterate over multiple lists in parallel. With .items(), this works for dicts as well.
-from itertools import zip_longest
-zip_longest(a,b,c, fillvalue=" ")#usually, zip stops after the shortest iterable reaches its end. Zip_longest will continue and insert fill values instead.
-```
-
-### Hashables
-An object is hashable if it has a hash value which never changes during its lifetime (it needs a `__hash__()` method), and can be compared to other objects (it needs an `__eq__()` or `__cmp__()` method). Hashable objects which compare equal must have the same hash value. (from the Python glossary)
 ### Sets
 Unordered collections, where each element appears only once. Pretty much the same thing as you know from mathematics! Elements must be immutable
 https://realpython.com/python-sets/
@@ -452,79 +456,55 @@ func(**kwargs):
   key=kwargs.pop('key', default)#Very useful for function argument defaults
 ```
 
-## IO
-### File paths
-Old: the os module. For python 3.5+, use the object-oriented pathlib module!
+
+### Slices
 ```python
-import os.path
-os.path.join(str1, str2) #join to one filepath
-os.path.basename(path)#basename if a file, empty for directory. might not work with Windows
-os.path.abspath(path)#get the absolute filepath
-os.path.dirname(path)#directory name
-os.path.splitext(filename)#tuple with Path+Name and Extension
-os.path.isfile(filename)#check for type or existence
+sl=slice(1,2,3)#Creates a slice object, which can be used to slice strings or lists
+sl=slice(2) #Specifies only 'stop'
+sl=slice(1,None) #you can create arbitrary open slices by inserting None
+sl.start#slice objects have members start, step and stop
+```
+## Comprehensions
+```python
+arr=[expr(i) for i in indices]
+arr=[expr(i) for i in indices if condition(i)]
+arr=[expr(i) if condition(i) else expression2(i) for i in indices]
 ```
 
-How to use Pathlib from the standard library:
+## Iterables
+Closely related to list comprehensions are generator expressions. They create iterables which do not get evaluated immediately. Iterables are objects which support the __next__() method, which returns the next iteration state.
 ```python
-from pathlib import Path
-Path("a/b/c.txt") #create from string
-p=Path.cwd() #current working directory
-p / "a" / "file.txt" #you can use the '/' operator to join path objects (and strings)
-p.mkdir(parents=True, exist_ok=True) #Make directories
-p.resolve() #Get the absolute path
-p.parent #get the parent path (as path object).
-p.name #get the filename
-p.suffix #get the file extension as string
-p.stem #get the final path component without the suffix as string
-p.with_suffix('.jpg') #replace file extension. Use '' to remove file extension.
-p.glob('*.py') #get list of paths matching glob in the given directory
-str(p) #the "traditional" string representation of a path
+iterable=(obj.evalute() for obj in objlist)
 ```
-For opening file streams:
+Generators can be created with the `yield` operator. It is similar to `return`, but keeps the function state in memory and continues execution when the next element is requested.
 ```python
-with open('file', 'w') as f:#w: writing, r: reading, a: append
-  f.read() #read whole file
-  f.readline(size=-1)#Read line or at most size char.
-  f.readlines()#Read all remaining lines and give a list
-  for line in f:#f is an iterable over the lines
-  f.write(str)#write string
-  f.writelines(seq)#NO line endings are added
+def com(l, k):
+  """Example: Generates an iterator over all possible k-size subsets of l"""
+    if k==0:
+        yield []
+    elif k>=len(l):
+        yield l
+    else:
+        for com_without in com(l[1:], k):
+            yield com_without
+        for com_without in com(l[1:],k-1):
+            yield [l[0]]+com_without
 ```
-#### Glob
-Unix style pathname expansion
+There are a lot of useful functions, which work with iterables.
+
+## Hashables
+An object is hashable if it has a hash value which never changes during its lifetime (it needs a `__hash__()` method), and can be compared to other objects (it needs an `__eq__()` or `__cmp__()` method). Hashable objects which compare equal must have the same hash value. (from the Python glossary)
+
+## Zip
 ```python
-import glob
-glob.glob('*.py') #return list with all python files in current directory
+zip_iter=zip(a,b,c)#zip takes multiple iterables and aggregates the first, second,... elements each in a tuple. It returns an iterator.
+transposed=list(map(list, zip(*l))) #With zip, you can "transpose" a list of lists
+list1, list2=zip(*sorted(zip(list1, list2)))#Sort multiple lists according to the first one
+for i,j in zip(l1,l2) #iterate over multiple lists in parallel. With .items(), this works for dicts as well.
+from itertools import zip_longest
+zip_longest(a,b,c, fillvalue=" ")#usually, zip stops after the shortest iterable reaches its end. Zip_longest will continue and insert fill values instead.
 ```
-#### Temporary Files
-use `tempfile` from the standard library
-```python
-f, name=tempfile.mkstemp(".nc", "Gauss", "Directory")#Create a temporary file and return file handle and name
-```
-#### Shell
-```python
-import os
-os.environ["HOME"] #Access environment variables
-expanded=os.path.expandvars(string) #expand environment variables in a string
-``` 
-### CLI Arguments
-```python
-import sys
-sys.argv[1]#Command line arguments. argv[0] contains program name. 
-```
-`argparse` is a useful package in the standard library to parse command line arguments
-```python
-import argparse
-par=argparse.ArgumentParser(description="What this script does")
-par.add_argument('-f', type=str, help="filepath")#Add command line arguments
-par.add_argument('-f','--filename', type=str, help="filepath")#you can specify a short and long name
-par.add_argument('infile', nargs='?', default="abc")#consume zero or one argument (like Latex '?'!). Take default if zero arguments are present.
-par.add_argument('-i', type=int, default=1)
-par.add_argument('-s',action='store_true')#Boolean flag
-args=par.parse_args()
-args.filename#Access argument values
-```
+
 ## Exceptions
 Rasising Exceptions
 ```python
@@ -601,23 +581,6 @@ setattr(obj, attrname, value) #
 import inspect #module to get detailed information about objects
 inspect.getmembers(obj) #list members
 ```
-### Decorators
-https://realpython.com/primer-on-python-decorators/
-Decorators: define two functions a:int->int, F:func->func. Now, you can do `a=F(a)` to get a new function a passed through F. Usually, F is a wrapper that does some pre and post processing. Shorthand for this is `@F`. Useful applications: Debugging: Print function arguments! Timers, Register function in dict, ...
-```python
-import functools
-def F(func):
-  @functools.wraps(func) #this line ensures that the wrapped function returns the original .__name__ attribute
-  def wrapper(*args, **kwargs):
-    #do something before
-    val=func(*args, **kwargs)
-    #do something after
-    return val
-  return wrapper
-@F
-def a(var):
-  ...
-```
 
 ### Get/Set
 ```python
@@ -642,7 +605,82 @@ Implement by use of special methods like `__add__`, `__mul__`,... By convenction
 
 ```
 
-## Datetime module
+
+# Python Standard Library
+## OS
+### Paths
+Old: the os module. For python 3.5+, use the object-oriented pathlib module!
+```python
+import os.path
+os.path.join(str1, str2) #join to one filepath
+os.path.basename(path)#basename if a file, empty for directory. might not work with Windows
+os.path.abspath(path)#get the absolute filepath
+os.path.dirname(path)#directory name
+os.path.splitext(filename)#tuple with Path+Name and Extension
+os.path.isfile(filename)#check for type or existence
+```
+### Shell Environment
+```python
+import os
+os.environ["HOME"] #Access environment variables
+expanded=os.path.expandvars(string) #expand environment variables in a string
+``` 
+## Pathlib
+How to use Pathlib from the standard library:
+```python
+from pathlib import Path
+Path("a/b/c.txt") #create from string
+p=Path.cwd() #current working directory
+p / "a" / "file.txt" #you can use the '/' operator to join path objects (and strings)
+p.mkdir(parents=True, exist_ok=True) #Make directories
+p.resolve() #Get the absolute path
+p.parent #get the parent path (as path object).
+p.name #get the filename
+p.suffix #get the file extension as string
+p.stem #get the final path component without the suffix as string
+p.with_suffix('.jpg') #replace file extension. Use '' to remove file extension.
+p.glob('*.py') #get list of paths matching glob in the given directory
+str(p) #the "traditional" string representation of a path
+```
+For opening file streams:
+```python
+with open('file', 'w') as f:#w: writing, r: reading, a: append
+  f.read() #read whole file
+  f.readline(size=-1)#Read line or at most size char.
+  f.readlines()#Read all remaining lines and give a list
+  for line in f:#f is an iterable over the lines
+  f.write(str)#write string
+  f.writelines(seq)#NO line endings are added
+```
+## Glob
+Unix style pathname expansion
+```python
+import glob
+glob.glob('*.py') #return list with all python files in current directory
+```
+## Temporary Files
+use `tempfile` from the standard library
+```python
+f, name=tempfile.mkstemp(".nc", "Gauss", "Directory")#Create a temporary file and return file handle and name
+```
+## CLI Arguments
+```python
+import sys
+sys.argv[1]#Command line arguments. argv[0] contains program name. 
+```
+`argparse` is a useful package in the standard library to parse command line arguments
+```python
+import argparse
+par=argparse.ArgumentParser(description="What this script does")
+par.add_argument('-f', type=str, help="filepath")#Add command line arguments
+par.add_argument('-f','--filename', type=str, help="filepath")#you can specify a short and long name
+par.add_argument('infile', nargs='?', default="abc")#consume zero or one argument (like Latex '?'!). Take default if zero arguments are present.
+par.add_argument('-i', type=int, default=1)
+par.add_argument('-s',action='store_true')#Boolean flag
+args=par.parse_args()
+args.filename#Access argument values
+```
+## Datetime
 Datum und Zeit
 Übersicht: https://www.programiz.com/python-programming/datetime
 ### Creation
@@ -666,11 +704,21 @@ t2=t.replace(hour=8,month=8) #Create new datetime from existing
 
 
 
-## time Module
+## Time
 
 ```python
 import time
 time.sleep(5.5)#5.5 seconds pause
+```
+## Regex
+https://realpython.com/regex-python/
+```python
+import re
+re.findall('ABC', 'ABCD')#Return match
+match=re.search('([0-9]*)',string) #search for all matches. Use () to capture groups. Return None if no match is found, so you can use it like:
+if re.search... :
+match.groups()#Tuple with all groups. () needs to be defined!
+match.group(1)#Select a group. Index is one-based!
 ```
 ## Serialization
 Idea: convert python objects to byte streams, which you can send or store. There are three modules in the python standard library for this:
@@ -1577,6 +1625,12 @@ In a python script:
 
 In a juypter ipynb:
 * Everything works, even in vscode
+
+# JAX
+Library for automatic differentiation and parallelization.
+```pyhton
+
+```
 
 
 # Image processing
