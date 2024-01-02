@@ -1172,12 +1172,16 @@ from matplotlib.animation import FuncAnimation
 def create_1d_animation(fig, ax, x, values, interval):
     #format [frame, position]
     line, = ax.plot([], [], lw=1)
+    title=ax.text(0.05, 0.9, "Timestep 0", transform=ax.transAxes)
+
     def animate(i):
         a = x[i]
         b = values[i]
-        line.set_data(a, b)
-        return line,
-    print(x.shape[0])
+        line.set_data(a, b) #set data for line plot
+        im.set_array(arr) #set data for imshow
+        title.set_text(f"Timestep {i}")
+        return line,title
+
     anim = FuncAnimation(fig, animate, frames=x.shape[0], interval=interval, blit=True)
     return anim
 ```
@@ -1188,7 +1192,7 @@ Matplotlib provides an API to allow users to interact with figures via key press
 ax.figure.canvas.mpl_connect("button_press_event", on_press) #connect a function to an event via figure.canvas (accessible via an ax object, if you want).
 def on_press(event): #The function must take an event as argument
   if event.button==1: #button_press_event is a MouseEvent, which contains the mouse button clicked in the button property
-  event.xdata #Key and Mouse Event have additional properties like xadata and ydata, the location in data coordinates, where the event happene
+  event.xdata #Key and Mouse Event have additional properties like xadata and ydata, the location in data coordinates, where the event happened
   event.inaxes #over which axes the event happened
   event.x #pixel coordinates of the canvas
   event.canvas.draw() #After you changed something, redraw the canvas to make changes visible
