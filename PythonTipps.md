@@ -433,6 +433,7 @@ a | b #Union: elements in a or b
 a & b #Intersection: elements in a and b
 a - b #Difference: elements in a and not in b
 #Boolean
+a.symmetric_difference(b) #Symmetric Difference: elements only in a or b (union minus intersection)
 a <=b #a is subset of b
 a < b #a is real subset of b
 a == b #elements in a and b are equal
@@ -1496,8 +1497,12 @@ da.get_axis_num('y')#useful when using numpy with da.values
 da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
 ```
 ### Index
+Indexes map from coordinates to array positions. They are necessary if you want to use label based indexing (sel). There are different kinds of indexes, e.g. `RangeIndex` for regularly spaced coordinates. Indexes are not dimensions nor coordinates!
+There can be dimensions and coordinates without indexes!
 ```python
-foo.set_xindex('month') #if you want to to selections, you need an index with your coordinate. With xindex, you can create such an index without making 'month' the main coordinate
+foo.set_xindex('month') #With xindex, you can create an index for a coordinate (without making 'month' the main coordinate)
+foo.indexes #List available indexes
+foo.get_index('x') #get index. If a dimension has no index yet, a linear index is returned.
 ```
 
 ## combining/extending data
