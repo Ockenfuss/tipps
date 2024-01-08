@@ -26,6 +26,10 @@ Tutorial: https://www.atlassian.com/git/tutorials/learn-git-with-bitbucket-cloud
 
 # General
 
+## Concepts
+### HEAD
+HEAD is a pointer, either to a branch or directly to a commit. If it points to a branch (last commit in branch), this is called "attached head state". If you check out a commit directly instead of a branch, HEAD points to this commit directly, which is a "detached HEAD state" (see output of `git status` or the file `.git/HEAD`).
+
 ## Setup
 ```bash
 git config --global user.name 'Name'
