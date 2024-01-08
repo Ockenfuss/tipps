@@ -18,6 +18,7 @@ Tipps concerning C
     - [Functions](#functions)
   - [IO](#io)
     - [Files](#files)
+    - [Command Line](#command-line)
   - [Strings](#strings)
     - [Format specifiers:](#format-specifiers)
     - [String functions](#string-functions)
@@ -140,6 +141,20 @@ Manipulate file pointers
 i=ftell(fp);//get the current position in stream
 rewind(fp);//set position to the beginning of the file
 ```
+
+### Command Line
+Command line arguments are available via `argv`.
+```C
+int main (int argc, char **argv)
+argv //0: The program name. 1,2,... The command line arguments (already splitted by spaces)
+argc //Length of argv
+```
+
+For advanced processing, `getopt` is the basic library.
+See https://www.gnu.org/software/libc/manual/html_node/Example-of-Getopt.html for a good example.
+Getopt consumes the keyword option, leaving you with the positional options after the getopt processing.
+
+Even more advanced processing may the done using `argp`. For example, `argp` allows for child parsers, such that a library can provide a parser for some of the input flags.
 
 ## Strings
 They are represented by character arrays. The last character must be a `\0`, which signals the end of the string. This is used by many function, e.g. `strlen`.
