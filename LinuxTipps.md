@@ -173,8 +173,6 @@ journalctl -f #command to see systemd log
 ## Packages
 Use a package manager. There are debian based distributions (Debian, Ubuntu,...) and rpm based (Suse).
 ```bash
-dpkg -L nmap #package manager, but cannot handle dependencies. Better: apt. -L cmd: show all files created when installing
-dpkg -i dir/package #install package directly from file
 man apt #Good overview without details!
 vi /etc/apt/sources.list #urls of package repositories
 apt search package #search in repository
@@ -184,11 +182,18 @@ apt show package #Show package information (version, description, etc.)
 apt list --installed #Show all installed packages
 apt remove package #deinstall program
 apt autoremove #remove unnecessary, automatically installed packages
-apt purge #remove everything, even configuration files
+apt purge #remove everything, even configuration files (but not the ones in user directories)
 apt -f install #force install of packages which are flagged as missing (e.g. dependencies from an attempt to install with dpkg before)
 ```
 Manually: put them into or create a link in e.g. /usr/bin/local. Meanwhile, many projects provide an AppImage which runs on most linux systems without installation. I collect them e.g. in ~/Software and create a link to a folder within the $PATH.
 
+### DPKG
+The Backend for apt. Does not handle dependencies. For all practical purposes, use apt.
+```bash
+dpkg -l #(interactive) list of installed packages. See https://wiki.ubuntuusers.de/dpkg/#dpkg-query for an explanation of the status indicators
+dpkg -L package #list files installed by `package`
+dpkg -i dir/package #install package directly from file
+```
 
 ## SVN
 ```bash

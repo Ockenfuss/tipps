@@ -16,3 +16,16 @@ wget -r -A .JPG http://10.5.5.9:8080/videos/DCIM/
 # Collection
 ## Digikam
 My main solution to organize photos. Open-source and powerful. Allows to assign Tags, rename files and edit metadata.
+
+# Presentation
+## Impress Photo Album
+In order to rotate photos correctly: Remove all metadata. Then rotate on disk (lossy for jpg) using `convert img.jpg -rotate 90 rotated.jpg`
+Simple script to rotate multiple files:
+```
+for szFile in /path/*.png
+do 
+    convert "$szFile" -rotate 90 /tmp/"$(basename "$szFile")" ; 
+done
+```
+Use this command to set the creation and modify date to the exifdate:
+`exiftool "-filemodifydate<datetimeoriginal" "-filecreatedate<datetimeoriginal" DIR`

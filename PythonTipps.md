@@ -663,6 +663,7 @@ glob.glob('*.py') #return list with all python files in current directory
 use `tempfile` from the standard library
 ```python
 f, name=tempfile.mkstemp(".nc", "Gauss", "Directory")#Create a temporary file and return file handle and name
+with tempfile.TemporaryDirectory() as tempdir: #create temporary directory. Will be deleted when context manager is left
 ```
 ## CLI Arguments
 ```python

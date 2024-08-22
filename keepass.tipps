@@ -6,10 +6,15 @@ Benötigt Plugin in keepass zur Kommunikation:
 Dazu: Passendes File in "Plugins" folder von Keepass legen
 
 
-
 Synchronisation mit Dropbox:
 -Je nach Betriebssystem von Keepass unabhängigen Dropbox Client installieren
 -Unter "Dokumente/Passwords.dkbx" liegt die original Keepass Datei
 -Um die Dropbox Datei bei jedem Speichern zu synchronisieren, erstelle einen Trigger:
 Event: Saving database file
 Actions: Erst Trigger State Off (suche change trigger state in actions liste), dann sync with file/URL (hier die zu synchronisierende Dropbox Datei(Voller Pfad) angeben), dann Trigger State ON
+
+# Bitwarden
+In the meanwhile, I switched to bitwarden.
+## Backups
+I do regular backups of the bitwarden vault. Therefore, export the vault as json and encrypt it with gpg.
+The encrypted backups are located under `Documents/Verwaltung/Passwords`

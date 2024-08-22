@@ -108,8 +108,8 @@ git config --global user.email "123456+username@users.noreply.github.com"
 If you need to rewrite some comments, use:
 ```bash
 git rebase -i HEAD~3 #do an interactive rebase of the last 3 comments
-#chose 'edit' for all comments you want to change in the editor, that opens
-git commit --ammend --reset-author #use the new default author for the first comment
+#choose 'edit' for all comments you want to change in the editor that opens
+git commit --amend --reset-author #use the new default author for the first comment
 git rebase --continue #continue to next comment
 #...
 ```
