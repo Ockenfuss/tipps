@@ -12,9 +12,13 @@ docker pull heartexlabs/label-studio:latest
 ```
 
 # Start
-start label studio using docker container
+Start label studio using docker container
 ```bash
 docker run -it -u $(id -u) -p 8080:8080 -v $(pwd)/data:/label-studio/data --env LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true --env LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/label-studio/files -v $(pwd)/riming_images:/label-studio/files heartexlabs/label-studio:latest label-studio
+```
+Start label studio if installed via pip:
+```bash
+label-studio start --username paul --password 1234
 ```
 
 ## Permission Issue
@@ -32,7 +36,8 @@ export LABEL_STUDIO_LOCAL_FILES_SERVING_ENABLED=true
 export LABEL_STUDIO_LOCAL_FILES_DOCUMENT_ROOT=/home/p/Paul.Ockenfuss/LabelStudio/Oldmasks/riming_images
 ```
 
-In label studio, create a cloud storage and select local. The data has to be located in a child of the given env. variable path.
+In label studio, create a cloud storage and select local. The data has to be located in a child of the given environment variable path. In the path field, enter the full unix path to the child folder.
+
 If you define complex tasks involving multiple images, text, etc, you have to define them in form of .json files.
 For simple tasks based on just one image/text, check "Treat every bucket object as a source file". This way, every image in the child folder will result in one labeling task.
 

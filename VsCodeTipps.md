@@ -102,8 +102,27 @@ PYTHONPATH=/path/to/additional/modules
 
 # Plugins
 ## VIM
-```txt
-
+### Remapping
+You can remap key combinations either using vim keybindings provided by the extension or general vscode keyboard shortcuts (very flexible, but only recommended if keybindings not work).
+```json
+"vim.normalModeKeyBindingsNonRecursive":[
+    {
+        "before": ["Y"],
+        "after": ["y","$"]
+    },
+    {
+        "before": ["<S-Space>"],
+        "after": ["i"]
+    },
+    {
+        "before": ["<leader>","e"],
+        "commands": [
+                        "editor.action.smartSelect.expand",
+                        "jupyter.execSelectionInteractive", //Ideally, set smartSelect.selectSubwords to False for this
+                        "extension.vim_escape"
+                    ]
+    }
+],
 ```
 
 

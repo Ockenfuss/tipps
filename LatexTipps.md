@@ -7,6 +7,7 @@ Tipps and code snippets to format texts in Latex
 
 - [Latex](#latex)
   - [Installation](#installation)
+    - [Local](#local)
   - [Compilation](#compilation)
   - [Font](#font)
     - [Fontsizes](#fontsizes)
@@ -32,17 +33,20 @@ Checkliste vor Druck:
 -Hyperlinks in Farbe ausschalten! `\usepackage[hidelinks]{hyperref}`
 -Seitenanordnung richig? Leerseiten? Seitenränder? `\documentclass[a4paper,10pt, twoside]{report}`
 
-
-##########Geometry
-show geometry:
-\usepackage{layout}
-\begin{document}\layout
-
 ## Installation
 Usually, the easiest way is to use a distribution like texlive, which includes many often used packages. Texlive features different versions with additional packages for science.
+### Local
+Texlive can be installed locally. Follow the [texlive instructions](https://www.tug.org/texlive/quickinstall.html#running).
+```bash
+mkdir MyTexlive; cd MyTexlive #create directory
+wget https://mirror.ctan.org/systems/texlive/tlnet/install-tl-unx.tar.gz  #Download
+zcat < install-tl-unx.tar.gz | tar xf - #Unpack
+cd install-tl-* #go to unpacked dir
+perl ./install-tl #Install. Important: Change the latex main installation dir to a user folder, e.g. MyTexlive/2024 or similar
+```
+
 ```bash
 pdflatex --version #get information about your distribution
-tlmgr 
 ```
 ## Compilation
 Generally, use pdflatex. To abort the compilation, enter 'x', since Ctrl-C does not work in interactive mode.
@@ -115,14 +119,15 @@ Package to embed animations in pdfs, which you can view with okular/acrobat read
 # Science
 ## Units
 Recommended to use the si package. It allows you to adapt the format afterwards, e.g. to fulfill the requirements of a journal.
-https://www.namsu.de/Extra/pakete/Siunitx.html
+See [this document](https://texdoc.org/serve/siunitx/0)
 ```latex
 \usepackage{siunitx}
-\si{\km} %unit only
+\unit{\km} %unit only
 \num{10} %Number only
-\SI{100}{\per\cubic\centi\metre}
-\SI{90}{\degree} %Alternatively, use $^{\circ}$
-\SIrange{1}{2}{\km} %range of values
+\qty{100}{\per\cubic\centi\metre}
+\qty{90}{\degree} %Alternatively, use $^{\circ}$
+\qty{e2}{\metre} %number as power
+\qtyrange{1}{2}{\km} %range of values
 ```
 
 # Math
@@ -135,7 +140,7 @@ Align multiple equations with one label
         e&=f
 \end{align}
 ```
-Align multiple quations in one row side by side with separate labels
+Align multiple equations in one row side by side with separate labels
 ```latex
 \begin{center}
     \begin{minipage}[b]{.45\textwidth}

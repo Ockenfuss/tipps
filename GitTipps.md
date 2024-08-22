@@ -95,6 +95,14 @@ git submodule update --init -- <specific relative path to submodule> #clone only
 git mv Old/ New/ #Rename a file or folder
 ```
 
+## Migration
+To migrate some files from one repo to another:
+```bash
+git log --pretty=email --patch-with-stat --reverse --full-index --binary -m --first-parent -- path/to/file_or_folder > patch.txt
+#In new repo:
+git am --committer-date-is-author-date < patch.txt
+```
+
 
 
 

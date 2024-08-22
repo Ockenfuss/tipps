@@ -4,7 +4,6 @@ Tipps concerning C
 
 <!-- code_chunk_output -->
 
-- [Language](#language)
   - [Variables](#variables)
     - [Pointers](#pointers)
       - [NULL](#null)
@@ -27,7 +26,8 @@ Tipps concerning C
     - [Sockets](#sockets)
 - [Compile](#compile)
   - [gcc](#gcc)
-    - [gcc flags](#gcc-flags)
+    - [Libraries](#libraries)
+      - [Static Libraries](#static-libraries)
   - [Debugging](#debugging)
   - [CMake](#cmake)
   - [Profiling](#profiling)
@@ -215,10 +215,23 @@ int Socket=socket(AF_INET, SOCK_STREAM, 0); //AF_INET: Use Internet (TCP/IP), SO
 # Compile
 
 ## gcc
-### gcc flags
-* -iquote abc: set "abc" at the beginning of the list of quote directories, i.e. direcotries which are searched for #include "file"
+Some useful options:
+* -iquote abc: set "abc" at the beginning of the list of quote directories, i.e. direcotries which are searched for #include "file". Similar: -I (see manpage)
 * -g: debug mode, important if you want to use gdb
 * -Wall: Warn all. Enable a lot of warnings.
+
+### Libraries
+#### Static Libraries
+See this [tutorial](https://dev.to/iamkhalil42/all-you-need-to-know-about-c-static-libraries-1o0b).
+Static libraries, like netcdf or math, are collections of object files. They usually start with `lib` and end with `.a`.
+In order to create a static library:
+```bash
+ar -rcs libname.a *.o #r: replace existing object files in the archive c: create if not existent s: index the symbols library (necessary for the compiler)
+```
+In order to use a library in gcc, use `-L` to specify the path:
+```bash
+gcc gcc main.c -Lpath/to/dir -lmyname -o main #with -l, the 'lib' prefix and '.a' suffix will be appended automatically
+```
 
 ## Debugging
 gdb: Debugger for Linux

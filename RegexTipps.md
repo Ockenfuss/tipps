@@ -56,6 +56,10 @@ Formed by round brackets around a part of the regex. They allow you to apply qua
 (ba.)? #matches e.g. 'bad' or 'bag' if it appears zero or one time and stores the match (e.g. 'bad')
 (?:ba.)? #Non-capturing group. Same as above, but the match is not stored for later use
 ```
+The captured groups can be used e.g. in replacements
+```bash
+$1 #default names are $1, $2, $3, ...
+```
 
 ## Lookahead and lookbehind
 https://www.regular-expressions.info/lookaround.html
