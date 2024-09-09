@@ -192,17 +192,18 @@ pip3 install package # install packages. Do not use sudo! Use pip install -r req
 pip freeze > requirements.txt #Export current environment
 deactivate #Deactivate virtual environment
 ```
-### Conda
+### Conda/Mamba
+Mamba is a drop-in replacement for conda which is said to be faster.
 #### Initialization
 Use `conda init zsh` to configure your zsh shell to use conda environments. Create a `.conda` folder in your home directory. This modifies your zshrc. To avoid changes in zshrc, move the corresponding lines into a separate `.zsh_conda` or `.zsh_local` file.
 
 #### Usage
 ```bash
 conda create --name py35 python=3.5 #Create virtual environment
-conda env create -f environment.yml #Create from file
-conda env update -f environment.yml --prune #update environment based on yml file, removing packages not in yml anymore
+conda create -p /path/to/folder #specify location
 conda env list #List virtual environments
 conda activate MyEnv #activate environment
+conda activate /full/path/to/env #alternative
 conda env remove --name MyEnv #remove environment
 conda rename -n old_name -d new_name #rename. Workaround, which internally clones environment and downloads all packages again.
 conda list #List all packages and versions in environment
@@ -210,8 +211,19 @@ conda env export --from-history #List only explicitly installed packages
 conda install NAME #Install package
 conda update NAME #Update package
 ```
-A conda environment can be configured in a .yml file. For an existing environment, this file can be created with:
-`conda env export --name MyEnv --from-history`
+#### Config
+Conda can be configured via a `.condarc` file, created e.g. in the home directory.
+```txt
+env_prompt: '({name}) ' #modify the conda prompt to contain always only the name, even with --prefix option
+envs_dirs: [/home/paul/.virtualenvs/mamba_envs] #location to search and install environments. Separate multiple using ':'
+```
+#### Conda YML File
+A conda environment can be configured in a .yml file.
+```bash
+`conda env export --name MyEnv --from-history` # create yml file for existing environment
+conda env create -f environment.yml #Create from file
+conda env update -f environment.yml --prune #update environment based on yml file, removing packages not in yml anymore
+```
 ```yml
 name: my-env
 channels:
@@ -222,10 +234,24 @@ dependencies:
   - python=3.8
   - pip
 ```
+
+#### Install local packages
 In a conda environment, the PYTHONPATH variable is not respected. One way to activate local packages is to put a file like MyPackages.pth unter `.conda/envs/NAME/lib/python3.10/site-packages`. In it, just list the components of PYTHONPATH, separated by newline.
 ```txt
 /full/path/to/packagecollection1
 /full/path/to/packagecollection2
+```
+
+#### Install pip packages
+You can install pip in a conda environment and specify which packages to install via pip.
+```yml
+name: standard
+channels:
+  - conda-forge
+dependencies:
+  - pip
+  - pip:
+    - inlog
 ```
 
 ## Code Formatting
@@ -1531,8 +1557,7 @@ weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
 foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])#DataArray with two dimensions with coordinates
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
 foo.assign_coords(time=[1,2,3,4])#another way to assign coords. You can also provide a dict directly here
-bar=xr.DataArray(np.linspace(0,1,10), dims="x")
-bar.assign_coords(x=bar) #set coordinates similar to values. Useful for 1D arrays
+co=xr.DataArray(np.linspace(0,1,10), dims="x", name='x') #if dims=name: result will have same values for data and coordinate!
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 da.get_axis_num('y')#useful when using numpy with da.values
 da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
