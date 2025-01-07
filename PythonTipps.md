@@ -1688,17 +1688,22 @@ result=xr.apply_ufunc(self.retrieval, measurement, measurement.theta,input_core_
 ## Plotting data
 ```python
 da.plot(x='a', ax=ax1) #1D. Data is automatically plotted in the 'open' dimension y. 'ax' allows to specify a matplotlib axes object.
-da.plot(x='a', hue='b', add_legend=True) #2D
 grid=da.plot(x='a', hue='b', col='c', col_wrap=2) #3D with multiple subplots. Will return a FacetGrid
 grid=da.plot(x='a', hue='b', col='c', row='d') #4D
 grid.fig #access the figure of the grid
-da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm(), add_colorbar=True, cbar_ax=ax1, cbar_kwargs={'label': 'val'}) #pcolormesh is the default for 2D.
 da.plot(cbar_kwargs={"format":ticker.FuncFormatter(fmt), "ticks":[1,2,3]}) #modify colorbar
 #Imshow is a faster alternative to pcolormesh. Allows 3D Data to be interpreted as rgb
 aspect=float(rgb.x.max()/rgb.y.max())
 ax=da.plot.imshow(size=10, aspect=aspect,x='x', y='y', rgb='rgb', interpolation='antialiased') #will create a new figure + axis
 fig=ax.get_figure() #get figure
 ```
+### 2D Data
+```python
+da.plot(x='a', hue='b', add_legend=True) #2D
+da.plot.pcolormesh(x='a', y='b',cmap='jet', norm=LogNorm(), add_colorbar=True, cbar_ax=ax1, cbar_kwargs={'label': 'val'}) #pcolormesh is the default for 2D.
+da.plot(x='x2d', y='y2d') #you can also use multidimensional coordinates! This allows to plot arbitrary mesh distortions, e.g. polar data
+```
+
 
 ## Datatree
 ```python

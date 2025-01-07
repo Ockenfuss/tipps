@@ -39,6 +39,12 @@ git config --global core.editor vim # standard is $EDITOR evn. variable
 git config --list #see all settings
 ```
 
+### Ignore Files
+```bash
+vim .gitignore #files which should be ignored. Usually, this file is part of the repository
+vim .git/info/exclude #local files which should be ignored
+```
+
 ## Branches
 ```bash
 git branch #show all local branches with active one marked by '*'
