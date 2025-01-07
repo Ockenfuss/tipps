@@ -580,7 +580,7 @@ For video editing, ffmpeg is the most versatile tool.
 ffmpeg -i A.mp4 B.mp3 #convert video to audio only
 ffmpeg -ss 00:04:32.200 -i vid.mp4 -vframes 1 -q:v 1 out.jpg #extract a single image from a video. -q:v control the quality from 1 to 31, with 1 meaning highest quality
 ffmpeg -framerate 10 -start_number 4 -i IMG_%03d.jpg out.mkv #combine numbered pictures to video
-ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -c copy output.mp4 #trim video from 'ss' until 'ss+to' (format hh:mm:ss). Here, the result would be 2min long from 01:00 to 03:00
+ffmpeg -ss 00:01:00 -i input.mp4 -to 00:02:00 -map_metadata 0 -c copy output.mp4 #trim video from 'ss' until 'ss+to' (format hh:mm:ss). Here, the result would be 2min long from 01:00 to 03:00. Also copy the metadata to the new video
 ffmpeg -i input.mkv -filter:v "setpts=PTS/60" output.mkv #Speed up video by factor 60. Use "-an" to remove audio
 ```
 

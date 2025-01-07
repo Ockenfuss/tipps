@@ -12,7 +12,8 @@ Tipps and code snippets to format texts in Latex
   - [Font](#font)
     - [Fontsizes](#fontsizes)
     - [Styes](#styes)
-  - [ToDo package](#todo-package)
+  - [Figures](#figures)
+  - [Tables](#tables)
   - [Subfiles](#subfiles)
 - [Biblatex](#biblatex)
 - [Tikz](#tikz)
@@ -22,16 +23,16 @@ Tipps and code snippets to format texts in Latex
 - [Math](#math)
   - [Aligning](#aligning)
   - [Symbols](#symbols)
-- [Figures](#figures)
-- [Tables](#tables)
 - [Glossaries](#glossaries)
+- [ToDo package](#todo-package)
+- [Differences: Latexdiff](#differences-latexdiff)
 - [Examples](#examples)
 
 <!-- /code_chunk_output -->
 
 Checkliste vor Druck:
--Hyperlinks in Farbe ausschalten! `\usepackage[hidelinks]{hyperref}`
--Seitenanordnung richig? Leerseiten? Seitenränder? `\documentclass[a4paper,10pt, twoside]{report}`
+- Hyperlinks in Farbe ausschalten! `\usepackage[hidelinks]{hyperref}`
+- Seitenanordnung richig? Leerseiten? Seitenränder? `\documentclass[a4paper,10pt, twoside]{report}`
 
 ## Installation
 Usually, the easiest way is to use a distribution like texlive, which includes many often used packages. Texlive features different versions with additional packages for science.
@@ -78,13 +79,26 @@ Available modifiers are:
 \emph{emphasized} % The behaviour of this command changes with context
 ```
 
+## Figures
+My personal best practice: Already set the correct figsize in matplotlib so that no scaling in latex is necessary! For this, use `\showthe\textwidth` in latex and combine it with the Pytex package in my template collection.
 
-## ToDo package
+## Tables
 ```latex
-\usepackage{todonotes}
-\todo{some text}
-\missingfigure{some text}
+\begin{table}[h]
+    \centering
+    \begin{tabular}{ c | c | c  c }
+        \hline
+        Quantity&Symbol&Definition&Unit\\
+        \hline
+        Radiant Energy&Q&&$J$\\
+        Radiant Power&$\phi_\lambda$&$\frac{dQ}{dt\cdot d\lambda}$&$Wnm^{-1}$\\
+        \hline
+    \end{tabular}
+    \caption{some caption}
+    \label{tab:mytable}
+\end{table}
 ```
+
 
 ## Subfiles
 Very useful package when a big latex project should be splitted into different subfiles. 
@@ -184,26 +198,6 @@ Brackets
 \left. %Invisible bracket. Useful if you want to show just the right one.
 ```
 
-# Figures
-My personal best practice: Already set the correct figsize in matplotlib so that no scaling in latex is necessary! For this, use `\showthe\textwidth` in latex and combine it with the Pytex package in my template collection.
-
-# Tables
-```latex
-\begin{table}[h]
-    \centering
-    \begin{tabular}{ c | c | c  c }
-        \hline
-        Quantity&Symbol&Definition&Unit\\
-        \hline
-        Radiant Energy&Q&&$J$\\
-        Radiant Power&$\phi_\lambda$&$\frac{dQ}{dt\cdot d\lambda}$&$Wnm^{-1}$\\
-        \hline
-    \end{tabular}
-    \caption{some caption}
-    \label{tab:mytable}
-\end{table}
-```
-
 # Glossaries
 Package to create an overview of acronyms and technical terms. Generally, there are two types of entries: Glossaryentries are meant to contain descriptions of technical terms and definitions, while acronyms list the long version of abbreviated names.
 ```latex
@@ -233,6 +227,23 @@ In order to compile a document with a glossary:
 pdflatex Glossary
 makeglossaries Glossary
 pdflatex Glossary
+```
+
+# ToDo package
+```latex
+\usepackage{todonotes}
+\todo{some text}
+\missingfigure{some text}
+```
+
+# Differences: Latexdiff
+`latexdiff` is a pearl script which shows changes between two latex documents. Just pass two latex files and it will create a new `diff.txt`:
+```bash
+latexdiff old.tex new.tex > diff.tex
+```
+`git-latexdiff` builds on latexdiff and creates a diff between two git repositories. For this, the pictures have to be included in the repo. `git-latexdiff` will create temporary directories and check out the git repo.
+```bash
+git-latexdiff OLDHASH --main FILE.tex --bibtex --whole-tree #whole-tree: checkout full git, not just the current folder.
 ```
 
 # Examples

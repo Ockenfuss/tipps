@@ -223,6 +223,7 @@ Config file for ssh. Use it for configuration, abbreviation of long names, etc.
 Host MyNickname
   HostName ServerAddress
   User MyLoginNameOnTheServer
+  PreferredAuthentications publickey
   IdentityFile ~/.ssh/xy_ed25519.pub
   # If there is a login/jump server in between, use this command
   ProxyJump user@jumpserver

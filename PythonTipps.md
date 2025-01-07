@@ -8,7 +8,13 @@
   - [Installation](#installation)
   - [Virtual Environments](#virtual-environments)
     - [Venv](#venv)
-    - [Conda](#conda)
+    - [Conda/Mamba](#condamamba)
+      - [Initialization](#initialization)
+      - [Usage](#usage)
+      - [Config](#config)
+      - [Conda YML File](#conda-yml-file)
+      - [Install local packages](#install-local-packages)
+      - [Install pip packages](#install-pip-packages)
   - [Code Formatting](#code-formatting)
   - [General](#general)
     - [Loops and Conditions](#loops-and-conditions)
@@ -40,7 +46,15 @@
     - [Decorators](#decorators)
     - [Get/Set](#getset)
     - [Operator overloading](#operator-overloading)
-  - [Datetime module](#datetime-module)
+- [Python Standard Library](#python-standard-library)
+  - [OS](#os)
+    - [Paths](#paths)
+    - [Shell Environment](#shell-environment)
+  - [Pathlib](#pathlib)
+  - [Glob](#glob-1)
+  - [Temporary Files](#temporary-files-1)
+  - [CLI Arguments](#cli-arguments-1)
+  - [Datetime](#datetime)
     - [Creation](#creation)
     - [Operations](#operations)
   - [time Module](#time-module)
@@ -48,11 +62,11 @@
     - [JSON](#json)
     - [Pickle](#pickle)
   - [Regex](#regex)
+  - [Logging](#logging)
 - [Numpy](#numpy)
     - [Numpy I/O](#numpy-io)
     - [Numpy Arrays](#numpy-arrays)
     - [Indexing](#indexing)
-    - [Basic Slicing](#basic-slicing)
     - [Numpy sortieren](#numpy-sortieren)
   - [Numpy Array Transformations](#numpy-array-transformations)
     - [Broadcasting](#broadcasting)
@@ -133,13 +147,20 @@
   - [combining/extending data](#combiningextending-data)
   - [Modifying data](#modifying-data)
   - [Computation](#computation)
+    - [Curve Fitting](#curve-fitting)
   - [Groupby](#groupby-1)
   - [Time Series](#time-series)
   - [Broadcasting](#broadcasting-1)
   - [apply_ufunc](#apply_ufunc)
   - [Plotting data](#plotting-data)
+  - [Datatree](#datatree)
   - [HVPlot](#hvplot)
+    - [Composites](#composites)
   - [Dask](#dask)
+    - [Dask + Xarray](#dask--xarray)
+      - [Visualization](#visualization)
+    - [Issues](#issues)
+      - [Memory](#memory)
 - [Image processing](#image-processing)
   - [Convolution](#convolution)
 - [IPython Jupyter](#ipython-jupyter)
@@ -216,6 +237,7 @@ Conda can be configured via a `.condarc` file, created e.g. in the home director
 ```txt
 env_prompt: '({name}) ' #modify the conda prompt to contain always only the name, even with --prefix option
 envs_dirs: [/home/paul/.virtualenvs/mamba_envs] #location to search and install environments. Separate multiple using ':'
+pkgs_dirs: [/path/to/conda_pkgs] #location of the folder where packages are located
 ```
 #### Conda YML File
 A conda environment can be configured in a .yml file.
@@ -226,12 +248,13 @@ conda env update -f environment.yml --prune #update environment based on yml fil
 ```
 ```yml
 name: my-env
+prefix: /path/to/dir/ #optionally specify the location of the environment
 channels:
   - conda-forge
   - anaconda
   - defaults
 dependencies:
-  - python=3.8
+  - python=3.12
   - pip
 ```
 
@@ -813,7 +836,18 @@ match.groups()#Tuple with all groups. () needs to be defined!
 match.group(1)#Select a group. Index is one-based!
 
 ```
-
+## Logging
+```python
+import logging
+logger=logging.getLogger('get_icon')
+logger.setLevel(logging.INFO) #set general log level. If this is more strict than the handler levels, you won't see any output!
+handler = logging.StreamHandler() #stream handler for console output
+file_handler = logging.FileHandler(logfile) # FileHandler for file output
+handler.setLevel(logging.WARNING) #set handler level to filter general level
+formatter = logging.Formatter('%(asctime)s - %(name)s - %(levelname)s - %(message)s')
+handler.setFormatter(formatter)
+logger.addHandler(handler)
+```
 
 
 # Numpy
@@ -1166,12 +1200,10 @@ fig, ax=plt.subplots(2,2, figsize=(4,3))#Easiest way
 fig.subplots_adjust(hspace=0.1,wspace=0.1)#Adjust height and width spacing in units of mean axis length
 
 import matplotlib.gridspec as gridspec
-fig = plt.figure(figsize=(4,3))
-grid = plt.GridSpec(4, 3, hspace=0.4, wspace=0.2)#Define grid and specify over how many cells axes spread
-ax1 = fig.add_subplot(grid[:-1,:])
-#another possibility
-gs = fig.add_gridspec(4, 2, width_ratios=[1, 1], height_ratios=[1, 10,10, 10])
-ax2 = fig.add_subplot(gs[-1, :])
+fig = plt.figure()
+gs0 = gridspec.GridSpec(1, 2, figure=fig, width_ratios=[1, 10], hspace=0.4, wspace=0.2)
+gs01 = gs0[1].subgridspec(3, 3) #gridspecs can be nested
+ax = fig.add_subplot(gs01[:, :-1])
 ```
 
 ### Text and annotations
@@ -1478,10 +1510,16 @@ ds=xr.open_mfdataset('filename.nc', combine_attrs='override', preprocess=myfunc,
 Compressed, multidimensional arrays. In comparison to netcdf, not a single file on disk. Can be appended!
 See also the [Zarr chapter](#zarr)
 ```python
-ds=xr.open_zarr('zarrstore_dir') #Zarr stores live in a directory
+ds=xr.open_zarr('zarrstore_dir') #Zarr stores live in a directory by default
 ds.to_zarr('zarrstore_dir', mode='w') #with w, existing stores will be overwritten!
 ds.to_zarr('zarrstore_dir', region='auto') #replace an already existingsubregion. You cannot extend existing axes like this.
 ds.to_zarr('zarrstore_dir', append_dim='time') #extend along one axes. No coordinate checking, i.e. the result can have the same coord. multiple times.
+```
+Using the store argument, you can use other ways to store zarr archives!
+```python
+import zarr
+zip_store = zarr.ZipStore('path/to/file.zip', mode='w')
+ds.to_zarr(store=zip_store)
 ```
 
 #### Zarr Chunking
@@ -1557,7 +1595,7 @@ weekdays = ['Mon', 'Tue', 'Wed', 'Thurs']
 foo = xr.DataArray(np.random.rand(4, 3), coords={'weekday':('time', weekdays), 'space':locs}, dims=['time', 'space'])#DataArray with two dimensions with coordinates
 foo.coords['month'] = ('time', [6, 7, 8,9])#another coordinate set for dimension time
 foo.assign_coords(time=[1,2,3,4])#another way to assign coords. You can also provide a dict directly here
-co=xr.DataArray(np.linspace(0,1,10), dims="x", name='x') #if dims=name: result will have same values for data and coordinate!
+co=xr.DataArray(np.linspace(0,1,10), dims="x", name='x') #if dims=name: result will have same values for data and coordinate (?)
 foo=foo.swap_dims({'time':'monthday'})#Now 'monthday' is the new "main" label for the dimension time
 da.get_axis_num('y')#useful when using numpy with da.values
 da.reindex(x=[1,1,2,3], method='nearest')#return data of da, but with new coordinates
